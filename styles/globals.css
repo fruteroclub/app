@@ -1,0 +1,68 @@
+@import 'tailwindcss';
+
+/*
+ * SCAFFOLD baseline only (T1). The full design-token translation (paper + arcade
+ * registers, hard-shadow utilities, square radius, the complete palette) is T2's
+ * job — see DESIGN.md and docs/design/previews/*.html. T2 expands `:root`,
+ * adds `[data-mode='arcade']`, and the @theme map. Keep this minimal so the build
+ * gate passes without pre-empting T2's disjoint work.
+ */
+
+:root {
+  /* Canonical palette (DESIGN.md) — paper register defaults. */
+  --black: #08000f;
+  --ink: #11091e;
+  --muted-canonical: #332a4b;
+  --purple: #190433;
+  --magenta: #c4088f;
+  --green: #19a662;
+  --orange: #ff9500;
+  --surface: #ece6dd;
+  --paper: #f9f5ef;
+  --card: #fffbf5;
+  --muted: #5b5170;
+  --muted-2: #8a8198;
+  --line: #dcd3c4;
+  --error: #ff0033;
+
+  /* Font families: next/font CSS vars → the short aliases the previews use. */
+  --display: var(--font-display), 'Bitter', serif;
+  --serif: var(--font-serif), 'Petrona', serif;
+  --sans: var(--font-sans), 'Geist', system-ui, sans-serif;
+  --mono: var(--font-mono), 'IBM Plex Mono', monospace;
+}
+
+@theme inline {
+  --color-black: var(--black);
+  --color-ink: var(--ink);
+  --color-purple: var(--purple);
+  --color-magenta: var(--magenta);
+  --color-green: var(--green);
+  --color-orange: var(--orange);
+  --color-surface: var(--surface);
+  --color-paper: var(--paper);
+  --color-card: var(--card);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-error: var(--error);
+
+  --font-display: var(--display);
+  --font-serif: var(--serif);
+  --font-sans: var(--sans);
+  --font-mono: var(--mono);
+
+  /* Square radius — neobrutalist signature (DESIGN.md). */
+  --radius: 0px;
+}
+
+html,
+body {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+body {
+  font-family: var(--sans);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.5;
+}

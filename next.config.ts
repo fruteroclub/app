@@ -1,0 +1,47 @@
+import type { NextConfig } from 'next'
+import createNextIntlPlugin from 'next-intl/plugin'
+
+const withNextIntl = createNextIntlPlugin('./i18n/request.ts')
+
+const nextConfig: NextConfig = {
+  // Security headers for Privy embedded wallets (pattern from frutero-current-app)
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'X-Frame-Options',
+            value: 'SAMEORIGIN',
+          },
+          {
+            key: 'Content-Security-Policy',
+            value: [
+              "default-src 'self'",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://auth.privy.io https://*.privy.io",
+              "style-src 'self' 'unsafe-inline'",
+              "img-src 'self' data: blob: https: http:",
+              "font-src 'self' data:",
+              "connect-src 'self' https: wss:",
+              "frame-src 'self' https://auth.privy.io https://*.privy.io",
+              "frame-ancestors 'self'",
+            ].join('; '),
+          },
+        ],
+      },
+    ]
+  },
+
+  // Turbopack configuration for Next.js 16+
+  turbopack: {
+    resolveExtensions: ['.tsx', '.ts', '.jsx', '.js', '.mjs', '.json'],
+  },
+
+  // Only process these file extensions as pages
+  pageExtensions: ['tsx', 'ts', 'jsx', 'js'],
+
+  // Exclude problematic packages from server-side bundling
+  serverExternalPackages: ['@privy-io/server-auth'],
+}
+
+export default withNextIntl(nextConfig)

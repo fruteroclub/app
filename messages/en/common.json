@@ -1,0 +1,13 @@
+{
+  "brand": {
+    "name": "Frutero Club",
+    "tagline": "Talent Accelerator"
+  },
+  "nav": {
+    "perfil": "Create your profile",
+    "enterprise": "For companies"
+  },
+  "app": {
+    "loading": "Loading…"
+  }
+}
