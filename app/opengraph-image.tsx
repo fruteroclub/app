@@ -27,8 +27,7 @@ export const contentType = 'image/png'
 const PAPER = '#f9f5ef'
 const INK = '#11091e'
 const MAGENTA = '#c4088f'
-const MUTED = '#5b5170'
-const LINE = '#dcd3c4'
+const FRAME = '#110b1a'
 
 const fontFile = (pkg: string, file: string) =>
   readFileSync(join(process.cwd(), 'node_modules', '@fontsource', pkg, 'files', file))
@@ -43,46 +42,50 @@ function Dot() {
 }
 
 /**
- * Flowing body copy with each sentence-ending period rendered as the magenta
- * dot. Word-level flex spans so the text wraps naturally (a single flex child
- * would not wrap); the period stays attached to its word.
+ * Body — the actions → reward statement. The three verbs in Bitter medium (only
+ * the dots magenta), then the payoff "Oportunidades Reales." in Petrona, both
+ * words capitalized, with the magenta brand dot.
  */
 function BodyCopy() {
-  const sentences = [
-    'Construye',
-    'Demuestra tu trabajo con reputación verificable',
-    'Desbloquea oportunidades reales',
-  ]
-  const words: React.ReactNode[] = []
-  sentences.forEach((sentence, si) => {
-    const tokens = sentence.split(' ')
-    tokens.forEach((word, wi) => {
-      const last = wi === tokens.length - 1
-      words.push(
-        <span key={`${si}-${wi}`} style={{ display: 'flex' }}>
-          {word}
-          {last ? <Dot /> : null}
-        </span>,
-      )
-    })
-  })
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexWrap: 'wrap',
-        columnGap: 14,
-        rowGap: 6,
-        marginTop: 30,
-        maxWidth: 940,
-        fontFamily: 'Petrona',
-        fontWeight: 500,
-        fontSize: 38,
-        lineHeight: 1.3,
-        color: MUTED,
-      }}
-    >
-      {words}
+    <div style={{ display: 'flex', flexDirection: 'column', marginTop: 30 }}>
+      <div
+        style={{
+          display: 'flex',
+          columnGap: 18,
+          fontFamily: 'Bitter',
+          fontWeight: 500,
+          fontSize: 46,
+          color: INK,
+        }}
+      >
+        <span style={{ display: 'flex' }}>
+          Construye
+          <Dot />
+        </span>
+        <span style={{ display: 'flex' }}>
+          Demuestra
+          <Dot />
+        </span>
+        <span style={{ display: 'flex' }}>
+          Desbloquea
+          <Dot />
+        </span>
+      </div>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'baseline',
+          marginTop: 14,
+          fontFamily: 'Petrona',
+          fontWeight: 600,
+          fontSize: 46,
+          color: INK,
+        }}
+      >
+        Oportunidades Reales
+        <Dot />
+      </div>
     </div>
   )
 }
@@ -142,26 +145,32 @@ export default async function OpengraphImage() {
           <BodyCopy />
         </div>
 
-        {/* Footer lockup — Bitter, magenta dots */}
+        {/* Footer lockup — Bitter. No divider; "Sube de nivel." reads as the
+            CTA in a frame-colored border, bumped a size. */}
         <div
           style={{
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            borderTop: `2px solid ${LINE}`,
-            paddingTop: 28,
             fontFamily: 'Bitter',
             fontWeight: 600,
-            fontSize: 28,
             color: INK,
           }}
         >
-          <div style={{ display: 'flex' }}>
+          <div style={{ display: 'flex', fontSize: 28 }}>
             frutero
             <Dot />
             club
           </div>
-          <div style={{ display: 'flex' }}>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'baseline',
+              fontSize: 34,
+              border: `4px solid ${FRAME}`,
+              padding: '12px 30px',
+            }}
+          >
             Sube de nivel
             <Dot />
           </div>
@@ -171,9 +180,9 @@ export default async function OpengraphImage() {
     {
       ...size,
       fonts: [
-        { name: 'Petrona', data: fontFile('petrona', 'petrona-latin-500-normal.woff'), weight: 500, style: 'normal' },
         { name: 'Petrona', data: fontFile('petrona', 'petrona-latin-600-normal.woff'), weight: 600, style: 'normal' },
         { name: 'IBM Plex Mono', data: fontFile('ibm-plex-mono', 'ibm-plex-mono-latin-700-normal.woff'), weight: 700, style: 'normal' },
+        { name: 'Bitter', data: fontFile('bitter', 'bitter-latin-500-normal.woff'), weight: 500, style: 'normal' },
         { name: 'Bitter', data: fontFile('bitter', 'bitter-latin-600-normal.woff'), weight: 600, style: 'normal' },
       ],
     },
