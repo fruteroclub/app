@@ -55,7 +55,7 @@ export const OG_IMAGE = {
   url: `${SITE_URL}/opengraph-image`,
   width: 1200,
   height: 630,
-  alt: `${SITE_NAME} — Talent Accelerator`,
+  alt: `${SITE_NAME} — Aceleradora de Talento`,
 } as const
 
 /** BCP-47 tags for the two locales (used in OG `locale` + hreflang). */
