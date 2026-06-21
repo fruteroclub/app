@@ -30,6 +30,10 @@ export function proxy(request: NextRequest): NextResponse {
 }
 
 export const config = {
-  // Match all paths except API routes, Next internals, and files with extensions.
-  matcher: ['/((?!api|_next|_vercel|.*\\..*).*)'],
+  // Match all paths except API routes, Next internals, files with extensions,
+  // and the EXTENSIONLESS metadata file-convention routes (opengraph-image /
+  // twitter-image). The latter live at the ROOT (no locale segment), so letting
+  // the locale proxy touch them rewrites `/opengraph-image` → a non-existent
+  // localized path and 404s — which silently broke every social-share card.
+  matcher: ['/((?!api|_next|_vercel|opengraph-image|twitter-image|.*\\..*).*)'],
 }
