@@ -5,7 +5,8 @@ import { routing, defaultLocale } from './i18n/routing'
 const intlMiddleware = createMiddleware(routing)
 
 /**
- * Locale middleware (D-locale, LOCKED — `as-needed`):
+ * Locale proxy (Next 16 `proxy.ts` convention — formerly `middleware.ts`).
+ * (D-locale, LOCKED — `as-needed`):
  * - `frutero.club/` and `frutero.club/<path>` serve Spanish with NO prefix (clean apex).
  * - `frutero.club/en/...` serves English.
  * - `frutero.club/es/...` is the default-locale prefix. With `as-needed`, next-intl
@@ -13,7 +14,7 @@ const intlMiddleware = createMiddleware(routing)
  *   `/es` prefix from deeper paths and 308-redirect to the bare canonical so we
  *   never serve duplicate content at both `/es/x` and `/x`.
  */
-export function middleware(request: NextRequest): NextResponse {
+export function proxy(request: NextRequest): NextResponse {
   const { pathname, search } = request.nextUrl
 
   // Canonicalize any `/es` or `/es/...` to the bare (prefix-less) Spanish URL.

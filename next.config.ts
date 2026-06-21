@@ -40,8 +40,18 @@ const nextConfig: NextConfig = {
   // Only process these file extensions as pages
   pageExtensions: ['tsx', 'ts', 'jsx', 'js'],
 
-  // Exclude problematic packages from server-side bundling
-  serverExternalPackages: ['@privy-io/server-auth'],
+  // Exclude problematic packages from server-side bundling.
+  // The Privy embedded-wallet chain (@privy-io/react-auth → @reown/appkit →
+  // walletconnect → pino → thread-stream) bundles dev test files that require
+  // 'tape'/'tap' and break the build under Turbopack. Externalizing the logging
+  // + appkit packages keeps them out of the bundle. Parity with frutero-current-app.
+  serverExternalPackages: [
+    'thread-stream',
+    'pino',
+    'pino-pretty',
+    '@reown/appkit',
+    '@privy-io/server-auth',
+  ],
 }
 
 export default withNextIntl(nextConfig)

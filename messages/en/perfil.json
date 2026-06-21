@@ -1,0 +1,52 @@
+{
+  "create": {
+    "kicker": "Your builder profile",
+    "title": "Create your profile",
+    "lead": "Your verifiable identity at Frutero Club. Sign in with email or social and create your profile in a minute.",
+    "loginCta": "Sign in to start",
+    "loggingIn": "Opening sign in…",
+    "fields": {
+      "handle": "Handle",
+      "handleHint": "3–30 characters. Letters, numbers, _ or -.",
+      "displayName": "Display name",
+      "role": "Role",
+      "rolePlaceholder": "Full-Stack Builder",
+      "location": "Location",
+      "locationPlaceholder": "Mexico City, MX",
+      "bio": "Bio",
+      "bioHint": "Up to 280 characters.",
+      "github": "GitHub",
+      "twitter": "Twitter / X",
+      "linkedin": "LinkedIn",
+      "website": "Website"
+    },
+    "submit": "Create your profile",
+    "submitting": "Creating…",
+    "saving": "Saving…",
+    "save": "Save changes",
+    "errors": {
+      "handleTaken": "That handle is already taken.",
+      "session": "Please sign in again to continue.",
+      "generic": "We couldn't save your profile. Please try again.",
+      "validation": "Check the highlighted fields."
+    },
+    "success": "Profile ready!"
+  },
+  "view": {
+    "kicker": "Builder Profile",
+    "memberSince": "Member since",
+    "edit": "Edit profile",
+    "empty": "You don't have a profile yet. Create it to appear in the community.",
+    "createCta": "Create your profile",
+    "sections": {
+      "summary": "Summary",
+      "links": "Links"
+    },
+    "loading": "Loading your profile…"
+  },
+  "edit": {
+    "kicker": "Edit profile",
+    "title": "Edit your profile",
+    "back": "Back to profile"
+  }
+}

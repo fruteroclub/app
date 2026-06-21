@@ -1,0 +1,52 @@
+{
+  "create": {
+    "kicker": "Tu perfil de constructor",
+    "title": "Crea tu perfil",
+    "lead": "Tu identidad verificable en Frutero Club. Inicia sesión con email o redes y crea tu perfil en un minuto.",
+    "loginCta": "Inicia sesión para empezar",
+    "loggingIn": "Abriendo inicio de sesión…",
+    "fields": {
+      "handle": "Handle",
+      "handleHint": "3–30 caracteres. Letras, números, _ o -.",
+      "displayName": "Nombre para mostrar",
+      "role": "Rol",
+      "rolePlaceholder": "Full-Stack Builder",
+      "location": "Ubicación",
+      "locationPlaceholder": "Ciudad de México, MX",
+      "bio": "Bio",
+      "bioHint": "Hasta 280 caracteres.",
+      "github": "GitHub",
+      "twitter": "Twitter / X",
+      "linkedin": "LinkedIn",
+      "website": "Sitio web"
+    },
+    "submit": "Crea tu perfil",
+    "submitting": "Creando…",
+    "saving": "Guardando…",
+    "save": "Guardar cambios",
+    "errors": {
+      "handleTaken": "Ese handle ya existe.",
+      "session": "Vuelve a iniciar sesión para continuar.",
+      "generic": "No pudimos guardar tu perfil. Intenta de nuevo.",
+      "validation": "Revisa los campos marcados."
+    },
+    "success": "¡Perfil listo!"
+  },
+  "view": {
+    "kicker": "Perfil de Constructor",
+    "memberSince": "Miembro desde",
+    "edit": "Editar perfil",
+    "empty": "Aún no tienes un perfil. Créalo para aparecer en la comunidad.",
+    "createCta": "Crea tu perfil",
+    "sections": {
+      "summary": "Resumen",
+      "links": "Enlaces"
+    },
+    "loading": "Cargando tu perfil…"
+  },
+  "edit": {
+    "kicker": "Editar perfil",
+    "title": "Edita tu perfil",
+    "back": "Volver al perfil"
+  }
+}

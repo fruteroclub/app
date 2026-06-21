@@ -1,35 +1,105 @@
 @import 'tailwindcss';
 
 /*
- * SCAFFOLD baseline only (T1). The full design-token translation (paper + arcade
- * registers, hard-shadow utilities, square radius, the complete palette) is T2's
- * job — see DESIGN.md and docs/design/previews/*.html. T2 expands `:root`,
- * adds `[data-mode='arcade']`, and the @theme map. Keep this minimal so the build
- * gate passes without pre-empting T2's disjoint work.
+ * Frutero Club design system (T2).
+ *
+ * Translates DESIGN.md + docs/design/previews/{landing,directory,twin-profile}.html
+ * 1:1 into a real, reusable token + component system.
+ *
+ * Two registers, one system:
+ *   :root              → paper (warm cream, default, public + everyday)
+ *   [data-mode=arcade] → arcade-dark (deep purple/near-black, neon accents)
+ *                        ONLY applied in the authed (app) group — public is
+ *                        paper-only (D-mode, LOCKED).
+ *
+ * Neobrutalism is PUNCTUATION: hard 2px ink borders + hard offset shadows live
+ * on a few signature elements only (Button, Badge, avatar frame, Card hover,
+ * high-score card). Everything else uses 1px hairline rules. Radius is square.
  */
 
 :root {
-  /* Canonical palette (DESIGN.md) — paper register defaults. */
-  --black: #08000f;
-  --ink: #11091e;
+  /* ---- Canonical palette (DESIGN.md) — paper register ---- */
+  --black: #08000f; /* borders, hard shadows, deep ink */
+  --ink: #11091e; /* primary text / foreground */
   --muted-canonical: #332a4b;
-  --purple: #190433;
-  --magenta: #c4088f;
-  --green: #19a662;
-  --orange: #ff9500;
-  --surface: #ece6dd;
-  --paper: #f9f5ef;
-  --card: #fffbf5;
-  --muted: #5b5170;
-  --muted-2: #8a8198;
-  --line: #dcd3c4;
-  --error: #ff0033;
+  --purple: #190433; /* level/arcade block bg */
+  --magenta: #c4088f; /* PRIMARY — CTAs, level badge, links, accents */
+  --green: #19a662; /* verified / positive */
+  --orange: #ff9500; /* warning / tertiary */
+  --red: #ff0033; /* error — vibrant arcade red */
+  --surface: #ece6dd; /* warm paper CARD surface (distinct from the --paper page bg) */
+  --paper: #f9f5ef; /* page background */
+  --card: #fffbf5; /* warm white cards */
+  --frame: #110b1a; /* dark editorial BACKGROUND — the publication frame, the masthead,
+                     * and the arcade section bgs. Print-feel; deliberately NOT --ink
+                     * (#11091e), which stays the TEXT/line color. */
 
-  /* Font families: next/font CSS vars → the short aliases the previews use. */
-  --display: var(--font-display), 'Bitter', serif;
-  --serif: var(--font-serif), 'Petrona', serif;
-  --sans: var(--font-sans), 'Geist', system-ui, sans-serif;
-  --mono: var(--font-mono), 'IBM Plex Mono', monospace;
+  /* Derived UI neutrals */
+  --muted: #5b5170; /* secondary text */
+  --muted-2: #8a8198; /* tertiary / labels */
+  --line: #dcd3c4; /* hairline rules / borders */
+  --error: var(--red);
+
+  /* Shared page container width (single source of truth → max-w-[var(--wrap)]).
+   * Preview used 1100px; widened to 1240px so the layout fills modern wide
+   * monitors instead of floating small in the middle (review 2026-06-16). */
+  --wrap: 1240px;
+
+  /* Offset shadows REMOVED from the design system (2026-06-20) — neobrutalism is
+   * now borders-only, flat everywhere. The shadow-hard* utilities are kept as
+   * no-ops so any lingering class renders flat. */
+
+  /* Font families: next/font CSS vars (--ff-*) → the short aliases the previews use.
+   * next/font MUST write --ff-* (not --font-*): the @theme block below maps
+   * --font-*: var(--<alias>), and if next/font also wrote --font-* those would form
+   * a self-referential CSS variable cycle (→ guaranteed-invalid → silent fallback to
+   * the inherited font). See lib/fonts.ts. */
+  /* Each var() carries a fallback so the declaration stays VALID even where the
+   * next/font var is out of scope. Critical for --serif: --ff-serif is set only on
+   * the (marketing) Petrona wrapper, so at :root it is undefined — and an undefined
+   * var() with NO fallback invalidates the whole --serif declaration (→ empty →
+   * inherits the sans body font). The 'Petrona' fallback matches next/font's
+   * @font-face family name, so the webfont still loads + renders on the subtree. */
+  --display: var(--ff-display, 'Bitter'), 'Bitter', Georgia, serif;
+  --serif: var(--ff-serif, 'Petrona'), 'Petrona', Georgia, serif;
+  --sans: var(--ff-sans, 'Geist'), 'Geist', system-ui, sans-serif;
+  --mono: var(--ff-mono, 'IBM Plex Mono'), 'IBM Plex Mono', ui-monospace, monospace;
+}
+
+/* ---- Dark-arcade register tokens (CANON only) ----
+ * The single source of truth for the dark register, used by BOTH <ArcadeSection>
+ * (marketing flat-dark bands, set on a wrapper) AND [data-mode='arcade'] below
+ * (the app cabinet + the landing Leaderboard). Every value is a canon palette
+ * color — no invented hexes.
+ *
+ * The bg is --frame (#110b1a), the SAME dark background as the publication frame +
+ * masthead, so the dark sections read as print-like and continuous with the frame
+ * (canon black #08000f is too saturated — screen-black, not paper; and --ink #11091e
+ * is reserved for text). Body text on dark = --paper (#f9f5ef, canon "font color on
+ * dark"); headers white; cards lift off the bg with --muted/--purple; magenta/green/
+ * amber stay at full power. */
+:root {
+  --arcade-bg: var(--frame); /* #110b1a — dedicated dark editorial bg; matches frame + masthead. */
+  --arcade-surface: #332a4b; /* = canon "muted" (card surface option) — raised panels */
+  --arcade-card: #190433; /* = --purple (canon "secondary") — cards / arcade blocks */
+  --arcade-fg: #f9f5ef; /* = --paper (canon "font color on dark backgrounds") */
+  --arcade-muted: #b3a9c9; /* secondary text on dark (derived neutral) */
+  --arcade-muted-2: #7d7295; /* tertiary / mono labels on dark (derived neutral) */
+  --arcade-line: #2c2050; /* hairline rules on dark (derived neutral) */
+}
+
+/* Arcade-dark register (DESIGN.md). Applied via html[data-mode="arcade"] in the
+ * authed (app) group, AND locally on the landing Leaderboard cabinet (#8) so the
+ * gated shadow/HUD utilities on shared primitives turn on for that section only. */
+[data-mode='arcade'] {
+  --paper: var(--arcade-bg);
+  --surface: var(--arcade-surface);
+  --card: var(--arcade-card);
+  --ink: var(--arcade-fg);
+  --black: #08000f; /* canon black (not pure #000) — borders + hard shadows */
+  --line: var(--arcade-line);
+  --muted: var(--arcade-muted);
+  --muted-2: var(--arcade-muted-2);
 }
 
 @theme inline {
@@ -39,10 +109,13 @@
   --color-magenta: var(--magenta);
   --color-green: var(--green);
   --color-orange: var(--orange);
+  --color-red: var(--red);
   --color-surface: var(--surface);
   --color-paper: var(--paper);
   --color-card: var(--card);
+  --color-frame: var(--frame);
   --color-muted: var(--muted);
+  --color-muted-2: var(--muted-2);
   --color-line: var(--line);
   --color-error: var(--error);
 
@@ -51,8 +124,17 @@
   --font-sans: var(--sans);
   --font-mono: var(--mono);
 
-  /* Square radius — neobrutalist signature (DESIGN.md). */
+  /* Square radius — neobrutalist signature (DESIGN.md). 0–6px max. */
   --radius: 0px;
+  --radius-sm: 3px;
+  --radius-card: 4px;
+
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
 html,
@@ -61,8 +143,82 @@ body {
   color: var(--ink);
 }
 
+html {
+  /* Smooth in-page anchor scrolling (e.g. the community rail → #lo-ultimo). */
+  scroll-behavior: smooth;
+}
+
 body {
+  margin: 0;
   font-family: var(--sans);
   -webkit-font-smoothing: antialiased;
   line-height: 1.5;
+  /* Smooth paper <-> arcade transition (DESIGN.md motion). */
+  transition:
+    background 0.3s,
+    color 0.3s;
+}
+
+svg {
+  display: block;
+}
+
+/* ===========================================================================
+ * Hairline / border utilities (neobrutalist = borders only, NO shadows).
+ * The shadow-hard* utilities are retained as NO-OPS so any lingering class
+ * stays flat; offset shadows were removed from the design system 2026-06-20.
+ * =========================================================================== */
+@utility shadow-hard {
+  box-shadow: none;
+}
+@utility shadow-hard-sm {
+  box-shadow: none;
+}
+@utility shadow-hard-none {
+  box-shadow: none;
+}
+/* Hard 2px ink border — signature elements. */
+@utility border-hard {
+  border: 2px solid var(--black);
+}
+/* Hairline rule — the default divider for everything else. */
+@utility border-hair {
+  border: 1px solid var(--line);
+}
+
+/* Leaderboard cabinet view transition — a videogame "clear then load". Only the LEFT
+ * view (roster grid ↔ builder profile) animates; the leaderboard + the frame stay put.
+ * Phase 1 `view-clear`: the current view clears off (fades to the dark screen).
+ * Phase 2 `view-load`: the new view draws in top-to-bottom (a scanline render). */
+@keyframes view-clear {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@keyframes view-load {
+  0% {
+    opacity: 0.15;
+    clip-path: inset(0 0 100% 0);
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* Arcade attract-mode "press start" blink for the select prompt. */
+@keyframes attract-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.25;
+  }
 }

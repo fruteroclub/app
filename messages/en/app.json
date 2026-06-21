@@ -1,0 +1,6 @@
+{
+  "auth": {
+    "loading": "Loading…",
+    "signinRequired": "Please sign in again to continue."
+  }
+}

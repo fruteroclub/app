@@ -1,0 +1,61 @@
+{
+  "meta": {
+    "title": "Frutero Club — For companies",
+    "description": "We build product, run hackathons, and connect you with verifiable LatAm talent. Work with the Frutero Club builder community."
+  },
+  "hero": {
+    "kicker": "For companies · LATAM",
+    "title": "Build with the community",
+    "lead": "Frutero Club grows out of Pokta: teams that already ship product, run hackathons, and train builders across LatAm. Now you can also tap into their verifiable talent.",
+    "cta": "Let's talk",
+    "cardLabel": "Why Frutero",
+    "cardBody": "It's not a job board. It's a community where every builder's work lives on their perfil — verifiable, and theirs."
+  },
+  "services": {
+    "heading": "What we do",
+    "tag": "SERVICES",
+    "build": {
+      "title": "Product building",
+      "body": "Pokta teams design and ship product with you: prototype to production, with builders who have done it before."
+    },
+    "hackathons": {
+      "title": "Hackathons & programs",
+      "body": "We run hackathons, bootcamps, and challenges for your brand. Logistics, mentorship, and a community ready to show up."
+    },
+    "talent": {
+      "title": "Verifiable talent",
+      "body": "Every builder has a perfil with proven work. You reach people whose reputation can be checked — not just a résumé."
+    }
+  },
+  "talent": {
+    "heading": "Hire verifiable talent",
+    "tag": "RECRUITING",
+    "lead": "We find the best matches between your team and builders whose reputation is backed by their work, not by a PDF.",
+    "body": "Recruiting is bespoke: tell us what you need and we connect you with people who have already proven what they can do inside the community.",
+    "gated": "By invitation — let's talk first"
+  },
+  "contact": {
+    "heading": "Let's talk",
+    "tag": "CONTACT",
+    "lead": "Tell us what you want to build or who you're looking for. We'll get back to you shortly.",
+    "fields": {
+      "name": "Name",
+      "email": "Email",
+      "org": "Organization",
+      "orgPlaceholder": "Company or project (optional)",
+      "message": "Message",
+      "messagePlaceholder": "How can we help?"
+    },
+    "submit": "Send message",
+    "submitting": "Sending…",
+    "success": {
+      "title": "Message received!",
+      "body": "Thanks for reaching out. We'll be in touch soon."
+    },
+    "errors": {
+      "validation": "Check the highlighted fields.",
+      "rateLimited": "Too many submissions. Try again in a few minutes.",
+      "generic": "We couldn't send your message. Please try again."
+    }
+  }
+}

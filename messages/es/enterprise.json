@@ -1,0 +1,61 @@
+{
+  "meta": {
+    "title": "Frutero Club — Para empresas",
+    "description": "Construimos producto, operamos hackathons y conectamos con talento verificable de LatAm. Trabaja con la comunidad de builders de Frutero Club."
+  },
+  "hero": {
+    "kicker": "Para empresas · LATAM",
+    "title": "Construye con la comunidad",
+    "lead": "Frutero Club nace de Pokta: equipos que ya construyen producto, operan hackathons y forman builders en LatAm. Hoy también puedes acceder a su talento verificable.",
+    "cta": "Hablemos",
+    "cardLabel": "Por qué Frutero",
+    "cardBody": "No es una bolsa de trabajo. Es una comunidad donde el trabajo de cada builder queda registrado en su perfil — verificable y suyo."
+  },
+  "services": {
+    "heading": "Lo que hacemos",
+    "tag": "SERVICIOS",
+    "build": {
+      "title": "Construcción de producto",
+      "body": "Equipos de Pokta diseñan y envían producto contigo: del prototipo a producción, con builders que ya lo han hecho."
+    },
+    "hackathons": {
+      "title": "Hackathons y programas",
+      "body": "Operamos hackathons, bootcamps y retos para tu marca. Logística, mentoría y una comunidad lista para participar."
+    },
+    "talent": {
+      "title": "Talento verificable",
+      "body": "Cada builder tiene un perfil con su trabajo demostrado. Llegas a gente cuya reputación se puede comprobar, no solo un currículum."
+    }
+  },
+  "talent": {
+    "heading": "Contrata talento verificable",
+    "tag": "RECLUTAMIENTO",
+    "lead": "Buscamos los mejores matches entre tu equipo y builders cuya reputación está respaldada por su trabajo, no por un PDF.",
+    "body": "El reclutamiento es a la medida: nos cuentas qué necesitas y te conectamos con perfiles que ya demostraron lo que saben hacer dentro de la comunidad.",
+    "gated": "Por invitación — hablemos primero"
+  },
+  "contact": {
+    "heading": "Hablemos",
+    "tag": "CONTACTO",
+    "lead": "Cuéntanos qué quieres construir o a quién buscas. Te respondemos en breve.",
+    "fields": {
+      "name": "Nombre",
+      "email": "Correo",
+      "org": "Organización",
+      "orgPlaceholder": "Empresa o proyecto (opcional)",
+      "message": "Mensaje",
+      "messagePlaceholder": "¿En qué te ayudamos?"
+    },
+    "submit": "Enviar mensaje",
+    "submitting": "Enviando…",
+    "success": {
+      "title": "¡Mensaje recibido!",
+      "body": "Gracias por escribirnos. Te contactaremos pronto."
+    },
+    "errors": {
+      "validation": "Revisa los campos marcados.",
+      "rateLimited": "Demasiados envíos. Intenta de nuevo en unos minutos.",
+      "generic": "No pudimos enviar tu mensaje. Intenta de nuevo."
+    }
+  }
+}
