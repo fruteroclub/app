@@ -5,7 +5,7 @@ import { NextIntlClientProvider, hasLocale } from 'next-intl'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { routing, type Locale } from '@/i18n/routing'
 import { baseFontVariables } from '@/lib/fonts'
-import { SITE_URL, SITE_NAME, localeToBcp47, siteJsonLd, OG_IMAGE } from '@/lib/seo'
+import { SITE_URL, SITE_NAME, localeToBcp47, siteJsonLd, OG_IMAGE, INDEXABLE } from '@/lib/seo'
 import { Analytics } from '@/components/analytics/Analytics'
 import { CtaTracker } from '@/components/analytics/CtaTracker'
 import { JsonLd } from '@/components/seo/JsonLd'
@@ -48,6 +48,9 @@ export async function generateMetadata({
     },
     description: t('meta.description'),
     applicationName: SITE_NAME,
+    // Non-production deploys are noindex site-wide (cascades to every route);
+    // production pages opt back in via buildMetadata / per-route metadata.
+    robots: INDEXABLE ? undefined : { index: false, follow: false },
     manifest: '/manifest.webmanifest',
     // app/favicon.ico is auto-detected; the PNG + apple-touch icons live in
     // /public/favicon and must be wired explicitly (Next only auto-detects
