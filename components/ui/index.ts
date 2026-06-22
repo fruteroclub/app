@@ -3,8 +3,3 @@ export { Button, buttonVariants, type ButtonProps } from './button'
 export { Badge, badgeVariants, type BadgeProps } from './badge'
 export { Card, cardVariants, type CardProps } from './card'
 export { Avatar, type AvatarProps } from './avatar'
-export {
-  ProgressBar,
-  clampPercent,
-  type ProgressBarProps,
-} from './progress-bar'

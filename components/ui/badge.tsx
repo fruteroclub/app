@@ -6,11 +6,11 @@ import { cn } from '@/lib/utils'
 /**
  * Badge — the small mono-labeled chips from the previews (DESIGN.md → Components).
  *
- * tier:   purple block, 1.5px hard border, mono uppercase ("Nivel 05+", "NIVEL 07")
- *         — the unlock-card tier chip / directory level pill.
+ * tier:   purple block, 1.5px hard border, mono uppercase ("RARE", "CONTRIBUTOR")
+ *         — the rarity / directory tier chip.
  * accent: a per-dimension colored chip (magenta / green / orange) used for
  *         eyebrows and status. Hairline, no shadow.
- * solid:  the signature level badge — purple block + hard border + offset shadow.
+ * solid:  the signature block badge — purple block + hard border.
  *         In arcade mode the bg flips to magenta (see globals / DESIGN.md).
  *
  * Neobrutalist shadow lives only on `solid` (a signature element).

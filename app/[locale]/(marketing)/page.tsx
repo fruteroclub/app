@@ -37,7 +37,7 @@ import {
  *   2 · paper  · ProofStrip (real proof numbers)
  *   3 · DARK   · Thesis (manifesto)            [ArcadeSection, flat]
  *   4 · DARK   · Pillars (Construye·Demuestra·Desbloquea) [ArcadeSection, flat]
- *   5 · paper  · Unlocks (level ladder)
+ *   5 · paper  · OpportunityMarketplace (rarity-gated unlocks)
  *   6 · DARK   · Testimonials (voices)         [ArcadeSection, flat]
  *   7 · paper  · LatestMagazine (newspaper page stack)
  *   8 · DARK*  · CharacterSelect (leaderboard) [ArcadeSection cabinet → shadows on]

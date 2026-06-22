@@ -11,7 +11,6 @@ export {
 } from "./CharacterSelectBoard";
 export { ProofStrip } from "./ProofStrip";
 export { Pillars } from "./Pillars";
-export { Unlocks } from "./Unlocks"; // parked — superseded by OpportunityMarketplace (#5)
 export { OpportunityMarketplace } from "./OpportunityMarketplace";
 export { PlayerCards } from "./PlayerCards";
 export { PlayerCard, type PlayerCardProps } from "./PlayerCard";
@@ -25,15 +24,11 @@ export {
   SectionHeader,
   type SectionHeaderProps,
   type SectionHeaderRegister,
-  type SectionHeaderLayout,
   type SectionHeaderAccent,
 } from "./SectionHeader";
 
 /* Conversion rework — shared foundation + new sections (landing-sections plan). */
 export { ArcadeSection, type ArcadeSectionProps } from "./ArcadeSection";
-/* Unlocks sub-components (reusable). */
-export { LevelLadder, type LevelLadderProps, type LevelTier, type LevelTierAccent } from "./LevelLadder";
-export { UnlockCard, type UnlockCardProps, type UnlockCardAccent } from "./UnlockCard";
 export { StatementCard, type StatementCardProps } from "./StatementCard";
 export { Band, type BandProps } from "./Band";
 export {

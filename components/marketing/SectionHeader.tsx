@@ -7,7 +7,7 @@ import { Glyph, type GlyphName } from "@/components/Glyph";
  *
  * Abstracts the "glyph eyebrow + Bitter title + mono tag + hairline rule" pattern
  * that every landing beat hand-rolled (Thesis, Testimonios, Lo último, FAQ,
- * Pillars, Unlocks). Prop-driven, no hardcoded copy — pass already-localized
+ * Pillars). Prop-driven, no hardcoded copy — pass already-localized
  * strings (call `t()` in the section, hand the results here). Usable on any page.
  *
  * REGISTER (the cypherpunk two-surface split, DESIGN.md "Two surfaces"):
@@ -18,19 +18,14 @@ import { Glyph, type GlyphName } from "@/components/Glyph";
  *     read on dark via the remapped `text-muted-2`/`border-line` tokens that the
  *     ArcadeSection wrapper already points at the `--arcade-*` group. No new hexes.
  *
- * LAYOUT — two shapes, chosen by `layout`:
- *   - 'stacked' (default) → eyebrow ABOVE the title, optional rule under the
- *     whole header. Matches Thesis / Testimonios / Lo último.
- *   - 'inline'  → glyph + eyebrow on ONE row with the hairline rule flexing to
- *     fill, the `tag` pinned right; the title (if any) sits below. Matches the
- *     `.sh` header in Pillars / Unlocks / FAQ.
+ * Layout is a single stacked shape: eyebrow ABOVE the title, optional rule under
+ * the whole header (Thesis / Testimonios / Lo último / Pillars / FAQ).
  *
  * Everything is optional except that you pass at least an `eyebrow` or a `title`.
  * Server component (no client hooks).
  */
 
 export type SectionHeaderRegister = "editorial" | "arcade";
-export type SectionHeaderLayout = "stacked" | "inline";
 
 /** Accent token for the glyph color (defaults to the register's neutral). */
 export type SectionHeaderAccent = "magenta" | "green" | "orange" | "neutral";
@@ -46,8 +41,6 @@ const ACCENT_VAR: Record<SectionHeaderAccent, string | undefined> = {
 export interface SectionHeaderProps {
   /** Light paper vs dark arcade. Drives title color (ink vs true-white). */
   register?: SectionHeaderRegister;
-  /** 'stacked' (eyebrow over title) or 'inline' (glyph · label · rule · tag). */
-  layout?: SectionHeaderLayout;
   /** Optional leading glyph (retro SVG mark). */
   glyph?: GlyphName;
   /** Glyph accent color. Defaults to 'magenta' when a glyph is present. */
@@ -56,9 +49,7 @@ export interface SectionHeaderProps {
   eyebrow?: ReactNode;
   /** Bitter display title (already localized). Omit for an eyebrow-only header. */
   title?: ReactNode;
-  /** Right-aligned mono tag/edition line (already localized). */
-  tag?: ReactNode;
-  /** Show the hairline rule (under the header for stacked; the flex rule for inline). Default true. */
+  /** Show the hairline rule under the header. Default true. */
   rule?: boolean;
   /**
    * Render the eyebrow as a FILLED accent badge (the MIT "Collection" stamp).
@@ -83,12 +74,10 @@ function titleColor(register: SectionHeaderRegister): string {
 
 export function SectionHeader({
   register = "editorial",
-  layout = "stacked",
   glyph,
   glyphAccent,
   eyebrow,
   title,
-  tag,
   rule = true,
   badge = false,
   id,

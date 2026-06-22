@@ -14,7 +14,7 @@ import { TestimonialCard } from "./TestimonialCard";
  * flip. `cabinet={false}` (default) — FLAT, no shadows, per DESIGN.md.
  *
  * Composition:
- *   - <SectionHeader register="arcade" layout="stacked"> — glyph eyebrow +
+ *   - <SectionHeader register="arcade"> — glyph eyebrow +
  *     Bitter title (text-white) + hairline rule, via the shared primitive.
  *   - <TestimonialCard> × n — prop-driven, reusable quote-post card.
  *

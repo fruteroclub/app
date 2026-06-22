@@ -32,7 +32,6 @@ import {
   Masthead,
   Pillars,
   ProofStrip,
-  Unlocks,
 } from "@/components/marketing";
 import { PROOF_STATS, SIGNUP_HREF } from "@/content/landing";
 
@@ -127,17 +126,6 @@ describe("landing — Pillars", () => {
     expect(
       screen.getByRole("heading", { name: "Desbloquea" }),
     ).toBeInTheDocument();
-  });
-});
-
-describe("landing — Unlocks", () => {
-  it("renders both reward cards with tier chips", () => {
-    renderLanding("es", <Unlocks />);
-    expect(
-      screen.getByRole("heading", { name: /Demo Slots/i }),
-    ).toBeInTheDocument();
-    expect(screen.getByText("Nivel 05+")).toBeInTheDocument();
-    expect(screen.getByText("Nivel 08+")).toBeInTheDocument();
   });
 });
 

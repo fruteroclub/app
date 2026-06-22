@@ -2,7 +2,7 @@ import { setRequestLocale } from 'next-intl/server'
 
 import { Glyph, GlyphDefs, GLYPH_NAMES } from '@/components/Glyph'
 import { ModeToggle } from '@/components/ModeToggle'
-import { Avatar, Badge, Button, Card, ProgressBar } from '@/components/ui'
+import { Avatar, Badge, Button, Card } from '@/components/ui'
 
 /**
  * Design-system demo route (T2 verify surface).
@@ -70,10 +70,10 @@ export default async function DesignSystemPage({
       </Section>
 
       {/* ---- Badges ---- */}
-      <Section index="02" title="Badges" tag="LEVEL · TIER · ACCENT">
+      <Section index="02" title="Badges" tag="SOLID · TIER · ACCENT">
         <div className="flex flex-wrap items-center gap-3.5">
-          <Badge variant="solid">NIVEL 07</Badge>
-          <Badge variant="tier">Nivel 05+</Badge>
+          <Badge variant="solid">CONTRIBUTOR</Badge>
+          <Badge variant="tier">RARE</Badge>
           <Badge variant="accent" tone="magenta">
             01 Shipped
           </Badge>
@@ -86,26 +86,8 @@ export default async function DesignSystemPage({
         </div>
       </Section>
 
-      {/* ---- ProgressBar ---- */}
-      <Section index="03" title="ProgressBar" tag="CLAMPED 0–100">
-        <div className="grid max-w-md gap-4">
-          <Labeled label="56% → magenta">
-            <ProgressBar value={56} label="Reputación a nivel 08" />
-          </Labeled>
-          <Labeled label="45% → green">
-            <ProgressBar value={45} fill="var(--green)" />
-          </Labeled>
-          <Labeled label="-20 clamps → 0%">
-            <ProgressBar value={-20} />
-          </Labeled>
-          <Labeled label="180 clamps → 100%">
-            <ProgressBar value={180} fill="var(--orange)" />
-          </Labeled>
-        </div>
-      </Section>
-
       {/* ---- Cards + Avatars ---- */}
-      <Section index="04" title="Cards · Avatars" tag="HAIR · HARD · LIFT">
+      <Section index="03" title="Cards · Avatars" tag="HAIR · HARD · LIFT">
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
           <Card variant="hair" accent="magenta" className="p-5">
             <div className="font-mono text-xs tracking-[0.12em] text-muted-2">
@@ -137,7 +119,7 @@ export default async function DesignSystemPage({
               <h3 className="font-display text-2xl font-bold tracking-[-0.01em]">
                 Demo Slots
               </h3>
-              <Badge variant="tier">Nivel 05+</Badge>
+              <Badge variant="tier">RARE</Badge>
             </div>
             <p className="text-sm text-muted">
               Presenta tu proyecto ante la comunidad. 6–8 lugares por edición.
@@ -147,7 +129,7 @@ export default async function DesignSystemPage({
       </Section>
 
       {/* ---- Glyphs ---- */}
-      <Section index="05" title="Glyphs" tag="RETRO-FUTURIST SVG">
+      <Section index="04" title="Glyphs" tag="RETRO-FUTURIST SVG">
         <div className="flex flex-wrap gap-6">
           {GLYPH_NAMES.map((name) => (
             <div key={name} className="flex flex-col items-center gap-2">
@@ -166,7 +148,7 @@ export default async function DesignSystemPage({
       </Section>
 
       {/* ---- Arcade register (authed (app) surfaces) ---- */}
-      <Section index="06" title="Arcade register" tag="(APP) DOPAMINE">
+      <Section index="05" title="Arcade register" tag="(APP) DOPAMINE">
         <div
           id={SCOPE}
           data-mode="paper"
@@ -179,13 +161,10 @@ export default async function DesignSystemPage({
             <ModeToggle scopeId={SCOPE} />
           </div>
           <div className="flex flex-wrap items-center gap-3.5">
-            <Badge variant="solid">NIVEL 08</Badge>
+            <Badge variant="solid">CONTRIBUTOR</Badge>
             <Button size="sm">
               <Glyph name="bolt" size={12} /> Sube de nivel
             </Button>
-            <div className="min-w-[200px] flex-1">
-              <ProgressBar value={72} />
-            </div>
           </div>
         </div>
       </Section>
@@ -220,22 +199,5 @@ function Section({
       </div>
       {children}
     </section>
-  )
-}
-
-function Labeled({
-  label,
-  children,
-}: {
-  label: string
-  children: React.ReactNode
-}) {
-  return (
-    <div>
-      <div className="mb-1.5 font-mono text-xs uppercase tracking-[0.08em] text-muted-2">
-        {label}
-      </div>
-      {children}
-    </div>
   )
 }

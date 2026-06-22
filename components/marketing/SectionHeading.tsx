@@ -6,7 +6,7 @@ import { Glyph, type GlyphName } from "@/components/Glyph";
  * SectionHeading — the `.sh` mono section header from landing.html: a glyph, a
  * mono uppercase label, a hairline rule, and an optional right-aligned tag.
  *
- * Used by Pillars + Unlocks. Server component.
+ * Used by the /enterprise sections. Server component.
  */
 export function SectionHeading({
   glyph,
