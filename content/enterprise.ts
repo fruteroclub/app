@@ -8,7 +8,7 @@ import type { AccentColor } from './landing'
  * colors, ordering, the contact anchor) lives here; COPY lives in next-intl
  * `messages/{es,en}/enterprise.json` keyed by the `i18nKey`s below.
  *
- * GTM (plan: "/enterprise leads with proven Pokta services; recruiting is
+ * GTM (plan: "/enterprise leads with proven services; recruiting is
  * 'talk to us', gated"): the page leads with PROVEN SERVICES, then a softer
  * "verified talent / recruiting" block that routes to the same single
  * ContactForm — recruiting is gated behind a conversation, not a self-serve flow.
@@ -29,9 +29,10 @@ export interface EnterpriseService {
 }
 
 /**
- * Proven Pokta services (the lead). Copy lives in the `enterprise.services.*`
- * message keys. These are the services Frutero/Pokta already delivers — the
- * credible front door for an enterprise lead.
+ * Proven services (the lead). Copy lives in the `enterprise.services.*`
+ * message keys. These are the services Frutero Club already delivers — the
+ * credible front door for an enterprise lead. (Public copy stays Frutero Club
+ * branded; the delivery org is not named on marketing material.)
  */
 export const ENTERPRISE_SERVICES: readonly EnterpriseService[] = [
   { i18nKey: 'build', glyph: 'bolt', accent: 'magenta' },

@@ -5,7 +5,7 @@ import { HAS_DB } from './_env'
 /**
  * /enterprise + contact E2E (T8 · plan "E2E … /enterprise, contact happy+error").
  *
- * The page is services-led (GTM, APPROVED): proven Pokta services first, then a
+ * The page is services-led (GTM, APPROVED): proven services first, then a
  * gated "talk to us" recruiting block, with the single ContactForm island. The
  * contact VALIDATION path runs without any DB (the route 400s before touching
  * Postgres). The happy path (real lead insert) is gated on DATABASE_URL.

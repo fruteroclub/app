@@ -20,7 +20,7 @@ import {
 /**
  * /enterprise — the services-led lead-capture page (T6).
  *
- * GTM (plan, APPROVED): leads with PROVEN POKTA SERVICES (the credible front
+ * GTM (plan, APPROVED): leads with PROVEN SERVICES (the credible front
  * door), then a softer "verified talent / recruiting" block — recruiting is
  * "talk to us", gated behind the single ContactForm rather than a self-serve
  * flow. The ContactForm is the ONLY interactive island; everything else is

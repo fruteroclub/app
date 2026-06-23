@@ -6,7 +6,7 @@
   "hero": {
     "kicker": "Para empresas · LATAM",
     "title": "Construye con la comunidad",
-    "lead": "Frutero Club nace de Pokta: equipos que ya construyen producto, operan hackathons y forman builders en LatAm. Hoy también puedes acceder a su talento verificable.",
+    "lead": "Frutero Club es una comunidad de equipos que ya construyen producto, operan hackathons y forman builders en LatAm. Hoy también puedes acceder a su talento verificable.",
     "cta": "Hablemos",
     "cardLabel": "Por qué Frutero",
     "cardBody": "No es una bolsa de trabajo. Es una comunidad donde el trabajo de cada builder queda registrado en su perfil — verificable y suyo."
@@ -16,7 +16,7 @@
     "tag": "SERVICIOS",
     "build": {
       "title": "Construcción de producto",
-      "body": "Equipos de Pokta diseñan y envían producto contigo: del prototipo a producción, con builders que ya lo han hecho."
+      "body": "Diseñamos y enviamos producto contigo: del prototipo a producción, con builders que ya lo han hecho."
     },
     "hackathons": {
       "title": "Hackathons y programas",

@@ -178,7 +178,7 @@ export interface Player {
 
 export const PLAYERS: readonly Player[] = [
   // TODO-swap: real members + consent + real card art + real weekly $PULPA (indexer) + real tags.
-  { id: "andres", name: "Andrés Frutero", acronym: "AFR", roleKey: "players.items.andres.role", rarity: "rare", pulpa: 2540, ships: ["Pokta OS", "zkPase"], accent: "magenta" },
+  { id: "andres", name: "Andrés Frutero", acronym: "AFR", roleKey: "players.items.andres.role", rarity: "rare", pulpa: 2540, ships: ["Frutero OS", "zkPase"], accent: "magenta" },
   { id: "mariana", name: "Mariana Ríos", acronym: "MRI", roleKey: "players.items.mariana.role", rarity: "rare", pulpa: 2310, ships: ["Monad Audit", "MUX"], accent: "green" },
   { id: "diego", name: "Diego Romero", acronym: "DGO", roleKey: "players.items.diego.role", rarity: "uncommon", pulpa: 1980, ships: ["Demo Night", "Frutero UI"], accent: "orange" },
   { id: "valeria", name: "Valeria Méndez", acronym: "VAL", roleKey: "players.items.valeria.role", rarity: "uncommon", pulpa: 1450, ships: ["Velora App"], accent: "magenta" },

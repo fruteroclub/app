@@ -152,7 +152,7 @@
     "open": "+40 oportunidades abiertas",
     "explore": "Explora el marketplace",
     "items": {
-      "audit": { "title": "Audita un smart contract en Monad", "body": "Revisa el contrato de un proyecto del club antes de su deploy.", "reward": "+250 rep", "poster": "Pokta Labs" },
+      "audit": { "title": "Audita un smart contract en Monad", "body": "Revisa el contrato de un proyecto del club antes de su deploy.", "reward": "+250 rep", "poster": "Frutero Club" },
       "guide": { "title": "Escribe una guía técnica", "body": "Documenta algo que aprendiste para el resto de la comunidad.", "reward": "+80 rep", "poster": "Redacción Frutero" },
       "bounty": { "title": "Bounty: integra ERC-8004", "body": "Implementa el estándar de identidad en un proyecto abierto.", "reward": "$500", "poster": "Monad" },
       "issue": { "title": "Resuelve un issue del SDK", "body": "Toma un issue etiquetado y mándalo a producción.", "reward": "$150", "poster": "Frutero Club" },
@@ -175,7 +175,7 @@
     "lead": "Cada miembro es una carta de jugador. Tu rareza sube construyendo.",
     "open": "Ver toda la colección",
     "items": {
-      "andres": { "role": "Full-Stack Builder", "company": "Pokta Labs", "city": "CDMX", "quote": "Frutero me dio la primera comunidad donde mi código importa. Subí a Club Contributor enviando, no hablando." },
+      "andres": { "role": "Full-Stack Builder", "company": "Frutero Club", "city": "CDMX", "quote": "Frutero me dio la primera comunidad donde mi código importa. Subí a Club Contributor enviando, no hablando." },
       "mariana": { "role": "Smart Contracts", "company": "Monad", "city": "Buenos Aires", "quote": "Cada contrato que audito suma a mi reputación. Acá tu trabajo te sigue, no se pierde en un Discord." },
       "diego": { "role": "Producto y Diseño", "company": "Frutero", "city": "CDMX", "quote": "Pasé de hacer side-projects en silencio a presentar en Demo Night. La rareza se siente real." },
       "valeria": { "role": "Diseño de Producto", "company": "Velora", "city": "Lima", "quote": "Mi perfil habla por mí. Conseguí mi primer contrato serio gracias a lo que construí en el club." },

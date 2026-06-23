@@ -152,7 +152,7 @@
     "open": "+40 open opportunities",
     "explore": "Explore the marketplace",
     "items": {
-      "audit": { "title": "Audit a smart contract on Monad", "body": "Review a club project's contract before it ships.", "reward": "+250 rep", "poster": "Pokta Labs" },
+      "audit": { "title": "Audit a smart contract on Monad", "body": "Review a club project's contract before it ships.", "reward": "+250 rep", "poster": "Frutero Club" },
       "guide": { "title": "Write a technical guide", "body": "Document something you learned for the rest of the community.", "reward": "+80 rep", "poster": "Frutero Editorial" },
       "bounty": { "title": "Bounty: integrate ERC-8004", "body": "Implement the identity standard in an open project.", "reward": "$500", "poster": "Monad" },
       "issue": { "title": "Fix an SDK issue", "body": "Pick up a labeled issue and ship it.", "reward": "$150", "poster": "Frutero Club" },
@@ -175,7 +175,7 @@
     "lead": "Every member is a player card. Your rarity climbs as you build.",
     "open": "See the full collection",
     "items": {
-      "andres": { "role": "Full-Stack Builder", "company": "Pokta Labs", "city": "CDMX", "quote": "Frutero gave me the first community where my code counts. I hit Club Contributor by shipping, not talking." },
+      "andres": { "role": "Full-Stack Builder", "company": "Frutero Club", "city": "CDMX", "quote": "Frutero gave me the first community where my code counts. I hit Club Contributor by shipping, not talking." },
       "mariana": { "role": "Smart Contracts", "company": "Monad", "city": "Buenos Aires", "quote": "Every contract I audit adds to my reputation. Here your work follows you, it doesn't vanish into a Discord." },
       "diego": { "role": "Product & Design", "company": "Frutero", "city": "CDMX", "quote": "I went from quiet side-projects to presenting at Demo Night. The rarity feels real." },
       "valeria": { "role": "Product Design", "company": "Velora", "city": "Lima", "quote": "My profile speaks for me. I landed my first serious contract from what I built in the club." },
