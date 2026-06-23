@@ -152,6 +152,13 @@ export interface BuildMetadataArgs {
   description: string
   /** Set false for non-indexable surfaces (e.g. authed app). Defaults true. */
   index?: boolean
+  /**
+   * Per-route OG/Twitter image override. Defaults to the single-path site card
+   * (`OG_IMAGE`). Pass an absolute URL for routes with their own card — e.g.
+   * `/noticias/[slug]/opengraph-image` (DEC-9: the file convention does NOT
+   * cascade through `[locale]`, so the article route wires its card explicitly).
+   */
+  image?: { url: string; width?: number; height?: number; alt?: string }
 }
 
 /**
@@ -167,7 +174,11 @@ export function buildMetadata({
   title,
   description,
   index = true,
+  image,
 }: BuildMetadataArgs): Metadata {
+  const ogImage = image
+    ? { url: image.url, width: image.width ?? 1200, height: image.height ?? 630, alt: image.alt }
+    : OG_IMAGE
   return {
     // `absolute` so the route's own title is used verbatim (these titles already
     // contain the brand) and is NOT wrapped by the layout's `%s · Frutero Club`
@@ -182,13 +193,13 @@ export function buildMetadata({
       description,
       url: localizedUrl(locale, path),
       locale: localeToBcp47[locale],
-      images: [OG_IMAGE],
+      images: [ogImage],
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
-      images: [OG_IMAGE.url],
+      images: [ogImage.url],
     },
     // Per-page opt-out (e.g. authed surfaces) OR a non-production deploy both
     // force noindex; only an indexable page on the production host stays open.
@@ -196,5 +207,40 @@ export function buildMetadata({
       index && INDEXABLE
         ? undefined
         : { index: false, follow: false },
+  }
+}
+
+export interface ArticleJsonLdArgs {
+  title: string
+  dek?: string
+  /** ISO date 'YYYY-MM-DD'. */
+  date: string
+  author: { name: string; handle: string }
+  /** Absolute canonical URL of the article. */
+  url: string
+  /** Absolute URL of the article's OG image. */
+  image: string
+}
+
+/**
+ * `NewsArticle` JSON-LD for an article page (T5). Tied to the site `Organization`
+ * as `publisher` via its `@id` (the org node is emitted site-wide by
+ * {@link siteJsonLd} in the locale layout, so this references it rather than
+ * re-declaring it). Rendered on `/noticias/[slug]` alongside the page.
+ */
+export function articleJsonLd(locale: Locale, a: ArticleJsonLdArgs) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'NewsArticle',
+    headline: a.title,
+    description: a.dek ?? '',
+    inLanguage: localeToBcp47[locale].replace('_', '-'),
+    datePublished: a.date,
+    dateModified: a.date,
+    image: [a.image],
+    url: a.url,
+    mainEntityOfPage: a.url,
+    author: { '@type': 'Person', name: a.author.name, identifier: `@${a.author.handle}` },
+    publisher: { '@id': `${SITE_URL}/#organization` },
   }
 }

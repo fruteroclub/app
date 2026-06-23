@@ -5,10 +5,11 @@ import ReactMarkdown from 'react-markdown'
 
 import { Link } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
-import { buildMetadata } from '@/lib/seo'
+import { buildMetadata, articleJsonLd, localizedUrl } from '@/lib/seo'
 import { getArticle, listSlugs, type Lang } from '@/lib/content/articles'
 import { toMagazinePageProps } from '@/lib/content/present'
 import { MagazinePage, Masthead, SiteFooter } from '@/components/marketing'
+import { JsonLd } from '@/components/seo/JsonLd'
 
 /**
  * /noticias/[slug] — a single article (DEC-4, DEC-14).
@@ -52,6 +53,12 @@ export async function generateMetadata({
     path: `/noticias/${slug}`,
     title: article.meta.title,
     description: article.meta.dek ?? article.meta.title,
+    // DEC-9: wire the per-route OG card explicitly (the file convention does not
+    // cascade through [locale]).
+    image: {
+      url: localizedUrl(locale as Locale, `/noticias/${slug}/opengraph-image`),
+      alt: article.meta.cover.alt,
+    },
   })
 }
 
@@ -95,6 +102,16 @@ export default async function NoticiaPage({
 
   return (
     <>
+      <JsonLd
+        data={articleJsonLd(locale as Locale, {
+          title: article.meta.title,
+          dek: article.meta.dek,
+          date: article.meta.date,
+          author: article.meta.author,
+          url: localizedUrl(locale as Locale, `/noticias/${slug}`),
+          image: localizedUrl(locale as Locale, `/noticias/${slug}/opengraph-image`),
+        })}
+      />
       <Masthead />
       <main className="mx-auto w-full max-w-4xl px-5 py-12 md:px-8 md:py-16">
         <Link

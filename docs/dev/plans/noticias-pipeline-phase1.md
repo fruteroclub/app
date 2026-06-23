@@ -386,6 +386,39 @@ corpus would otherwise drop pages — DEC-7); covered by a test. (b) The content
 over to `07-01` and skew `latest()`); `ArticleMeta`'s §5 regex is kept verbatim and the
 semantic check lives at the CI gate. No critical/high findings.
 
+### T5 + T6 + T7 outcome (2026-06-22) — DONE, Phase 1 complete
+
+**T5 (SEO/OG/sitemap/llms):** `lib/seo.ts` gained `articleJsonLd` (NewsArticle, `publisher`
+→ org `@id`) — rendered on the article page; `buildMetadata` gained an `image` override.
+`app/sitemap.ts` is now async + `force-static`, emitting `/noticias` + every article (both
+locales via hreflang) from `getAllArticles` (throws → build fails on token error, DEC-7).
+`app/llms.txt/route.ts` lists the news section. Per-route OG: the `opengraph-image.tsx` FILE
+convention serves at an unguessable HASHED path (`…-<hash>`), which breaks the STABLE URL that
+`toErc721.image` (§5) and the metadata both need — so it's a ROUTE HANDLER at
+`noticias/[slug]/opengraph-image/route.tsx` (stable path, force-static, per locale×slug).
+**proxy.ts** gained a THIRD matcher entry re-including nested `/.../opengraph-image` (the
+first pattern's `opengraph-image` exclusion is for the ROOT card only; without it the ES apex
+404s). Verified: apex/en/root OG all 200 image/png; `og:image` = `metadata.json` image = the
+served route (all aligned); NewsArticle JSON-LD present; sitemap carries the news refs.
+
+**T6 (daily cron):** `.github/workflows/daily-edition.yml` (cron `0 6 * * *` = 00:00 UTC-6 +
+`workflow_dispatch`; curls the Vercel deploy hook, exits non-zero on non-200/201 → Slack alert
+via `if: failure()`). YAML validated. E2E gated on repo secrets `VERCEL_DEPLOY_HOOK` +
+`SLACK_WEBHOOK` (set in GitHub) and the workflow landing on `main`.
+
+**T7 (Hermes + real loop):** content repo gained `HERMES.md` (house style + field guide +
+citation/dup-URL rules) and `CONTRIBUTING.md` (DEC-12 merge checklist). One REAL loop ran end
+to end: notes → bilingual draft → PR #1 → CI `validate` green → human squash-merge → `main`
+(4 posts) → app build prerenders the new article (ES+EN + metadata.json all 200, homepage rail
+shows 4). Plus the validate gate now also rejects non-real calendar dates (review hardening).
+
+**Phase 1 DoD:** all gates green (tsc, eslint, vitest 137, next build 28 pages, content CI);
+real bilingual posts live at `/noticias/<slug>` with NewsArticle JSON-LD + OG card + valid
+metadata.json; Lo último #7 + hero rail render real posts; content CI blocks bad PRs; one real
+Hermes loop completed. (Test-contract paths: unit-covered for schema/reader/present/mappers +
+the regression; route render/404/metadata/sitemap/OG verified at runtime rather than via
+component unit tests for the async server components.)
+
 ## References (repo-relative)
 
 - SEO factory + JSON-LD `@graph`: `lib/seo.ts` (`buildMetadata` `:164`, `siteJsonLd` `:120`, org id `:121`)

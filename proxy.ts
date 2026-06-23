@@ -41,8 +41,15 @@ export const config = {
   // apex `/noticias/<slug>/metadata.json` → the prerendered `/es/...` output.
   // Without it the broad `.*\..*` (dotted) exclusion skips the proxy and the
   // apex 404s (the EN `/en/...` form works regardless).
+  //
+  // The THIRD pattern re-includes the NESTED per-article OG route handler
+  // `/.../noticias/<slug>/opengraph-image` (DEC-9), which the first pattern's
+  // `opengraph-image` exclusion (meant for the ROOT card only) would otherwise
+  // skip → apex 404. `.*/opengraph-image` requires a leading segment, so the
+  // root `/opengraph-image` never matches it and stays excluded.
   matcher: [
     '/((?!api|_next|_vercel|opengraph-image|twitter-image|.*\\..*).*)',
     '/((?!api|_next|_vercel).*/metadata\\.json)',
+    '/((?!api|_next|_vercel).*/opengraph-image)',
   ],
 }

@@ -1,0 +1,33 @@
+# Daily edition (T6 / DEC-10).
+#
+# News goes live as a once-a-day "edition", NOT on every content merge. This cron
+# curls a Vercel Deploy Hook at 00:00 America/Mexico_City, which rebuilds the site
+# and snapshots `fruteroclub/content@main` (Mexico has no DST → UTC-6 is stable, so
+# `0 6 * * *` UTC is exactly local midnight). `workflow_dispatch` is the manual
+# "publish now" override for urgent posts.
+#
+# Hosted in the APP repo (not the content repo) on purpose: GitHub auto-disables
+# scheduled workflows after 60 days of REPO inactivity; the app repo is always
+# active, the content repo may go quiet. Notify-on-failure so a missed edition is
+# never silent.
+#
+# Required repo Actions secrets:
+#   VERCEL_DEPLOY_HOOK  — the Vercel Deploy Hook URL (Project → Settings → Git → Deploy Hooks)
+#   SLACK_WEBHOOK       — an Incoming Webhook URL for the failure alert
+name: Daily edition
+on:
+  schedule:
+    - cron: '0 6 * * *' # 00:00 America/Mexico_City (UTC-6, DST-free)
+  workflow_dispatch: {} # manual publish-now (DEC-10)
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Vercel deploy
+        run: |
+          code=$(curl -s -o /dev/null -w '%{http_code}' -X POST "${{ secrets.VERCEL_DEPLOY_HOOK }}")
+          echo "deploy hook -> $code"
+          case "$code" in 200|201) ;; *) exit 1 ;; esac
+      - name: Alert on failure
+        if: failure()
+        run: curl -fsS -X POST "${{ secrets.SLACK_WEBHOOK }}" -d '{"text":"⚠️ Daily edition deploy hook failed"}'
