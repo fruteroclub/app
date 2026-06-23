@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 
 import { buildMetadata } from "@/lib/seo";
 import type { Locale } from "@/i18n/routing";
+import { latest, type Lang } from "@/lib/content/articles";
+import { toCard } from "@/lib/content/present";
 import {
   ArcadeSection,
   CharacterSelect,
@@ -71,6 +73,14 @@ export default async function HomePage({
   const { locale } = await params;
   setRequestLocale(locale);
 
+  // T4: the news front-page rail (#1) + Lo último (#7) read the REAL latest
+  // articles. Fetch the 6 once; the hero rail is the first 4 (same sort). The build
+  // fails if the content read fails (DEC-7) — same source as /noticias.
+  const lang: Lang = locale === "en" ? "en" : "es";
+  const localePrefix = lang === "en" ? "/en" : "";
+  const latestCards = (await latest(6, lang)).map((a) => toCard(a.meta, lang));
+  const railCards = latestCards.slice(0, 4);
+
   return (
     <>
       {/* 11 · — · Masthead (persistent dark frame; header + brand + nav + CTA) */}
@@ -80,7 +90,7 @@ export default async function HomePage({
         {/* Editorial column — PAPER beats #1, #2 live inside the max-w wrapper. */}
         <div className="mx-auto max-w-[var(--wrap)] px-7">
           {/* 1 · paper · Hero + community rail */}
-          <CommunityFrontPage />
+          <CommunityFrontPage posts={railCards} localePrefix={localePrefix} />
           {/* 2 · paper · Proof numbers */}
           <ProofStrip />
         </div>
@@ -109,7 +119,7 @@ export default async function HomePage({
 
         {/* 7 · paper · Lo último (newspaper page stack) — editorial column */}
         <div className="mx-auto max-w-[var(--wrap)] px-7">
-          <LatestMagazine />
+          <LatestMagazine posts={latestCards} localePrefix={localePrefix} />
         </div>
 
         {/* 8 · DARK* · Leaderboard — full-bleed CABINET (data-mode=arcade → shadows on) */}

@@ -366,6 +366,19 @@ CI is green. Deviations + reconciliations (DEC numbers kept):
    `notFound()` (never a mixed-language fallback page — hard rule). The explicit sitemap-level
    noindex/drop net lands with the sitemap work (T5).
 
+### T4 outcome (2026-06-22) — DONE, all gates green
+
+Repointed the homepage's hero rail (`CommunityFrontPage`) + Lo último #7 (`LatestMagazine`)
+off the `COMMUNITY_CARDS` stub onto the REAL articles. The homepage (already async) fetches
+`latest(6, lang)` ONCE and slices the rail to the first 4 (same sort) — both components are
+now prop-driven (`posts` + `localePrefix`), staying presentational/testable. Each card/spine
+links to `/noticias/<slug>` (locale-prefixed; old `#<id>` in-page hash open removed). Zero
+posts → the `latest.empty` "pronto" state (new key, ES+EN). `MagazineTabs` mechanic + the
+nameplate/edition-strip layout unchanged. `LATEST_POSTS` was already dead (no consumer) — left
+as-is. `landing.test.tsx` stays green (its tested components don't touch the cards) + 5 new
+tests (empty state + real-route hrefs, ES+EN). Verified: vitest 137, tsc/eslint/build green,
+and the live homepage renders the 3 seeds linking to real routes (ES apex + /en).
+
 **Post-review hardening (adversarial review, 2 LOW findings — both applied):**
 (a) `fetchTree` now throws if the GitHub tree response is `truncated` (latent >~100k-entry
 corpus would otherwise drop pages — DEC-7); covered by a test. (b) The content-repo

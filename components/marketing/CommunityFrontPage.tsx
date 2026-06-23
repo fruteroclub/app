@@ -1,7 +1,6 @@
 import { useTranslations } from "next-intl";
 
 import { Glyph } from "@/components/Glyph";
-import { COMMUNITY_CARDS } from "@/content/cards";
 import type { CommunityCardData } from "@/content/cards";
 
 import { ACCENT, duotone } from "./cardStyles";
@@ -14,9 +13,19 @@ import { Hero } from "./Hero";
  * hairline-divided list of the community's publications (news / events /
  * achievements), each a two-part eyebrow + Bitter headline + meta + duotone thumb.
  *
+ * Source of truth (T4): the REAL latest 4 articles — `latest(4, lang)`, fetched in
+ * page.tsx and passed as `posts` (the first 4 of the #7 set). Each rail item links
+ * to its `/noticias/<slug>` route (no more in-page "#<id>" hash open).
+ *
  * Line hierarchy: thin hairlines for the rail dividers + the vertical column rule;
  * a heavy 2px ink rule frames the bottom of the section. Flat, editorial, static.
  */
+export interface CommunityFrontPageProps {
+  /** The latest rail posts (mapped from ArticleMeta), newest first. */
+  posts: readonly CommunityCardData[];
+  /** Locale prefix for the article hrefs ('' for the ES apex, '/en' for EN). */
+  localePrefix: string;
+}
 
 /** Two-part eyebrow: TYPE (muted) | TOPIC (accent) — the Spectrum pattern. */
 function Eyebrow({ card }: { card: CommunityCardData }) {
@@ -44,14 +53,22 @@ function Meta({ card }: { card: CommunityCardData }) {
   );
 }
 
-function RailItem({ card, seed }: { card: CommunityCardData; seed: number }) {
+function RailItem({
+  card,
+  seed,
+  href,
+}: {
+  card: CommunityCardData;
+  seed: number;
+  href: string;
+}) {
   const a = ACCENT[card.accent];
   return (
     <li className="py-3.5 first:pt-0 md:pl-6">
-      {/* Links to the matching page in #lo-ultimo — MagazineTabs opens that tab and
-          scrolls the section into view (hash-driven; see MagazineTabs). */}
+      {/* Links to the full article route (/noticias/<slug>). Plain anchor (already
+          locale-prefixed) keeps this a static server component. */}
       <a
-        href={`#${card.id}`}
+        href={href}
         className="group flex items-start justify-between gap-4 no-underline"
       >
         <div className="min-w-0">
@@ -73,7 +90,7 @@ function RailItem({ card, seed }: { card: CommunityCardData; seed: number }) {
   );
 }
 
-export function CommunityFrontPage() {
+export function CommunityFrontPage({ posts, localePrefix }: CommunityFrontPageProps) {
   const t = useTranslations("landing");
 
   return (
@@ -84,13 +101,24 @@ export function CommunityFrontPage() {
           column rule (connected hairline grid, Spectrum-style); the left padding
           lives on each item, not the wrapper. */}
       <div className="md:border-l md:border-line">
-        <ul className="divide-y divide-line">
-          {COMMUNITY_CARDS.map((card, i) => (
-            <RailItem key={card.id} card={card} seed={i} />
-          ))}
-        </ul>
+        {posts.length === 0 ? (
+          <p className="py-3.5 font-serif text-base text-muted md:pl-6">
+            {t("latest.empty")}
+          </p>
+        ) : (
+          <ul className="divide-y divide-line">
+            {posts.map((card, i) => (
+              <RailItem
+                key={card.id}
+                card={card}
+                seed={i}
+                href={`${localePrefix}/noticias/${card.id}`}
+              />
+            ))}
+          </ul>
+        )}
 
-        {/* In-page link to the full magazine (#7 Lo último). Mono, hairline-topped,
+        {/* Link to the full magazine (#7 Lo último), in-page. Mono, hairline-topped,
             smooth-scrolls (html { scroll-behavior: smooth }). Plain anchor so it
             keeps this a static server component. */}
         <a

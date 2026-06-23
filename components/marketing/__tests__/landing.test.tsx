@@ -27,12 +27,15 @@ vi.mock("@/i18n/navigation", () => ({
 import { GlyphDefs } from "@/components/Glyph";
 import {
   CharacterSelect,
+  CommunityFrontPage,
   CtaBand,
   Hero,
+  LatestMagazine,
   Masthead,
   Pillars,
   ProofStrip,
 } from "@/components/marketing";
+import type { CommunityCardData } from "@/content/cards";
 import { PROOF_STATS, SIGNUP_HREF } from "@/content/landing";
 
 import esCommon from "@/messages/es/common.json";
@@ -172,5 +175,79 @@ describe('landing — Leaderboard character-select makes no fake "live" claim', 
     fireEvent.click(within(container).getByRole("button", { name: /Andrés Frutero/i }));
     const cta = await within(container).findByRole("link", { name: /Habla con su Agente/i });
     expect(cta).toHaveAttribute("href", "/perfil/andres");
+  });
+});
+
+describe("landing — Lo último #7 + hero rail (T4 repoint to latest())", () => {
+  const cards: CommunityCardData[] = [
+    {
+      id: "2026-06-22-alpha",
+      category: "Logro",
+      topic: "Monad",
+      accent: "magenta",
+      glyph: "star",
+      collector: "001/120",
+      title: "Alpha headline",
+      dek: "Alpha dek",
+      author: "Redacción",
+      time: "22 JUN 2026",
+      stat: "@frutero",
+    },
+    {
+      id: "2026-06-20-bravo",
+      category: "Evento",
+      topic: "CDMX",
+      accent: "green",
+      glyph: "star",
+      collector: "002/120",
+      title: "Bravo headline",
+      author: "A. Frutero",
+      time: "20 JUN 2026",
+      stat: "@aldo",
+    },
+  ];
+
+  it("LatestMagazine links each page CTA to its /noticias/<slug> route (ES apex)", () => {
+    const { container } = renderLanding(
+      "es",
+      <LatestMagazine posts={cards} localePrefix="" />,
+    );
+    const hrefs = Array.from(container.querySelectorAll('a[href^="/noticias/"]')).map((a) =>
+      a.getAttribute("href"),
+    );
+    expect(hrefs).toContain("/noticias/2026-06-22-alpha");
+    expect(hrefs).toContain("/noticias/2026-06-20-bravo");
+  });
+
+  it("LatestMagazine locale-prefixes the hrefs for EN", () => {
+    const { container } = renderLanding(
+      "en",
+      <LatestMagazine posts={cards} localePrefix="/en" />,
+    );
+    const hrefs = Array.from(container.querySelectorAll('a[href^="/en/noticias/"]')).map((a) =>
+      a.getAttribute("href"),
+    );
+    expect(hrefs).toContain("/en/noticias/2026-06-22-alpha");
+  });
+
+  it("LatestMagazine renders the 'pronto' empty state with zero posts", () => {
+    renderLanding("es", <LatestMagazine posts={[]} localePrefix="" />);
+    expect(screen.getByText(/Pronto\. La comunidad/i)).toBeInTheDocument();
+  });
+
+  it("CommunityFrontPage rail items link to /noticias/<slug> (no more #hash)", () => {
+    const { container } = renderLanding(
+      "es",
+      <CommunityFrontPage posts={cards} localePrefix="" />,
+    );
+    const railLink = container.querySelector('a[href="/noticias/2026-06-22-alpha"]');
+    expect(railLink).not.toBeNull();
+    // The old in-page hash open must be gone.
+    expect(container.querySelector('a[href="#2026-06-22-alpha"]')).toBeNull();
+  });
+
+  it("CommunityFrontPage renders the empty state with zero posts", () => {
+    renderLanding("es", <CommunityFrontPage posts={[]} localePrefix="" />);
+    expect(screen.getByText(/Pronto\. La comunidad/i)).toBeInTheDocument();
   });
 });
