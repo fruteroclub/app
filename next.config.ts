@@ -40,6 +40,11 @@ const nextConfig: NextConfig = {
   // Only process these file extensions as pages
   pageExtensions: ['tsx', 'ts', 'jsx', 'js'],
 
+  // The content repo (`github:fruteroclub/content`) ships TypeScript source
+  // (schema/article.ts — the ArticleMeta source of truth). Transpile it so Next
+  // can consume the `.ts` exports directly without a build step in that repo.
+  transpilePackages: ['@fruteroclub/content'],
+
   // Exclude problematic packages from server-side bundling.
   // The Privy embedded-wallet chain (@privy-io/react-auth → @reown/appkit →
   // walletconnect → pino → thread-stream) bundles dev test files that require

@@ -1,0 +1,14 @@
+{
+  "meta": {
+    "title": "News",
+    "description": "What the community ships and builds: verifiable achievements, events, guides, and logs."
+  },
+  "heading": "News",
+  "edition": "What the community shipped",
+  "count": "{count, plural, one {# entry} other {# entries}}",
+  "readMore": "Read",
+  "soon": "Soon",
+  "empty": "Soon. The community is writing the first edition.",
+  "source": "Source",
+  "back": "← News"
+}

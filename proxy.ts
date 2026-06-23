@@ -35,5 +35,14 @@ export const config = {
   // twitter-image). The latter live at the ROOT (no locale segment), so letting
   // the locale proxy touch them rewrites `/opengraph-image` → a non-existent
   // localized path and 404s — which silently broke every social-share card.
-  matcher: ['/((?!api|_next|_vercel|opengraph-image|twitter-image|.*\\..*).*)'],
+  //
+  // The SECOND pattern re-includes the `/.../metadata.json` route handler
+  // (DEC-3): it lives UNDER `[locale]`, so the proxy MUST rewrite the bare ES
+  // apex `/noticias/<slug>/metadata.json` → the prerendered `/es/...` output.
+  // Without it the broad `.*\..*` (dotted) exclusion skips the proxy and the
+  // apex 404s (the EN `/en/...` form works regardless).
+  matcher: [
+    '/((?!api|_next|_vercel|opengraph-image|twitter-image|.*\\..*).*)',
+    '/((?!api|_next|_vercel).*/metadata\\.json)',
+  ],
 }

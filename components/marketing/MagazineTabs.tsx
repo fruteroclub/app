@@ -30,16 +30,33 @@ export interface MagazineTabsProps {
   soon: string;
   /** Vertical label on the dark brand spine (e.g. "Edición 07"). */
   brandLabel: string;
+  /**
+   * Optional per-post article hrefs (already locale-prefixed), keyed by post id.
+   * When present, the read CTA links to the real article instead of the "#" stub.
+   * The homepage (LatestMagazine) omits it → unchanged stub behaviour.
+   */
+  ctaHrefBySlug?: Record<string, string>;
 }
 
 /** Zero-padded tab index, e.g. "01". */
 const tabNo = (i: number) => String(i + 1).padStart(2, "0");
 
-export function MagazineTabs({ posts, readMore, soon, brandLabel }: MagazineTabsProps) {
+export function MagazineTabs({
+  posts,
+  readMore,
+  soon,
+  brandLabel,
+  ctaHrefBySlug,
+}: MagazineTabsProps) {
   const [active, setActive] = useState(0);
   const baseId = useId();
 
-  const cta = { label: readMore, href: "#", soonLabel: soon };
+  const ctaFor = (post: CommunityCardData) => {
+    const href = ctaHrefBySlug?.[post.id];
+    return href
+      ? { label: readMore, href }
+      : { label: readMore, href: "#", soonLabel: soon };
+  };
 
   // Deep-link / hero-rail open: a `#<post-id>` hash opens that page and scrolls the
   // section into view (the hero "Lo que envió la comunidad" rows link here). The id
@@ -182,7 +199,7 @@ export function MagazineTabs({ posts, readMore, soon, brandLabel }: MagazineTabs
                   stat={post.stat}
                   accent={post.accent}
                   coverSeed={post.id}
-                  cta={cta}
+                  cta={ctaFor(post)}
                   divider={false}
                   className="h-full w-full min-w-[640px]"
                 />
@@ -236,7 +253,7 @@ export function MagazineTabs({ posts, readMore, soon, brandLabel }: MagazineTabs
                     stat={post.stat}
                     accent={post.accent}
                     coverSeed={post.id}
-                    cta={cta}
+                    cta={ctaFor(post)}
                     divider={false}
                     className="pb-4"
                   />

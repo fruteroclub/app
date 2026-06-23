@@ -1,0 +1,14 @@
+{
+  "meta": {
+    "title": "Noticias",
+    "description": "Lo que envía y construye la comunidad: logros, eventos, guías y bitácoras verificables."
+  },
+  "heading": "Noticias",
+  "edition": "Lo que envió la comunidad",
+  "count": "{count, plural, one {# entrada} other {# entradas}}",
+  "readMore": "Leer",
+  "soon": "Pronto",
+  "empty": "Pronto. La comunidad está escribiendo la primera edición.",
+  "source": "Fuente",
+  "back": "← Noticias"
+}
