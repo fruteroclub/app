@@ -10,6 +10,7 @@ import { getArticle, listSlugs, type Lang } from '@/lib/content/articles'
 import { toMagazinePageProps } from '@/lib/content/present'
 import { MagazinePage, Masthead, SiteFooter } from '@/components/marketing'
 import { JsonLd } from '@/components/seo/JsonLd'
+import { SIGNUP_HREF } from '@/content/landing'
 
 /**
  * /noticias/[slug] — a single article (DEC-4, DEC-14).
@@ -70,14 +71,39 @@ const markdownComponents = {
   strong: (props: { children?: React.ReactNode }) => (
     <strong className="font-semibold text-ink" {...props} />
   ),
-  a: (props: { href?: string; children?: React.ReactNode }) => (
-    <a
-      className="text-magenta underline underline-offset-2"
-      rel="noopener noreferrer"
-      target="_blank"
-      {...props}
-    />
-  ),
+  // Internal links use the locale-aware Link (so /perfil → /en/perfil on EN). A link
+  // to the signup destination (/perfil) renders as the magenta CTA button — drop
+  // `[Crea tu Perfil](/perfil)` in a post body to get a real call-to-action.
+  a: ({ href, children }: { href?: string; children?: React.ReactNode }) => {
+    if (href && href.startsWith('/')) {
+      const isCta = href === SIGNUP_HREF || href.startsWith(`${SIGNUP_HREF}?`)
+      if (isCta) {
+        return (
+          <Link
+            href={href}
+            className="mt-8 inline-flex items-center gap-2 border-2 border-black bg-magenta px-[26px] py-[15px] font-mono text-sm font-semibold uppercase tracking-[0.07em] text-white no-underline transition-colors hover:bg-[color-mix(in_srgb,var(--magenta)_88%,var(--black))]"
+          >
+            {children} &rarr;
+          </Link>
+        )
+      }
+      return (
+        <Link href={href} className="text-magenta underline underline-offset-2">
+          {children}
+        </Link>
+      )
+    }
+    return (
+      <a
+        href={href}
+        className="text-magenta underline underline-offset-2"
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        {children}
+      </a>
+    )
+  },
   ul: (props: { children?: React.ReactNode }) => (
     <ul className="mt-5 list-disc space-y-2 pl-6 font-serif text-lg leading-relaxed text-ink" {...props} />
   ),
