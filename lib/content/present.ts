@@ -17,6 +17,17 @@ import type { Lang } from './articles'
 
 type Category = ArticleMeta['category']
 
+/** Raw URL of a file committed next to a post in the content repo (@main). Used
+ *  for cover images, which are versioned alongside the post (DEC-6). */
+const CONTENT_RAW = 'https://raw.githubusercontent.com/fruteroclub/content/main/posts'
+const IMAGE_FILE = /\.(png|jpe?g|webp|avif)$/i
+
+/** The on-page cover image URL when `cover.src` names a committed image file;
+ *  otherwise undefined (the card falls back to its placeholder). */
+export function coverImageUrl(slug: string, src: string): string | undefined {
+  return IMAGE_FILE.test(src) ? `${CONTENT_RAW}/${slug}/${src}` : undefined
+}
+
 const CATEGORY_LABEL: Record<Lang, Record<Category, string>> = {
   es: { logro: 'Logro', evento: 'Evento', noticia: 'Noticia', guia: 'Guía', bitacora: 'Bitácora' },
   en: { logro: 'Achievement', evento: 'Event', noticia: 'News', guia: 'Guide', bitacora: 'Log' },
@@ -80,6 +91,8 @@ export function toMagazinePageProps(
     stat: `@${meta.author.handle}`,
     accent: meta.accent,
     coverSeed: meta.cover.src,
+    coverImage: coverImageUrl(meta.slug, meta.cover.src),
+    coverAlt: meta.cover.alt,
     cta: source
       ? { label: sourceLabel, href: source }
       : { label: '', href: '#', soonLabel: '' },

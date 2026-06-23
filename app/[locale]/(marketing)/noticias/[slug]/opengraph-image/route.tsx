@@ -43,6 +43,23 @@ export async function GET(
 ) {
   const { locale, slug } = await params
   const lang: Lang = locale === 'en' ? 'en' : 'es'
+
+  // Prefer a designer-provided social card committed next to the post
+  // (`cover-og.<ext>`, ideally 1200x630). It's the real SEO/AEO/social image and
+  // also the JSON-LD + ERC-721 `image`. Fall back to the generated card below.
+  for (const ext of ['jpg', 'png', 'webp']) {
+    const url = `https://raw.githubusercontent.com/fruteroclub/content/main/posts/${slug}/cover-og.${ext}`
+    const provided = await fetch(url)
+    if (provided.ok) {
+      return new Response(await provided.arrayBuffer(), {
+        headers: {
+          'content-type': provided.headers.get('content-type') ?? `image/${ext}`,
+          'cache-control': 'public, max-age=31536000, immutable',
+        },
+      })
+    }
+  }
+
   const article = await getArticle(slug, lang)
 
   const eyebrow = article ? categoryLabel(article.meta.category, lang) : 'Noticias'

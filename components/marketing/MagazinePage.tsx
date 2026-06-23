@@ -42,6 +42,11 @@ export interface MagazinePageProps {
   accent: AccentColor;
   /** Stable seed for the placeholder cover photo. */
   coverSeed: string;
+  /** Real cover image URL (committed next to the post). When set, renders the
+   *  actual cover (full color) instead of the grayscale placeholder. */
+  coverImage?: string;
+  /** Alt text for a real cover image (a11y + image SEO). */
+  coverAlt?: string;
   /** CTA label + href. href "#" renders a muted soon-label instead of a link. */
   cta?: { label: string; href: string; soonLabel?: string };
   /** Draw the heavy 2px top rule (the page divider). Off inside the page-tabs. */
@@ -62,6 +67,8 @@ export function MagazinePage({
   stat,
   accent,
   coverSeed,
+  coverImage,
+  coverAlt,
   cta,
   divider = true,
   className = "",
@@ -124,13 +131,22 @@ export function MagazinePage({
 
         {/* Cover — grayscale photo, hairline-framed, contained (NOT a full-bleed gradient) */}
         <div className="relative min-h-[220px] overflow-hidden border border-line bg-ink md:min-h-[300px]">
-          {/* eslint-disable-next-line @next/next/no-img-element -- placeholder cover, swap to real member photos */}
-          <img
-            src={`https://picsum.photos/seed/${coverSeed}/640/800`}
-            alt=""
-            aria-hidden="true"
-            className="absolute inset-0 h-full w-full object-cover grayscale"
-          />
+          {coverImage ? (
+            // eslint-disable-next-line @next/next/no-img-element -- remote cover from the content repo; next/image optimization is a later enhancement
+            <img
+              src={coverImage}
+              alt={coverAlt ?? ""}
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+          ) : (
+            // eslint-disable-next-line @next/next/no-img-element -- placeholder cover until a real one is committed
+            <img
+              src={`https://picsum.photos/seed/${coverSeed}/640/800`}
+              alt=""
+              aria-hidden="true"
+              className="absolute inset-0 h-full w-full object-cover grayscale"
+            />
+          )}
         </div>
       </div>
     </article>
