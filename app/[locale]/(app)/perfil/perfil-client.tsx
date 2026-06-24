@@ -106,14 +106,10 @@ export default function PerfilClient() {
     // exterior that reads as a Login page first. The CTA opens the Privy modal.
     return (
       <section className="mx-auto grid max-w-md justify-items-center gap-5 py-12 text-center md:py-20">
-        <p className="flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-[0.16em] text-magenta">
-          <Glyph name="target" size={13} />
-          {t('create.kicker')}
-        </p>
         <h1 className="font-display text-4xl font-semibold leading-[1.05] tracking-[-0.025em] text-ink">
           {t('create.title')}
         </h1>
-        <p className="max-w-[34ch] font-serif text-lg leading-[1.45] text-muted">
+        <p className="max-w-[34ch] font-serif text-lg leading-[1.45] text-ink">
           {t('create.lead')}
         </p>
         <div className="mt-2">
