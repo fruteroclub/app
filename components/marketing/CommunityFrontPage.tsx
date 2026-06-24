@@ -14,8 +14,11 @@ import { Hero } from "./Hero";
  * achievements), each a two-part eyebrow + Bitter headline + meta + duotone thumb.
  *
  * Source of truth (T4): the REAL latest 4 articles — `latest(4, lang)`, fetched in
- * page.tsx and passed as `posts` (the first 4 of the #7 set). Each rail item links
- * to its `/noticias/<slug>` route (no more in-page "#<id>" hash open).
+ * page.tsx and passed as `posts` (the first 4 of the #7 set). Each rail item
+ * DEEP-LINKS into the on-page "Lo último" reader (#7): the `#<slug>` hash opens
+ * that story's tab and scrolls to the section (handled by MagazineTabs). The full
+ * /noticias/<slug> article is reached from there (the reader's "Leer" CTA), not the
+ * hero rail.
  *
  * Line hierarchy: thin hairlines for the rail dividers + the vertical column rule;
  * a heavy 2px ink rule frames the bottom of the section. Flat, editorial, static.
@@ -23,8 +26,6 @@ import { Hero } from "./Hero";
 export interface CommunityFrontPageProps {
   /** The latest rail posts (mapped from ArticleMeta), newest first. */
   posts: readonly CommunityCardData[];
-  /** Locale prefix for the article hrefs ('' for the ES apex, '/en' for EN). */
-  localePrefix: string;
 }
 
 /** Two-part eyebrow: TYPE (muted) | TOPIC (accent) — the Spectrum pattern. */
@@ -53,22 +54,15 @@ function Meta({ card }: { card: CommunityCardData }) {
   );
 }
 
-function RailItem({
-  card,
-  seed,
-  href,
-}: {
-  card: CommunityCardData;
-  seed: number;
-  href: string;
-}) {
+function RailItem({ card, seed }: { card: CommunityCardData; seed: number }) {
   const a = ACCENT[card.accent];
   return (
     <li className="py-3.5 first:pt-0 md:pl-6">
-      {/* Links to the full article route (/noticias/<slug>). Plain anchor (already
-          locale-prefixed) keeps this a static server component. */}
+      {/* Deep-links to the matching page in #lo-ultimo — MagazineTabs opens that tab
+          and scrolls the section into view (hash-driven; see MagazineTabs). The full
+          article is then one click away via the reader's "Leer" CTA. */}
       <a
-        href={href}
+        href={`#${card.id}`}
         className="group flex items-start justify-between gap-4 no-underline"
       >
         <div className="min-w-0">
@@ -90,7 +84,7 @@ function RailItem({
   );
 }
 
-export function CommunityFrontPage({ posts, localePrefix }: CommunityFrontPageProps) {
+export function CommunityFrontPage({ posts }: CommunityFrontPageProps) {
   const t = useTranslations("landing");
 
   return (
@@ -108,12 +102,7 @@ export function CommunityFrontPage({ posts, localePrefix }: CommunityFrontPagePr
         ) : (
           <ul className="divide-y divide-line">
             {posts.map((card, i) => (
-              <RailItem
-                key={card.id}
-                card={card}
-                seed={i}
-                href={`${localePrefix}/noticias/${card.id}`}
-              />
+              <RailItem key={card.id} card={card} seed={i} />
             ))}
           </ul>
         )}

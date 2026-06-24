@@ -89,8 +89,8 @@ export default async function HomePage({
       <main>
         {/* Editorial column — PAPER beats #1, #2 live inside the max-w wrapper. */}
         <div className="mx-auto max-w-[var(--wrap)] px-7">
-          {/* 1 · paper · Hero + community rail */}
-          <CommunityFrontPage posts={railCards} localePrefix={localePrefix} />
+          {/* 1 · paper · Hero + community rail (rail deep-links into #lo-ultimo) */}
+          <CommunityFrontPage posts={railCards} />
           {/* 2 · paper · Proof numbers */}
           <ProofStrip />
         </div>

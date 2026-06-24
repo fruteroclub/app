@@ -235,19 +235,18 @@ describe("landing — Lo último #7 + hero rail (T4 repoint to latest())", () =>
     expect(screen.getByText(/Pronto\. La comunidad/i)).toBeInTheDocument();
   });
 
-  it("CommunityFrontPage rail items link to /noticias/<slug> (no more #hash)", () => {
-    const { container } = renderLanding(
-      "es",
-      <CommunityFrontPage posts={cards} localePrefix="" />,
-    );
-    const railLink = container.querySelector('a[href="/noticias/2026-06-22-alpha"]');
-    expect(railLink).not.toBeNull();
-    // The old in-page hash open must be gone.
-    expect(container.querySelector('a[href="#2026-06-22-alpha"]')).toBeNull();
+  it("CommunityFrontPage rail items DEEP-LINK into #lo-ultimo (#<slug>), not the article URL", () => {
+    const { container } = renderLanding("es", <CommunityFrontPage posts={cards} />);
+    // The rail opens the matching tab in the on-page Lo último reader.
+    expect(container.querySelector('a[href="#2026-06-22-alpha"]')).not.toBeNull();
+    // It must NOT navigate away to the full article route.
+    expect(container.querySelector('a[href="/noticias/2026-06-22-alpha"]')).toBeNull();
+    // "Ver todo" still scrolls to the section.
+    expect(container.querySelector('a[href="#lo-ultimo"]')).not.toBeNull();
   });
 
   it("CommunityFrontPage renders the empty state with zero posts", () => {
-    renderLanding("es", <CommunityFrontPage posts={[]} localePrefix="" />);
+    renderLanding("es", <CommunityFrontPage posts={[]} />);
     expect(screen.getByText(/Pronto\. La comunidad/i)).toBeInTheDocument();
   });
 });
