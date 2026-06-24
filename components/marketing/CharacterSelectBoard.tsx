@@ -354,7 +354,7 @@ export function CharacterSelectBoard({
                     ))}
                   </span>
                 </div>
-                <Button asChild onDark size="lg" className="mt-6 self-start">
+                <Button asChild onDark className="mt-6 self-start">
                   <Link href={sel.href}>{labels.agentCta}</Link>
                 </Button>
               </div>
