@@ -91,7 +91,18 @@ export default async function LocaleLayout({
   const t = await getTranslations({ locale, namespace: 'landing' })
 
   return (
-    <html lang={locale} data-mode="paper" className={baseFontVariables}>
+    // The (app) group's pre-paint ThemeScript flips `data-mode` + `color-scheme`
+    // on <html> BEFORE hydration (no-flash arcade mode), so this one element's
+    // attributes intentionally differ from the SSR'd `data-mode="paper"`.
+    // suppressHydrationWarning silences that expected, attribute-only mismatch on
+    // <html> alone — it does NOT mask mismatches in any child (React only skips
+    // one level deep). Standard next-themes / pre-paint-theme-script pattern.
+    <html
+      lang={locale}
+      data-mode="paper"
+      className={baseFontVariables}
+      suppressHydrationWarning
+    >
       <body>
         <JsonLd data={siteJsonLd(locale as Locale, t('meta.description'))} />
         <NextIntlClientProvider>{children}</NextIntlClientProvider>
