@@ -79,7 +79,8 @@ export default async function HomePage({
   const lang: Lang = locale === "en" ? "en" : "es";
   const localePrefix = lang === "en" ? "/en" : "";
   const latestCards = (await latest(6, lang)).map((a) => toCard(a.meta, lang));
-  const railCards = latestCards.slice(0, 4);
+  // Hero rail shows 5 (featured-first via latest()); Lo último #7 shows the 6.
+  const railCards = latestCards.slice(0, 5);
 
   return (
     <>
