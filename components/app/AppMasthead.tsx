@@ -16,10 +16,10 @@ export function AppMasthead() {
   const tc = useTranslations('common')
 
   return (
-    // The publication-frame ink bar (same as the marketing Masthead): a dark bar
-    // on the warm-paper app. text-white is mode-agnostic (avoids the --paper
-    // inversion gotcha if a child opts into arcade locally).
-    <header className="sticky top-0 z-50 bg-frame text-white">
+    // The publication-frame ink bar — identical to the marketing Masthead:
+    // `bg-frame text-paper` (the app leads paper, so --paper is the light canon
+    // #f9f5ef on the dark bar; canon = never text-white #fff on dark).
+    <header className="sticky top-0 z-50 bg-frame text-paper">
       <div className="mx-auto flex h-16 max-w-[var(--wrap)] items-center justify-between gap-6 px-7">
         <Link href="/" className="flex items-center gap-2.5 no-underline">
           <Image
@@ -31,7 +31,7 @@ export function AppMasthead() {
             className="flex-none"
           />
           <span className="font-mono text-lg font-bold leading-none tracking-[-0.01em]">
-            <span className="text-white">{tc('brand.name')}</span>
+            <span className="text-paper">{tc('brand.name')}</span>
             <span className="text-magenta">.</span>
           </span>
         </Link>
