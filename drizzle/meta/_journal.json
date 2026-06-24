@@ -8,6 +8,13 @@
       "when": 1781581298912,
       "tag": "0000_fair_exodus",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1782331160359,
+      "tag": "0001_profile_stage1_fields",
+      "breakpoints": true
     }
   ]
 }

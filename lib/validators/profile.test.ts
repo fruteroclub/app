@@ -67,4 +67,35 @@ describe('profileInputSchema', () => {
       profileInputSchema.safeParse({ ...base, locale: 'en' }).success,
     ).toBe(true)
   })
+
+  it('accepts the Stage-1 onboarding fields', () => {
+    const r = profileInputSchema.safeParse({
+      ...base,
+      city: 'CDMX',
+      region: 'LatAm',
+      favoriteFruit: 'Mango',
+      preferredColor: 'violet',
+      testimony: 'Construyo porque me obsesiona enviar.',
+    })
+    expect(r.success).toBe(true)
+    if (r.success) {
+      expect(r.data.city).toBe('CDMX')
+      expect(r.data.preferredColor).toBe('violet')
+      expect(r.data.testimony).toBe('Construyo porque me obsesiona enviar.')
+    }
+  })
+
+  it('rejects an unknown preferred color', () => {
+    expect(
+      profileInputSchema.safeParse({ ...base, preferredColor: 'turquoise' })
+        .success,
+    ).toBe(false)
+  })
+
+  it('rejects a testimony over 280 chars', () => {
+    expect(
+      profileInputSchema.safeParse({ ...base, testimony: 'x'.repeat(281) })
+        .success,
+    ).toBe(false)
+  })
 })

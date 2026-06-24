@@ -108,7 +108,7 @@ export default function PerfilClient() {
           <Glyph name="target" size={13} className="mr-2 inline-block align-middle" />
           {t('create.kicker')}
         </p>
-        <h1 className="font-display text-5xl font-bold tracking-[-0.025em]">
+        <h1 className="font-display text-5xl font-semibold tracking-[-0.025em]">
           {t('create.title')}
         </h1>
         <p className="max-w-prose text-base text-muted">{t('create.lead')}</p>
@@ -130,7 +130,7 @@ export default function PerfilClient() {
             <Glyph name="target" size={13} className="mr-2 inline-block align-middle" />
             {t('create.kicker')}
           </p>
-          <h1 className="font-display text-5xl font-bold tracking-[-0.025em]">
+          <h1 className="font-display text-5xl font-semibold tracking-[-0.025em]">
             {t('create.title')}
           </h1>
           <p className="max-w-prose text-base text-muted">{t('create.lead')}</p>

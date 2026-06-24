@@ -1,14 +1,14 @@
 {
   "create": {
-    "kicker": "Tu perfil de constructor",
-    "title": "Crea tu perfil",
-    "lead": "Tu identidad verificable en Frutero Club. Inicia sesión con email o redes y crea tu perfil en un minuto.",
+    "kicker": "Comunidad Frutero · Etapa 1",
+    "title": "Suscríbete a la comunidad",
+    "lead": "Te estás uniendo a la publicación de una comunidad subterránea de builders. Completa lo básico para volverte Community Member — toma un minuto.",
     "loginCta": "Inicia sesión para empezar",
     "loggingIn": "Abriendo inicio de sesión…",
     "fields": {
       "handle": "Handle",
       "handleHint": "3–30 caracteres. Letras, números, _ o -.",
-      "displayName": "Nombre para mostrar",
+      "displayName": "Nombre",
       "role": "Rol",
       "rolePlaceholder": "Full-Stack Builder",
       "location": "Ubicación",
@@ -18,7 +18,23 @@
       "github": "GitHub",
       "twitter": "Twitter / X",
       "linkedin": "LinkedIn",
-      "website": "Sitio web"
+      "website": "Sitio web",
+      "roleHint": "En qué eres bueno.",
+      "city": "Ciudad",
+      "cityPlaceholder": "Ciudad de México",
+      "region": "Región",
+      "regionPlaceholder": "LatAm",
+      "favoriteFruit": "Fruta favorita",
+      "favoriteFruitHint": "Cultura Frutero. 🍓",
+      "favoriteFruitPlaceholder": "Mango",
+      "avatar": "Avatar",
+      "preferredColor": "Color favorito",
+      "colors": {
+        "magenta": "Magenta",
+        "violet": "Violeta",
+        "amber": "Ámbar",
+        "green": "Verde"
+      }
     },
     "submit": "Crea tu perfil",
     "submitting": "Creando…",
@@ -30,7 +46,28 @@
       "generic": "No pudimos guardar tu perfil. Intenta de nuevo.",
       "validation": "Revisa los campos marcados."
     },
-    "success": "¡Perfil listo!"
+    "success": "¡Perfil listo!",
+    "bounties": {
+      "heading": "Bounties de bienvenida",
+      "lead": "Opcionales, pero $PULPA fácil. Cada uno suma a tu reputación en la comunidad.",
+      "reward": "+$PULPA",
+      "optional": "Opcional",
+      "testimony": {
+        "title": "Tu testimonio",
+        "desc": "Cuéntanos por qué construyes y qué te trajo al club.",
+        "placeholder": "Construyo porque… (máx. 280 caracteres)"
+      },
+      "github": {
+        "title": "Conecta un proyecto",
+        "desc": "Tu GitHub o el repo del proyecto en el que trabajas hoy.",
+        "placeholder": "github.com/tu-usuario"
+      },
+      "website": {
+        "title": "Tu sitio personal",
+        "desc": "Tu web, portafolio o link-in-bio.",
+        "placeholder": "https://tu-sitio.com"
+      }
+    }
   },
   "view": {
     "kicker": "Perfil de Constructor",

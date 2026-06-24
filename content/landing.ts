@@ -99,8 +99,9 @@ export const UNLOCKS: readonly Unlock[] = [
  * #5 Opportunity Marketplace ("Lo que puedes desbloquear" reframed).
  * A community board of "power-up" opportunities. Each pays one of three
  * CURRENCIES (reputación / dinero / experiencia, color-coded) and carries a
- * RARITY tier (Pokémon-TCG inspired; the membership role). Placeholder data —
- * TODO-swap with the real marketplace before go-live.
+ * RARITY tier (Pokémon-TCG inspired; the membership role). v0 board: the first
+ * real opportunities (Reputación content bounties + Experiencia events). The
+ * `dinero` currency stays in the model for paid bounties added later.
  * =========================================================================== */
 
 /** Membership rarity tier (Pokémon-TCG inspired). Symbol conveys the tier. */
@@ -138,12 +139,14 @@ export interface Opportunity {
 }
 
 export const OPPORTUNITIES: readonly Opportunity[] = [
-  { id: "audit", currency: "reputacion", rarity: "rare", i18nKey: "marketplace.items.audit" },
-  { id: "guide", currency: "reputacion", rarity: "common", i18nKey: "marketplace.items.guide" },
-  { id: "bounty", currency: "dinero", rarity: "rare", i18nKey: "marketplace.items.bounty" },
-  { id: "issue", currency: "dinero", rarity: "uncommon", i18nKey: "marketplace.items.issue" },
-  { id: "demo", currency: "experiencia", rarity: "uncommon", i18nKey: "marketplace.items.demo" },
-  { id: "stay", currency: "experiencia", rarity: "rare", i18nKey: "marketplace.items.stay" },
+  // The first open board (v0). Three Reputación content bounties (entry-tier,
+  // open to the Community) + two Experiencia opportunities. Only the ETH Cinco
+  // de Mayo stay is uncommon (Club Member); everything else is common.
+  { id: "build-in-public", currency: "reputacion", rarity: "common", i18nKey: "marketplace.items.buildInPublic" },
+  { id: "project-card", currency: "reputacion", rarity: "common", i18nKey: "marketplace.items.projectCard" },
+  { id: "video-testimonial", currency: "reputacion", rarity: "common", i18nKey: "marketplace.items.videoTestimonial" },
+  { id: "demo-day", currency: "experiencia", rarity: "common", i18nKey: "marketplace.items.demoDay" },
+  { id: "eth-stay", currency: "experiencia", rarity: "uncommon", i18nKey: "marketplace.items.ethStay" },
 ] as const;
 
 /* ===========================================================================

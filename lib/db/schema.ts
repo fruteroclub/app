@@ -42,6 +42,19 @@ export const localeEnum = pgEnum('locale', ['es', 'en'])
 export const leadSourceEnum = pgEnum('lead_source', ['enterprise', 'landing'])
 
 /**
+ * A member's preferred accent — a personalization picked at onboarding, drawn
+ * from the canon palette (DESIGN.md "Canonical palette"): magenta = primary,
+ * violet = `--purple` secondary, amber = `--orange` warning, green = accent.
+ * Drives their avatar tone + (later) their player-card accent.
+ */
+export const preferredColorEnum = pgEnum('preferred_color', [
+  'magenta',
+  'violet',
+  'amber',
+  'green',
+])
+
+/**
  * profiles — the off-chain "perfil". One row per Privy identity.
  * `privy_did` is the Privy server-verified subject (AuthTokenClaims.userId).
  */
@@ -55,8 +68,17 @@ export const profiles = pgTable(
     handle: citext('handle').notNull(),
     displayName: text('display_name').notNull(),
     role: text('role'),
+    // `location` is the legacy single field; the onboarding now captures city +
+    // region separately. Kept nullable for back-compat with early rows.
     location: text('location'),
+    city: text('city'),
+    region: text('region'),
     bio: text('bio'),
+    // Stage-1 onboarding extras (Frutero culture + personalization + the
+    // "testimony" bounty). All optional — the basics are name + handle.
+    favoriteFruit: text('favorite_fruit'),
+    preferredColor: preferredColorEnum('preferred_color'),
+    testimony: text('testimony'),
     // Social / external links as a typed JSON object (no CMS).
     links: jsonb('links').notNull().default(sql`'{}'::jsonb`),
     locale: localeEnum('locale').notNull().default('es'),
@@ -82,6 +104,10 @@ export const profiles = pgTable(
       sql`char_length(${table.displayName}) BETWEEN 1 AND 80`,
     ),
     check('profiles_bio_len', sql`${table.bio} IS NULL OR char_length(${table.bio}) <= 280`),
+    check(
+      'profiles_testimony_len',
+      sql`${table.testimony} IS NULL OR char_length(${table.testimony}) <= 280`,
+    ),
   ],
 )
 

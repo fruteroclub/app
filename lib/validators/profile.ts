@@ -55,6 +55,9 @@ const linksSchema = z
  * The accepted POST /api/profile body. `locale` is captured at signup; it is
  * server-clamped to a known locale so a tampered body can't write garbage.
  */
+/** The four canon-palette accents a member can pick at onboarding. */
+export const PREFERRED_COLORS = ['magenta', 'violet', 'amber', 'green'] as const
+
 export const profileInputSchema = z.object({
   handle: handleSchema,
   displayName: z
@@ -63,7 +66,20 @@ export const profileInputSchema = z.object({
     .min(1, 'El nombre es obligatorio.')
     .max(80, 'El nombre es demasiado largo.'),
   role: optionalTrimmed(120),
+  // `location` stays accepted for back-compat; the onboarding sends city + region.
   location: optionalTrimmed(120),
+  city: optionalTrimmed(120),
+  region: optionalTrimmed(120),
+  favoriteFruit: optionalTrimmed(60),
+  preferredColor: z.enum(PREFERRED_COLORS).optional(),
+  // The onboarding "testimony" bounty — same 280-char ceiling as bio.
+  testimony: z
+    .string()
+    .trim()
+    .max(280, 'El testimonio no puede superar 280 caracteres.')
+    .optional()
+    .or(z.literal(''))
+    .transform((v) => (v ? v : undefined)),
   bio: z
     .string()
     .trim()

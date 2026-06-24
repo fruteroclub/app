@@ -1,14 +1,14 @@
 {
   "create": {
-    "kicker": "Your builder profile",
-    "title": "Create your profile",
-    "lead": "Your verifiable identity at Frutero Club. Sign in with email or social and create your profile in a minute.",
+    "kicker": "Frutero Community · Stage 1",
+    "title": "Subscribe to the community",
+    "lead": "You're joining the publication of an underground builder community. Fill in the basics to become a Community Member — it takes a minute.",
     "loginCta": "Sign in to start",
     "loggingIn": "Opening sign in…",
     "fields": {
       "handle": "Handle",
       "handleHint": "3–30 characters. Letters, numbers, _ or -.",
-      "displayName": "Display name",
+      "displayName": "Name",
       "role": "Role",
       "rolePlaceholder": "Full-Stack Builder",
       "location": "Location",
@@ -18,7 +18,23 @@
       "github": "GitHub",
       "twitter": "Twitter / X",
       "linkedin": "LinkedIn",
-      "website": "Website"
+      "website": "Website",
+      "roleHint": "What you're good at.",
+      "city": "City",
+      "cityPlaceholder": "Mexico City",
+      "region": "Region",
+      "regionPlaceholder": "LatAm",
+      "favoriteFruit": "Favorite fruit",
+      "favoriteFruitHint": "Frutero culture. 🍓",
+      "favoriteFruitPlaceholder": "Mango",
+      "avatar": "Avatar",
+      "preferredColor": "Favorite color",
+      "colors": {
+        "magenta": "Magenta",
+        "violet": "Violet",
+        "amber": "Amber",
+        "green": "Green"
+      }
     },
     "submit": "Create your profile",
     "submitting": "Creating…",
@@ -30,7 +46,28 @@
       "generic": "We couldn't save your profile. Please try again.",
       "validation": "Check the highlighted fields."
     },
-    "success": "Profile ready!"
+    "success": "Profile ready!",
+    "bounties": {
+      "heading": "Welcome bounties",
+      "lead": "Optional, but easy $PULPA. Each one adds to your reputation in the community.",
+      "reward": "+$PULPA",
+      "optional": "Optional",
+      "testimony": {
+        "title": "Your testimony",
+        "desc": "Tell us why you build and what brought you to the club.",
+        "placeholder": "I build because… (max 280 characters)"
+      },
+      "github": {
+        "title": "Connect a project",
+        "desc": "Your GitHub or the repo of what you're building today.",
+        "placeholder": "github.com/your-handle"
+      },
+      "website": {
+        "title": "Your personal site",
+        "desc": "Your website, portfolio, or link-in-bio.",
+        "placeholder": "https://your-site.com"
+      }
+    }
   },
   "view": {
     "kicker": "Builder Profile",

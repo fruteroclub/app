@@ -1,11 +1,16 @@
 import { useTranslations } from "next-intl";
 
 import { OPPORTUNITIES, RARITY, type OppCurrency } from "@/content/landing";
-import { SIGNUP_HREF } from "@/content/landing";
+import { ENTERPRISE_HREF, SIGNUP_HREF } from "@/content/landing";
 import { Link } from "@/i18n/navigation";
 
 import { SectionHeader } from "./SectionHeader";
-import { OpportunityCard, CURRENCY_TEXT, CURRENCY_DOT } from "./OpportunityCard";
+import {
+  OpportunityCard,
+  SponsorSlotCard,
+  CURRENCY_TEXT,
+  CURRENCY_DOT,
+} from "./OpportunityCard";
 
 /**
  * OpportunityMarketplace (#5 — "Lo que puedes desbloquear", reframed).
@@ -20,11 +25,9 @@ import { OpportunityCard, CURRENCY_TEXT, CURRENCY_DOT } from "./OpportunityCard"
  * Server component. Data: OPPORTUNITIES (content/landing.ts, placeholder).
  */
 
-const CURRENCIES: readonly OppCurrency[] = [
-  "reputacion",
-  "dinero",
-  "experiencia",
-] as const;
+// v0 legend shows only the currencies the board actually pays today (Reputación
+// + Experiencia). `dinero` returns to the legend when paid bounties land.
+const CURRENCIES: readonly OppCurrency[] = ["reputacion", "experiencia"] as const;
 
 export function OpportunityMarketplace() {
   const t = useTranslations("landing");
@@ -74,6 +77,16 @@ export function OpportunityMarketplace() {
             poster={t(`${o.i18nKey}.poster`)}
           />
         ))}
+
+        {/* The "empty" ad slot — a CTA for a sponsor or a member ("Publica aquí"). */}
+        <Link href={ENTERPRISE_HREF} className="group block h-full">
+          <SponsorSlotCard
+            label={t("marketplace.sponsor.label")}
+            title={t("marketplace.sponsor.title")}
+            body={t("marketplace.sponsor.body")}
+            cta={t("marketplace.sponsor.cta")}
+          />
+        </Link>
       </div>
 
       {/* Marketplace close — teaser CTA */}
