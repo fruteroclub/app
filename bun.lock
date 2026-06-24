@@ -7,7 +7,7 @@
         "@fontsource/bitter": "^5.2.10",
         "@fontsource/ibm-plex-mono": "^5.2.7",
         "@fontsource/petrona": "^5.2.8",
-        "@fruteroclub/content": "github:fruteroclub/content",
+        "@fruteroclub/content": "github:fruteroclub/content#1d9c43d78ea030974d5e959a752db42251c23bba",
         "@keystatic/core": "^0.5.50",
         "@keystatic/next": "^5.0.4",
         "@privy-io/react-auth": "^3.9.0",
@@ -272,7 +272,7 @@
 
     "@formatjs/intl-localematcher": ["@formatjs/intl-localematcher@0.8.10", "", { "dependencies": { "@formatjs/fast-memoize": "3.1.6" } }, "sha512-P/IC3qws3jH+1fEs+o0RIFgXKRaQlFehjS5W0FPAqdo6hgzawLl+eD0q0JjheQ3XtoOe5n8WSYfX06KQZI/QJA=="],
 
-    "@fruteroclub/content": ["@fruteroclub/content@github:fruteroclub/content#55ebd04", { "dependencies": { "zod": "^4.2.1" } }, "fruteroclub-content-55ebd04"],
+    "@fruteroclub/content": ["@fruteroclub/content@github:fruteroclub/content#1d9c43d", { "dependencies": { "zod": "^4.2.1" } }, "fruteroclub-content-1d9c43d"],
 
     "@gemini-wallet/core": ["@gemini-wallet/core@0.3.2", "", { "dependencies": { "@metamask/rpc-errors": "7.0.2", "eventemitter3": "5.0.1" }, "peerDependencies": { "viem": ">=2.0.0" } }, "sha512-Z4aHi3ECFf5oWYWM3F1rW83GJfB9OvhBYPTmb5q+VyK3uvzvS48lwo+jwh2eOoCRWEuT/crpb9Vwp2QaS5JqgQ=="],
 

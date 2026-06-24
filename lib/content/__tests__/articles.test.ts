@@ -32,6 +32,7 @@ interface EntryOverrides {
   title?: string
   date?: string
   sourceUrls?: string[]
+  featured?: boolean
 }
 
 function entry(over: EntryOverrides = {}) {
@@ -47,6 +48,7 @@ function entry(over: EntryOverrides = {}) {
     collector: '001/120',
     cover: { src: 's', alt: 'a' },
     sourceUrls: over.sourceUrls ?? [],
+    featured: over.featured ?? false,
     content: async () => 'cuerpo',
   }
 }
@@ -130,5 +132,19 @@ describe('getAllArticles + latest', () => {
     expect(top2.map((a) => a.meta.date)).toEqual(['2026-06-22', '2026-06-20'])
     expect(await latest(0, 'es')).toEqual([])
     expect((await latest(99, 'es')).length).toBe(3)
+  })
+
+  it('latest() puts FEATURED posts first, regardless of date', async () => {
+    mockTree(['2026-06-22-newest', '2026-06-18-featured-old'])
+    mockRead.mockImplementation((_lang: string, slug: string) =>
+      Promise.resolve(
+        entry({ title: slug, date: slug.slice(0, 10), featured: slug.includes('featured') }),
+      ),
+    )
+    const top = await latest(2, 'es')
+    // The older but featured post leads the newer non-featured one.
+    expect(top[0].meta.slug).toBe('2026-06-18-featured-old')
+    expect(top[0].meta.featured).toBe(true)
+    expect(top[1].meta.slug).toBe('2026-06-22-newest')
   })
 })

@@ -18,6 +18,7 @@ const meta: ArticleMeta = {
   collector: '103/120',
   cover: { src: 'cover-seed', alt: 'alt' },
   sourceUrls: ['https://example.com/x'],
+  featured: false,
 }
 
 describe('present mappers', () => {

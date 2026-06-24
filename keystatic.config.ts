@@ -77,6 +77,7 @@ const articleSchema = {
     label: 'Source URLs',
     itemLabel: (props) => props.value ?? 'URL',
   }),
+  featured: fields.checkbox({ label: 'Featured', defaultValue: false }),
   content: fields.mdx({ label: 'Body' }),
 }
 

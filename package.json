@@ -21,7 +21,7 @@
     "@fontsource/bitter": "^5.2.10",
     "@fontsource/ibm-plex-mono": "^5.2.7",
     "@fontsource/petrona": "^5.2.8",
-    "@fruteroclub/content": "github:fruteroclub/content",
+    "@fruteroclub/content": "github:fruteroclub/content#1d9c43d78ea030974d5e959a752db42251c23bba",
     "@keystatic/core": "^0.5.50",
     "@keystatic/next": "^5.0.4",
     "@privy-io/react-auth": "^3.9.0",

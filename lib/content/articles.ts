@@ -122,6 +122,7 @@ export async function getArticle(slug: string, lang: Lang): Promise<Article | nu
     collector: entry.collector,
     cover: entry.cover,
     sourceUrls: (entry.sourceUrls ?? []).filter((u): u is string => Boolean(u)),
+    featured: entry.featured ?? false,
   })
 
   const body = await entry.content()
@@ -139,11 +140,19 @@ export async function getAllArticles(lang: Lang): Promise<Article[]> {
   return articles
 }
 
-/** The newest `n` articles in a locale, sorted by `date` descending. */
+/**
+ * The top `n` articles in a locale: FEATURED first (DEC-feature — curated pieces
+ * lead the hero rail + Lo último regardless of date), then by `date` descending.
+ */
 export async function latest(n: number, lang: Lang): Promise<Article[]> {
   const all = await getAllArticles(lang)
+  const byDateDesc = (a: Article, b: Article) =>
+    a.meta.date < b.meta.date ? 1 : a.meta.date > b.meta.date ? -1 : 0
   return all
     .slice()
-    .sort((a, b) => (a.meta.date < b.meta.date ? 1 : a.meta.date > b.meta.date ? -1 : 0))
+    .sort((a, b) => {
+      if (a.meta.featured !== b.meta.featured) return a.meta.featured ? -1 : 1
+      return byDateDesc(a, b)
+    })
     .slice(0, Math.max(0, n))
 }
