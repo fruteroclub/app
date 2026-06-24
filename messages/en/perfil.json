@@ -1,8 +1,8 @@
 {
   "create": {
     "kicker": "Frutero Community · Stage 1",
-    "title": "Subscribe to the community",
-    "lead": "You're joining the publication of an underground builder community. Fill in the basics to become a Community Member — it takes a minute.",
+    "title": "Create your profile",
+    "lead": "Your verifiable identity in the club. Sign in to get started.",
     "loginCta": "Sign in to start",
     "loggingIn": "Opening sign in…",
     "fields": {
@@ -67,20 +67,7 @@
         "desc": "Your website, portfolio, or link-in-bio.",
         "placeholder": "https://your-site.com"
       }
-    },
-    "steps": {
-      "title": "To become a Community Member",
-      "items": [
-        "Create your profile",
-        "Share your testimony",
-        "Connect a project (GitHub)",
-        "Connect your personal site"
-      ]
-    },
-    "plate": "PROFILE",
-    "mode": "New player",
-    "modeCreate": "Create your character",
-    "edition": "Stage 1 · Community"
+    }
   },
   "view": {
     "kicker": "Builder Profile",

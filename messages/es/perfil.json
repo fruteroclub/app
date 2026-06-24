@@ -1,8 +1,8 @@
 {
   "create": {
     "kicker": "Comunidad Frutero · Etapa 1",
-    "title": "Suscríbete a la comunidad",
-    "lead": "Te estás uniendo a la publicación de una comunidad subterránea de builders. Completa lo básico para volverte Community Member — toma un minuto.",
+    "title": "Crea tu perfil",
+    "lead": "Tu identidad verificable en el club. Inicia sesión para empezar.",
     "loginCta": "Inicia sesión para empezar",
     "loggingIn": "Abriendo inicio de sesión…",
     "fields": {
@@ -67,20 +67,7 @@
         "desc": "Tu web, portafolio o link-in-bio.",
         "placeholder": "https://tu-sitio.com"
       }
-    },
-    "steps": {
-      "title": "Para ser Community Member",
-      "items": [
-        "Crea tu perfil",
-        "Comparte tu testimonio",
-        "Conecta un proyecto (GitHub)",
-        "Conecta tu sitio personal"
-      ]
-    },
-    "plate": "PERFIL",
-    "mode": "Nuevo jugador",
-    "modeCreate": "Crea tu personaje",
-    "edition": "Etapa 1 · Community"
+    }
   },
   "view": {
     "kicker": "Perfil de Constructor",

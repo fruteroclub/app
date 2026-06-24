@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useState, type ReactNode } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { usePrivy } from '@privy-io/react-auth'
 import { useTranslations } from 'next-intl'
 
@@ -102,35 +102,36 @@ export default function PerfilClient() {
   }
 
   if (!authenticated) {
-    // The login gateway as the arcade cabinet's "insert coin / new player" screen:
-    // a heavy framed magazine character page (marquee bezel + dark screen). Two
-    // columns inside the screen — the pitch + login CTA, the Stage-1 steps card.
+    // The login: a clean, centered editorial card on warm paper — a professional
+    // exterior that reads as a Login page first. The CTA opens the Privy modal.
     return (
-      <PerfilFrame mode={t('create.mode')} edition={t('create.edition')}>
-        <div className="grid items-start gap-10 md:grid-cols-[1.15fr_0.85fr] md:gap-12">
-          <div className="grid gap-6">
-            <GatewayHeader />
-            <div>
-              <Button onDark onClick={() => login()}>
-                <Glyph name="bolt" size={14} />
-                {t('create.loginCta')}
-              </Button>
-            </div>
-          </div>
-          <StepsCard />
+      <section className="mx-auto grid max-w-md justify-items-center gap-5 py-12 text-center md:py-20">
+        <p className="flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-[0.16em] text-magenta">
+          <Glyph name="target" size={13} />
+          {t('create.kicker')}
+        </p>
+        <h1 className="font-display text-4xl font-semibold leading-[1.05] tracking-[-0.025em] text-ink">
+          {t('create.title')}
+        </h1>
+        <p className="max-w-[34ch] font-serif text-lg leading-[1.45] text-muted">
+          {t('create.lead')}
+        </p>
+        <div className="mt-2">
+          <Button onClick={() => login()}>
+            <Glyph name="bolt" size={14} />
+            {t('create.loginCta')}
+          </Button>
         </div>
-      </PerfilFrame>
+      </section>
     )
   }
 
   if (state.kind === 'create') {
     return (
-      <PerfilFrame mode={t('create.modeCreate')} edition={t('create.edition')}>
-        <div className="grid gap-8">
-          <GatewayHeader />
-          <PerfilForm mode="create" />
-        </div>
-      </PerfilFrame>
+      <section className="grid gap-8">
+        <CreateHeader />
+        <PerfilForm mode="create" />
+      </section>
     )
   }
 
@@ -170,99 +171,25 @@ export default function PerfilClient() {
 }
 
 /**
- * The signup eyebrow + title + lead, shared by the login gateway and the create
- * form. Eyebrow follows the marketing pattern (mono magenta + glyph + a trailing
- * hairline rule, as on /enterprise) so the surfaces stay consistent — one eyebrow,
- * used deliberately.
+ * The create-form header — the editorial eyebrow + title + lead above the form
+ * (left-aligned, warm paper). Eyebrow follows the marketing pattern (mono magenta
+ * + glyph + a trailing hairline rule, as on /enterprise).
  */
-function GatewayHeader() {
+function CreateHeader() {
   const t = useTranslations('perfil.create')
   return (
     <header className="grid gap-4">
       <p className="flex items-center gap-2.5 font-mono text-xs font-semibold uppercase tracking-[0.16em] text-magenta">
         <Glyph name="target" size={13} />
         {t('kicker')}
-        <span className="h-px max-w-[120px] flex-1 bg-muted/50" />
+        <span className="h-px max-w-[120px] flex-1 bg-line" />
       </p>
-      <h1 className="font-display text-4xl font-semibold leading-[1.02] tracking-[-0.025em] text-white md:text-5xl">
+      <h1 className="font-display text-4xl font-semibold leading-[1.02] tracking-[-0.025em] text-ink md:text-5xl">
         {t('title')}
       </h1>
       <p className="max-w-[48ch] font-serif text-lg leading-[1.45] text-muted">
         {t('lead')}
       </p>
     </header>
-  )
-}
-
-/**
- * The Stage-1 checklist card shown beside the login CTA — what you'll do to
- * become a Community Member. A panel inside the cabinet screen (border-muted on
- * the dark frame), previewing the onboarding so the login reads as a character
- * sheet, not an empty void.
- */
-function StepsCard() {
-  const t = useTranslations('perfil.create')
-  const items = t.raw('steps.items') as string[]
-  return (
-    <aside className="border-2 border-muted bg-black/30 p-6">
-      <p className="mb-5 flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-[0.14em] text-muted">
-        <Glyph name="grid" size={12} />
-        {t('steps.title')}
-      </p>
-      <ol className="grid gap-3.5">
-        {items.map((label, i) => (
-          <li key={i} className="flex items-baseline gap-3 border-t border-muted/60 pt-3.5 first:border-t-0 first:pt-0">
-            <span className="font-mono text-xs font-bold text-magenta">
-              {String(i + 1).padStart(2, '0')}
-            </span>
-            <span className="text-sm leading-snug text-ink">{label}</span>
-          </li>
-        ))}
-      </ol>
-    </aside>
-  )
-}
-
-/**
- * PerfilFrame — the heavy arcade-cabinet frame around the perfil surface, the
- * twin of the Leaderboard cabinet: a `border-muted` frame + a black-bezel MARQUEE
- * (mode ▶ · PERFIL title plate · edition) + the dark `bg-frame` screen. Makes
- * /perfil read as a videogame-magazine character page. Lives on the (app) arcade
- * surface, so the inverted token contract applies (text-ink/white = light).
- */
-function PerfilFrame({
-  mode,
-  edition,
-  children,
-}: {
-  mode: string
-  edition: string
-  children: ReactNode
-}) {
-  const t = useTranslations('perfil.create')
-  return (
-    <div className="border-2 border-muted">
-      {/* MARQUEE — the cabinet title plate on a black bezel. */}
-      <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3 border-b border-muted bg-black px-4 py-4 md:py-5">
-        <span className="flex min-w-0 items-center gap-1.5 justify-self-start font-mono text-xs font-bold uppercase tracking-[0.16em] text-muted">
-          <span
-            aria-hidden
-            className="shrink-0 text-magenta motion-safe:[animation:attract-blink_1.2s_steps(1,end)_infinite]"
-          >
-            ▶
-          </span>
-          <span className="truncate">{mode}</span>
-        </span>
-        <span className="justify-self-center font-mono text-2xl font-bold leading-none tracking-[-0.02em] text-white md:text-4xl">
-          {t('plate')}
-          <span className="text-magenta">.</span>
-        </span>
-        <span className="hidden justify-self-end truncate text-right font-mono text-xs font-bold uppercase tracking-[0.16em] text-muted sm:block">
-          {edition}
-        </span>
-      </div>
-      {/* SCREEN — the dark cabinet interior where the character page renders. */}
-      <div className="bg-frame p-6 md:p-10">{children}</div>
-    </div>
   )
 }

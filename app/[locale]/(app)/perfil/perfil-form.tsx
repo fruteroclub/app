@@ -362,7 +362,7 @@ function BountyCard({
   children: ReactNode
 }) {
   return (
-    <article className="grid gap-3 border-[1.5px] border-muted bg-black/30 p-5">
+    <article className="grid gap-3 border-[1.5px] border-line bg-surface/50 p-5">
       <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
         <h3 className="font-display text-base font-semibold tracking-[-0.01em] text-ink">
           {title}

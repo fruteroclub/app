@@ -16,9 +16,10 @@ export function AppMasthead() {
   const tc = useTranslations('common')
 
   return (
-    // bg-black (the cabinet bezel color) seats the bar a shade below the bg-frame
-    // page; text is text-white because in arcade `--paper` inverts to dark.
-    <header className="sticky top-0 z-50 border-b border-muted bg-black text-white">
+    // The publication-frame ink bar (same as the marketing Masthead): a dark bar
+    // on the warm-paper app. text-white is mode-agnostic (avoids the --paper
+    // inversion gotcha if a child opts into arcade locally).
+    <header className="sticky top-0 z-50 bg-frame text-white">
       <div className="mx-auto flex h-16 max-w-[var(--wrap)] items-center justify-between gap-6 px-7">
         <Link href="/" className="flex items-center gap-2.5 no-underline">
           <Image
