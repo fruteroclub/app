@@ -4,6 +4,7 @@ import AppPrivyProvider from './privy-provider'
 import ArcadeMode from './arcade-mode'
 import AuthGuard from './auth-guard'
 import { ThemeScript } from '@/components/app/ThemeScript'
+import { AppMasthead } from '@/components/app/AppMasthead'
 
 /**
  * The authed app surface is intentionally NOT indexable (T7): it is private,
@@ -32,6 +33,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
       {/* T7: pre-paint, no-flash arcade mode set (runs before hydration). */}
       <ThemeScript />
       <ArcadeMode />
+      <AppMasthead />
       <AuthGuard>{children}</AuthGuard>
     </AppPrivyProvider>
   )

@@ -76,7 +76,11 @@
         "Conecta un proyecto (GitHub)",
         "Conecta tu sitio personal"
       ]
-    }
+    },
+    "plate": "PERFIL",
+    "mode": "Nuevo jugador",
+    "modeCreate": "Crea tu personaje",
+    "edition": "Etapa 1 · Community"
   },
   "view": {
     "kicker": "Perfil de Constructor",
