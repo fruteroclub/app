@@ -97,7 +97,7 @@ export default function EditClient() {
             : t('view.empty')}
         </p>
         <div>
-          <Button asChild size="lg">
+          <Button asChild>
             <Link href="/perfil" locale={locale}>
               <Glyph name="bolt" size={14} /> {t('view.createCta')}
             </Link>

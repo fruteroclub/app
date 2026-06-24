@@ -67,6 +67,15 @@
         "desc": "Tu web, portafolio o link-in-bio.",
         "placeholder": "https://tu-sitio.com"
       }
+    },
+    "steps": {
+      "title": "Para ser Community Member",
+      "items": [
+        "Crea tu perfil",
+        "Comparte tu testimonio",
+        "Conecta un proyecto (GitHub)",
+        "Conecta tu sitio personal"
+      ]
     }
   },
   "view": {

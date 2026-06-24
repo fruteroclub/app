@@ -102,39 +102,29 @@ export default function PerfilClient() {
   }
 
   if (!authenticated) {
+    // The login gateway — a two-column "join the publication" hero (mirrors the
+    // /enterprise hero composition) so it reads as a composed entry, not content
+    // floating in the void: the pitch + login CTA left, the Stage-1 steps right.
     return (
-      <section className="grid max-w-xl gap-5">
-        <p className="font-mono text-xs font-semibold uppercase tracking-[0.16em] text-magenta">
-          <Glyph name="target" size={13} className="mr-2 inline-block align-middle" />
-          {t('create.kicker')}
-        </p>
-        <h1 className="font-display text-5xl font-semibold tracking-[-0.025em]">
-          {t('create.title')}
-        </h1>
-        <p className="max-w-prose text-base text-muted">{t('create.lead')}</p>
-        <div>
-          <Button size="lg" onClick={() => login()}>
-            <Glyph name="bolt" size={14} />
-            {t('create.loginCta')}
-          </Button>
+      <section className="grid items-start gap-10 md:grid-cols-[1.15fr_0.85fr] md:gap-12">
+        <div className="grid gap-6">
+          <GatewayHeader />
+          <div>
+            <Button onClick={() => login()}>
+              <Glyph name="bolt" size={14} />
+              {t('create.loginCta')}
+            </Button>
+          </div>
         </div>
+        <StepsCard />
       </section>
     )
   }
 
   if (state.kind === 'create') {
     return (
-      <section className="grid gap-7">
-        <header className="grid gap-3">
-          <p className="font-mono text-xs font-semibold uppercase tracking-[0.16em] text-magenta">
-            <Glyph name="target" size={13} className="mr-2 inline-block align-middle" />
-            {t('create.kicker')}
-          </p>
-          <h1 className="font-display text-5xl font-semibold tracking-[-0.025em]">
-            {t('create.title')}
-          </h1>
-          <p className="max-w-prose text-base text-muted">{t('create.lead')}</p>
-        </header>
+      <section className="grid gap-8">
+        <GatewayHeader />
         <PerfilForm mode="create" />
       </section>
     )
@@ -172,5 +162,58 @@ export default function PerfilClient() {
     >
       {t('view.loading')}
     </p>
+  )
+}
+
+/**
+ * The signup eyebrow + title + lead, shared by the login gateway and the create
+ * form. Eyebrow follows the marketing pattern (mono magenta + glyph + a trailing
+ * hairline rule, as on /enterprise) so the surfaces stay consistent — one eyebrow,
+ * used deliberately.
+ */
+function GatewayHeader() {
+  const t = useTranslations('perfil.create')
+  return (
+    <header className="grid gap-4">
+      <p className="flex items-center gap-2.5 font-mono text-xs font-semibold uppercase tracking-[0.16em] text-magenta">
+        <Glyph name="target" size={13} />
+        {t('kicker')}
+        <span className="h-px max-w-[120px] flex-1 bg-line" />
+      </p>
+      <h1 className="font-display text-4xl font-semibold leading-[1.02] tracking-[-0.025em] md:text-5xl">
+        {t('title')}
+      </h1>
+      <p className="max-w-[48ch] font-serif text-lg leading-[1.45] text-muted">
+        {t('lead')}
+      </p>
+    </header>
+  )
+}
+
+/**
+ * The Stage-1 checklist card shown beside the login CTA — what you'll do to
+ * become a Community Member. Fills the gateway's second column and previews the
+ * onboarding so the login screen reads as a composed entry, not an empty void.
+ */
+function StepsCard() {
+  const t = useTranslations('perfil.create')
+  const items = t.raw('steps.items') as string[]
+  return (
+    <aside className="border-2 border-line bg-surface/40 p-6">
+      <p className="mb-5 flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-[0.14em] text-muted-2">
+        <Glyph name="grid" size={12} />
+        {t('steps.title')}
+      </p>
+      <ol className="grid gap-3.5">
+        {items.map((label, i) => (
+          <li key={i} className="flex items-baseline gap-3">
+            <span className="font-mono text-xs font-bold text-magenta">
+              {String(i + 1).padStart(2, '0')}
+            </span>
+            <span className="text-sm leading-snug text-ink">{label}</span>
+          </li>
+        ))}
+      </ol>
+    </aside>
   )
 }

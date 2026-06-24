@@ -189,7 +189,7 @@ export function ContactForm({
       </div>
 
       <div>
-        <Button type="submit" size="lg" disabled={submitting}>
+        <Button type="submit" disabled={submitting}>
           <Glyph name="bolt" size={14} />
           {submitting ? t('submitting') : t('submit')}
         </Button>

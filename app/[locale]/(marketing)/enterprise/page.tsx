@@ -5,7 +5,7 @@ import type { Metadata } from 'next'
 import { buildMetadata } from '@/lib/seo'
 import type { Locale } from '@/i18n/routing'
 import { Glyph } from '@/components/Glyph'
-import { Card } from '@/components/ui'
+import { Button, Card } from '@/components/ui'
 import {
   Masthead,
   SectionHeading,
@@ -94,13 +94,12 @@ function EnterpriseHero() {
           {t('hero.lead')}
         </p>
         <div className="mt-7">
-          <a
-            href={`#${CONTACT_ANCHOR}`}
-            className="inline-flex items-center gap-[9px] border-2 border-black bg-magenta px-[26px] py-[15px] font-mono text-sm font-semibold uppercase tracking-[0.07em] text-white no-underline transition-colors duration-[80ms] hover:bg-[color-mix(in_srgb,var(--magenta)_88%,var(--black))]"
-          >
-            <Glyph name="bolt" size={14} />
-            {t('hero.cta')}
-          </a>
+          <Button asChild>
+            <a href={`#${CONTACT_ANCHOR}`}>
+              <Glyph name="bolt" size={14} />
+              {t('hero.cta')}
+            </a>
+          </Button>
         </div>
       </div>
       <Card variant="hard" className="p-6">

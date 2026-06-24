@@ -332,7 +332,7 @@ export default function PerfilForm({
       </div>
 
       <div>
-        <Button type="submit" size="lg" disabled={submitting}>
+        <Button type="submit" disabled={submitting}>
           <Glyph name="bolt" size={14} />
           {submitting
             ? mode === 'create'

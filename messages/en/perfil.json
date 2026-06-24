@@ -67,6 +67,15 @@
         "desc": "Your website, portfolio, or link-in-bio.",
         "placeholder": "https://your-site.com"
       }
+    },
+    "steps": {
+      "title": "To become a Community Member",
+      "items": [
+        "Create your profile",
+        "Share your testimony",
+        "Connect a project (GitHub)",
+        "Connect your personal site"
+      ]
     }
   },
   "view": {
