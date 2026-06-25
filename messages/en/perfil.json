@@ -22,8 +22,8 @@
       "roleHint": "What you're good at.",
       "city": "City",
       "cityPlaceholder": "Mexico City",
-      "region": "Region",
-      "regionPlaceholder": "LatAm",
+      "region": "Country",
+      "regionPlaceholder": "Mexico",
       "favoriteFruit": "Favorite fruit",
       "favoriteFruitHint": "Frutero culture. 🍓",
       "favoriteFruitPlaceholder": "Mango",
@@ -47,7 +47,8 @@
       "session": "Please sign in again to continue.",
       "generic": "We couldn't save your profile. Please try again.",
       "validation": "Check the highlighted fields.",
-      "nameRequired": "First name is required."
+      "nameRequired": "First name is required.",
+      "required": "Required."
     },
     "success": "Profile ready!",
     "bounties": {
@@ -70,6 +71,11 @@
         "desc": "Your website, portfolio, or link-in-bio.",
         "placeholder": "https://your-site.com"
       }
+    },
+    "roles": {
+      "creativo": "Creative",
+      "negocio": "Business",
+      "tecnologia": "Technology"
     }
   },
   "view": {

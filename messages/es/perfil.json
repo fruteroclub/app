@@ -22,8 +22,8 @@
       "roleHint": "En qué eres bueno.",
       "city": "Ciudad",
       "cityPlaceholder": "Ciudad de México",
-      "region": "Región",
-      "regionPlaceholder": "LatAm",
+      "region": "País",
+      "regionPlaceholder": "México",
       "favoriteFruit": "Fruta favorita",
       "favoriteFruitHint": "Cultura Frutero. 🍓",
       "favoriteFruitPlaceholder": "Mango",
@@ -36,7 +36,7 @@
         "green": "Verde"
       },
       "firstName": "Nombre",
-      "lastName": "Apellido"
+      "lastName": "Apellidos"
     },
     "submit": "Crea tu perfil",
     "submitting": "Creando…",
@@ -47,7 +47,8 @@
       "session": "Vuelve a iniciar sesión para continuar.",
       "generic": "No pudimos guardar tu perfil. Intenta de nuevo.",
       "validation": "Revisa los campos marcados.",
-      "nameRequired": "El nombre es obligatorio."
+      "nameRequired": "El nombre es obligatorio.",
+      "required": "Obligatorio."
     },
     "success": "¡Perfil listo!",
     "bounties": {
@@ -70,6 +71,11 @@
         "desc": "Tu web, portafolio o link-in-bio.",
         "placeholder": "https://tu-sitio.com"
       }
+    },
+    "roles": {
+      "creativo": "Creativo",
+      "negocio": "Negocio",
+      "tecnologia": "Tecnología"
     }
   },
   "view": {

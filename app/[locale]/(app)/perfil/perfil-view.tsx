@@ -5,7 +5,7 @@ import { useFormatter, useLocale, useTranslations } from 'next-intl'
 import { Avatar, Button } from '@/components/ui'
 import { Glyph } from '@/components/Glyph'
 import { Link } from '@/i18n/navigation'
-import type { PerfilData } from './perfil-form'
+import { ROLE_CATEGORIES, type PerfilData } from './perfil-form'
 
 /**
  * The perfil view — a 1:1 translation of the FEATURE HEADER from
@@ -40,9 +40,18 @@ const COLOR_TO_TONE: Record<
 
 export default function PerfilView({ profile }: { profile: PerfilData }) {
   const t = useTranslations('perfil.view')
+  const tc = useTranslations('perfil.create')
   const td = useTranslations('dashboard')
   const format = useFormatter()
   const locale = useLocale()
+
+  // `role` stores a category key (creativo/negocio/tecnologia) → show its label;
+  // fall back to the raw value for any legacy free-text role.
+  const roleLabel =
+    profile.role &&
+    (ROLE_CATEGORIES as readonly string[]).includes(profile.role)
+      ? tc(`roles.${profile.role}`)
+      : profile.role
 
   const links = Object.entries(profile.links ?? {}).filter(
     ([, v]) => typeof v === 'string' && v.length > 0,
@@ -76,9 +85,9 @@ export default function PerfilView({ profile }: { profile: PerfilData }) {
           <h1 className="mt-4 mb-3 font-display text-[clamp(2.75rem,7vw,4rem)] font-semibold leading-[0.98] tracking-[-0.025em]">
             {profile.displayName}
           </h1>
-          {profile.role ? (
+          {roleLabel ? (
             <p className="max-w-[46ch] text-lg leading-[1.45] text-muted">
-              <b className="font-semibold text-ink">{profile.role}.</b>
+              <b className="font-semibold text-ink">{roleLabel}.</b>
               {testimony ? ` ${testimony}` : ''}
             </p>
           ) : testimony ? (
