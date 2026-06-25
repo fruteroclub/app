@@ -11,5 +11,13 @@
     "load": "No pudimos cargar tu tablero. Intenta de nuevo.",
     "save": "No pudimos guardar tus bounties. Intenta de nuevo.",
     "session": "Vuelve a iniciar sesión para continuar."
-  }
+  },
+  "reputation": "Reputación",
+  "count": "{done}/{total} completados",
+  "completed": "Completado",
+  "pending": "Pendiente",
+  "complete": "Completar",
+  "edit": "Editar",
+  "cancel": "Cancelar",
+  "saveBounty": "Guardar"
 }
