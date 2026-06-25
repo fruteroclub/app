@@ -415,7 +415,8 @@ export default function PerfilForm({
         <FieldError errors={fieldErrors.preferredColor} />
       </fieldset>
 
-      <div>
+      {/* Form action → bottom-right (GUI/dialog convention, see DESIGN.md). */}
+      <div className="flex justify-end">
         <Button type="submit" disabled={submitting}>
           <Glyph name="bolt" size={14} />
           {submitting
