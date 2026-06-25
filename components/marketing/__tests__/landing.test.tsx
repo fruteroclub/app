@@ -32,11 +32,12 @@ import {
   Hero,
   LatestMagazine,
   Masthead,
+  OpportunityMarketplace,
   Pillars,
   ProofStrip,
 } from "@/components/marketing";
 import type { CommunityCardData } from "@/content/cards";
-import { PROOF_STATS, SIGNUP_HREF } from "@/content/landing";
+import { OPPORTUNITIES, PROOF_STATS, SIGNUP_HREF } from "@/content/landing";
 
 import esCommon from "@/messages/es/common.json";
 import esLanding from "@/messages/es/landing.json";
@@ -140,14 +141,46 @@ describe("landing — CtaBand", () => {
   });
 });
 
-describe("landing — vocabulary guard (Hard rule #3)", () => {
-  const banned = /\bonchain\b|\bweb3\b|\bcrypto\b|\bblockchain\b/i;
+describe("landing — OpportunityMarketplace (#5)", () => {
+  it("lists the 5 open opportunities + the Publica aquí ad slot", () => {
+    renderLanding("es", <OpportunityMarketplace />);
 
-  it("ES landing copy never says onchain/web3/crypto/blockchain", () => {
+    // Five real listings.
+    expect(OPPORTUNITIES).toHaveLength(5);
+    expect(
+      screen.getByRole("heading", { name: /Build in Public semanal/i }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: /Estadía ETH Cinco de Mayo/i }),
+    ).toBeInTheDocument();
+
+    // The count header + the sponsor "empty" slot.
+    expect(screen.getByText("5 Oportunidades Abiertas")).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: /^Publica aquí$/i }),
+    ).toBeInTheDocument();
+  });
+
+  it("only ETH Cinco de Mayo is uncommon; everything else is common", () => {
+    const uncommon = OPPORTUNITIES.filter((o) => o.rarity === "uncommon");
+    expect(uncommon.map((o) => o.id)).toEqual(["eth-stay"]);
+    expect(
+      OPPORTUNITIES.filter((o) => o.rarity !== "common" && o.id !== "eth-stay"),
+    ).toHaveLength(0);
+  });
+});
+
+describe("landing — vocabulary guard (Hard rule #3)", () => {
+  // "blockchain" is intentionally NOT banned — it's a technology and we're
+  // tech-forward (titles, articles, event names like "AI x Blockchain Day").
+  // The guard keeps out the crypto-bro register: onchain / web3 / crypto.
+  const banned = /\bonchain\b|\bweb3\b|\bcrypto\b/i;
+
+  it("ES landing copy never says onchain/web3/crypto", () => {
     expect(JSON.stringify(esLanding)).not.toMatch(banned);
   });
 
-  it("EN landing copy never says onchain/web3/crypto/blockchain", () => {
+  it("EN landing copy never says onchain/web3/crypto", () => {
     expect(JSON.stringify(enLanding)).not.toMatch(banned);
   });
 

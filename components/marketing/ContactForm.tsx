@@ -188,8 +188,9 @@ export function ContactForm({
         />
       </div>
 
-      <div>
-        <Button type="submit" size="lg" disabled={submitting}>
+      {/* Form action → bottom-right (GUI/dialog convention, see DESIGN.md). */}
+      <div className="flex justify-end">
+        <Button type="submit" disabled={submitting}>
           <Glyph name="bolt" size={14} />
           {submitting ? t('submitting') : t('submit')}
         </Button>

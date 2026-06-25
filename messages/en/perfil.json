@@ -1,14 +1,14 @@
 {
   "create": {
-    "kicker": "Your builder profile",
+    "kicker": "Frutero Community · Stage 1",
     "title": "Create your profile",
-    "lead": "Your verifiable identity at Frutero Club. Sign in with email or social and create your profile in a minute.",
+    "lead": "Your verifiable identity in the club. Sign in to get started.",
     "loginCta": "Sign in to start",
     "loggingIn": "Opening sign in…",
     "fields": {
       "handle": "Handle",
       "handleHint": "3–30 characters. Letters, numbers, _ or -.",
-      "displayName": "Display name",
+      "displayName": "Name",
       "role": "Role",
       "rolePlaceholder": "Full-Stack Builder",
       "location": "Location",
@@ -18,7 +18,25 @@
       "github": "GitHub",
       "twitter": "Twitter / X",
       "linkedin": "LinkedIn",
-      "website": "Website"
+      "website": "Website",
+      "roleHint": "What you're good at.",
+      "city": "City",
+      "cityPlaceholder": "Mexico City",
+      "region": "Country",
+      "regionPlaceholder": "Mexico",
+      "favoriteFruit": "Favorite fruit",
+      "favoriteFruitHint": "Frutero culture. 🍓",
+      "favoriteFruitPlaceholder": "Mango",
+      "avatar": "Avatar",
+      "preferredColor": "Choose a color",
+      "colors": {
+        "magenta": "Pink",
+        "violet": "Purple",
+        "amber": "Yellow",
+        "green": "Green"
+      },
+      "firstName": "First name",
+      "lastName": "Last name"
     },
     "submit": "Create your profile",
     "submitting": "Creating…",
@@ -28,9 +46,37 @@
       "handleTaken": "That handle is already taken.",
       "session": "Please sign in again to continue.",
       "generic": "We couldn't save your profile. Please try again.",
-      "validation": "Check the highlighted fields."
+      "validation": "Check the highlighted fields.",
+      "nameRequired": "First name is required.",
+      "required": "Required."
     },
-    "success": "Profile ready!"
+    "success": "Profile ready!",
+    "bounties": {
+      "heading": "Welcome bounties",
+      "lead": "Optional, but easy $PULPA. Each one adds to your reputation in the community.",
+      "reward": "+$PULPA",
+      "optional": "Optional",
+      "testimony": {
+        "title": "Your testimony",
+        "desc": "Tell us why you build and what brought you to the club.",
+        "placeholder": "I build because… (max 280 characters)"
+      },
+      "github": {
+        "title": "Connect a project",
+        "desc": "Your GitHub or the repo of what you're building today.",
+        "placeholder": "github.com/your-handle"
+      },
+      "website": {
+        "title": "Your personal site",
+        "desc": "Your website, portfolio, or link-in-bio.",
+        "placeholder": "https://your-site.com"
+      }
+    },
+    "roles": {
+      "creativo": "Creative",
+      "negocio": "Business",
+      "tecnologia": "Technology"
+    }
   },
   "view": {
     "kicker": "Builder Profile",

@@ -39,10 +39,15 @@ export default function AppPrivyProvider({
           },
         },
         appearance: {
-          // Lead with email/social; no wallet-first prompt on the trust surface.
+          // No wallet-first prompt on the trust surface.
           showWalletLoginFirst: false,
         },
-        loginMethods: ['email', 'google', 'github'],
+        // MUST match what's actually ENABLED in the Privy dashboard — the SDK
+        // renders whatever is listed here, but a method that isn't configured in
+        // the dashboard shows yet errors on click. Email-only for now; add
+        // 'google' / 'github' here ONLY after enabling those providers in the
+        // dashboard (Login methods).
+        loginMethods: ['email'],
       }}
     >
       {children}

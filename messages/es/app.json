@@ -2,5 +2,6 @@
   "auth": {
     "loading": "Cargando…",
     "signinRequired": "Vuelve a iniciar sesión para continuar."
-  }
+  },
+  "memberArea": "Área de miembros"
 }

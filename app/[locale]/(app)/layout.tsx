@@ -1,9 +1,8 @@
 import type { ReactNode } from 'react'
 import type { Metadata } from 'next'
 import AppPrivyProvider from './privy-provider'
-import ArcadeMode from './arcade-mode'
 import AuthGuard from './auth-guard'
-import { ThemeScript } from '@/components/app/ThemeScript'
+import { AppMasthead } from '@/components/app/AppMasthead'
 
 /**
  * The authed app surface is intentionally NOT indexable (T7): it is private,
@@ -28,10 +27,13 @@ export const metadata: Metadata = {
  */
 export default function AppLayout({ children }: { children: ReactNode }) {
   return (
+    // The app LEADS EDITORIAL (warm paper), like the marketing publication — the
+    // arcade-dark "console" is no longer the app's background. Arcade is reserved
+    // as an opt-in accent for specific game moments (the way the marketing
+    // leaderboard sets data-mode="arcade" locally), not the whole surface. So the
+    // old global ThemeScript/ArcadeMode forcing is intentionally removed here.
     <AppPrivyProvider>
-      {/* T7: pre-paint, no-flash arcade mode set (runs before hydration). */}
-      <ThemeScript />
-      <ArcadeMode />
+      <AppMasthead />
       <AuthGuard>{children}</AuthGuard>
     </AppPrivyProvider>
   )

@@ -23,8 +23,10 @@ layers onto later.
 1. **Public is paper-only.** No MODO toggle on marketing pages. Arcade mode is
    `(app)`-only.
 2. **Vocabulary.** Public term is **"perfil"**; "twin" is internal only. Never
-   say **onchain / web3 / crypto / blockchain** in marketing copy — lead with
-   **"verifiable" / "verificable"**. This is enforced by tests
+   say **onchain / web3 / crypto** in marketing copy — lead with **"verifiable" /
+   "verificable"**. **"Blockchain" is allowed** — it's a technology and we're
+   tech-forward (titles, articles, event names); keep crypto-*bro*/scam framing
+   out, not the tech word. Enforced by tests
    (`components/marketing/__tests__/landing.test.tsx`, `tests/e2e/landing.spec.ts`).
 3. **No onchain anything.** No wagmi/viem/contracts/tokens. Off-chain identity
    only (Privy auth + Postgres profile).

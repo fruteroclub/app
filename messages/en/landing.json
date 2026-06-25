@@ -110,7 +110,11 @@
     "prompt": "Select a builder",
     "insert": "Insert $PULPA",
     "highScore": "High score",
-    "periods": { "week": "Weekly", "quarter": "Quarterly", "year": "Annual" },
+    "periods": {
+      "week": "Weekly",
+      "quarter": "Quarterly",
+      "year": "Annual"
+    },
     "construye": "Building",
     "agentCta": "Talk to their Agent →",
     "footer": "Weekly $PULPA · Illustrative data · Real data soon"
@@ -148,22 +152,61 @@
   },
   "marketplace": {
     "heading": "What you can unlock",
-    "lead": "The community's power-up marketplace: earn reputation, money, or experiences.",
-    "open": "+40 open opportunities",
+    "lead": "The community's opportunity board: earn reputation and live experiences by building in public.",
+    "open": "5 Open Opportunities",
     "explore": "Explore the marketplace",
     "items": {
-      "audit": { "title": "Audit a smart contract on Monad", "body": "Review a club project's contract before it ships.", "reward": "+250 rep", "poster": "Frutero Club" },
-      "guide": { "title": "Write a technical guide", "body": "Document something you learned for the rest of the community.", "reward": "+80 rep", "poster": "Frutero Editorial" },
-      "bounty": { "title": "Bounty: integrate ERC-8004", "body": "Implement the identity standard in an open project.", "reward": "$500", "poster": "Monad" },
-      "issue": { "title": "Fix an SDK issue", "body": "Pick up a labeled issue and ship it.", "reward": "$150", "poster": "Frutero Club" },
-      "demo": { "title": "Demo Night — CDMX", "body": "Present your project to the community at a live event.", "reward": "Live demo", "poster": "Frutero Club" },
-      "stay": { "title": "CDMX stay — 1 week", "body": "A week of events in Mexico City, lodging included. The grand prize.", "reward": "1 week", "poster": "Frutero Club" }
+      "buildInPublic": {
+        "title": "Weekly Build in Public",
+        "body": "Post your progress every week: what you built, what broke, what's next.",
+        "reward": "+$PULPA",
+        "poster": "Frutero Club"
+      },
+      "projectCard": {
+        "title": "Your current project",
+        "body": "A card with your project's one-liner and how it works.",
+        "reward": "+$PULPA",
+        "poster": "Frutero Club"
+      },
+      "videoTestimonial": {
+        "title": "Frutero video testimonial",
+        "body": "Record a short video sharing your story as a club builder.",
+        "reward": "+$PULPA",
+        "poster": "Frutero Club"
+      },
+      "demoDay": {
+        "title": "Demo at AI x Blockchain Day",
+        "body": "A slot to present your project live during AI x Blockchain Day.",
+        "reward": "Live demo",
+        "poster": "Frutero Club"
+      },
+      "ethStay": {
+        "title": "ETH Cinco de Mayo stay",
+        "body": "Lodging during ETH Cinco de Mayo week (Jul 6–13, 2026).",
+        "reward": "1 week · CDMX",
+        "poster": "Frutero Club"
+      }
+    },
+    "sponsor": {
+      "label": "Slot available",
+      "title": "Publish here",
+      "body": "This spot could be yours. Sponsor an opportunity or publish your own to the community.",
+      "cta": "Publish here"
     }
   },
   "rarity": {
-    "common": { "name": "Common", "role": "Community Member" },
-    "uncommon": { "name": "Uncommon", "role": "Club Member" },
-    "rare": { "name": "Rare", "role": "Club Contributor" }
+    "common": {
+      "name": "Common",
+      "role": "Community Member"
+    },
+    "uncommon": {
+      "name": "Uncommon",
+      "role": "Club Member"
+    },
+    "rare": {
+      "name": "Rare",
+      "role": "Club Contributor"
+    }
   },
   "currency": {
     "reputacion": "Reputation",
@@ -175,12 +218,42 @@
     "lead": "Every member is a player card. Your rarity climbs as you build.",
     "open": "See the full collection",
     "items": {
-      "andres": { "role": "Full-Stack Builder", "company": "Frutero Club", "city": "CDMX", "quote": "Frutero gave me the first community where my code counts. I hit Club Contributor by shipping, not talking." },
-      "mariana": { "role": "Smart Contracts", "company": "Monad", "city": "Buenos Aires", "quote": "Every contract I audit adds to my reputation. Here your work follows you, it doesn't vanish into a Discord." },
-      "diego": { "role": "Product & Design", "company": "Frutero", "city": "CDMX", "quote": "I went from quiet side-projects to presenting at Demo Night. The rarity feels real." },
-      "valeria": { "role": "Product Design", "company": "Velora", "city": "Lima", "quote": "My profile speaks for me. I landed my first serious contract from what I built in the club." },
-      "tomas": { "role": "Data & ML", "company": "Nubia", "city": "Bogotá", "quote": "I started as a Community Member with no one to show my work to. Now I do." },
-      "sofia": { "role": "DevRel", "company": "Frutero", "city": "Medellín", "quote": "The community pushes you to level up. You're not building alone." }
+      "andres": {
+        "role": "Full-Stack Builder",
+        "company": "Frutero Club",
+        "city": "CDMX",
+        "quote": "Frutero gave me the first community where my code counts. I hit Club Contributor by shipping, not talking."
+      },
+      "mariana": {
+        "role": "Smart Contracts",
+        "company": "Monad",
+        "city": "Buenos Aires",
+        "quote": "Every contract I audit adds to my reputation. Here your work follows you, it doesn't vanish into a Discord."
+      },
+      "diego": {
+        "role": "Product & Design",
+        "company": "Frutero",
+        "city": "CDMX",
+        "quote": "I went from quiet side-projects to presenting at Demo Night. The rarity feels real."
+      },
+      "valeria": {
+        "role": "Product Design",
+        "company": "Velora",
+        "city": "Lima",
+        "quote": "My profile speaks for me. I landed my first serious contract from what I built in the club."
+      },
+      "tomas": {
+        "role": "Data & ML",
+        "company": "Nubia",
+        "city": "Bogotá",
+        "quote": "I started as a Community Member with no one to show my work to. Now I do."
+      },
+      "sofia": {
+        "role": "DevRel",
+        "company": "Frutero",
+        "city": "Medellín",
+        "quote": "The community pushes you to level up. You're not building alone."
+      }
     }
   },
   "band": {

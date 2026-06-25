@@ -4,15 +4,25 @@ import { type ReactNode } from 'react'
 import { useEffect } from 'react'
 import { usePrivy } from '@privy-io/react-auth'
 import { useTranslations } from 'next-intl'
-import { useRouter } from '@/i18n/navigation'
+
+import { usePathname, useRouter } from '@/i18n/navigation'
+import { SIGNUP_HREF } from '@/content/landing'
+
+/** Informational (app) routes readable without auth (locale-stripped paths). */
+const PUBLIC_ROUTES = new Set<string>(['/pulpa'])
 
 /**
  * Client auth guard for the authed (app) group.
  *
  * Privy is a client SDK, so the gate runs on the client: while Privy is resolving
- * we show a localized loading state; once resolved, an unauthenticated user is
- * redirected to the localized signup destination. No silent failure — the user
- * always sees either content, a loading state, or a redirect.
+ * we show a localized loading state; once resolved, an unauthenticated user on a
+ * PROTECTED route is redirected to the signup destination (/perfil).
+ *
+ * EXCEPTION — the signup route itself: `/perfil` lives inside this guarded group
+ * but IS the login destination (it renders the Privy login CTA for unauthed
+ * users). Guarding it would loop (redirect /perfil → /perfil) and hide its own
+ * login UI behind the bare "signin required" message. So the guard lets the
+ * signup route render its children and defers to PerfilClient's auth handling.
  *
  * Server routes (e.g. /api/profile) independently re-verify the Bearer token via
  * `lib/auth` — this guard is UX, not the security boundary.
@@ -20,32 +30,51 @@ import { useRouter } from '@/i18n/navigation'
 export default function AuthGuard({ children }: { children: ReactNode }) {
   const { ready, authenticated } = usePrivy()
   const router = useRouter()
+  const pathname = usePathname()
   const t = useTranslations('app')
 
+  // `usePathname` (next-intl) is locale-stripped, so these are `/perfil` etc. for
+  // both locales. The signup route shows its own login UI while unauthenticated;
+  // PUBLIC_ROUTES are purely informational (e.g. the $PULPA roadmap) — readable by
+  // anyone, with no auth and no Privy wait.
+  const isSignupRoute = pathname === SIGNUP_HREF
+  const isPublicRoute = PUBLIC_ROUTES.has(pathname)
+
   useEffect(() => {
-    if (ready && !authenticated) {
-      // Send unauthed users to the localized signup entry. `/perfil` is the
-      // signup destination (T4) and itself triggers the Privy login modal.
+    if (ready && !authenticated && !isSignupRoute && !isPublicRoute) {
+      // Send unauthed users on a protected route to the localized signup entry.
       router.replace('/perfil')
     }
-  }, [ready, authenticated, router])
+  }, [ready, authenticated, isSignupRoute, isPublicRoute, router])
 
-  if (!ready) {
-    return (
-      <div role="status" aria-live="polite" className="auth-guard-pending">
-        {t('auth.loading')}
-      </div>
-    )
+  // Public informational routes render immediately (no auth, no Privy resolve).
+  if (isPublicRoute) {
+    return <>{children}</>
   }
 
-  if (!authenticated) {
+  if (!ready) {
+    return <Pending>{t('auth.loading')}</Pending>
+  }
+
+  if (!authenticated && !isSignupRoute) {
     // Redirect is in flight; show the re-auth message rather than flashing content.
-    return (
-      <div role="status" aria-live="polite" className="auth-guard-pending">
-        {t('auth.signinRequired')}
-      </div>
-    )
+    return <Pending>{t('auth.signinRequired')}</Pending>
   }
 
   return <>{children}</>
+}
+
+/** Styled transient state (loading / redirecting) — padded like the page main. */
+function Pending({ children }: { children: ReactNode }) {
+  return (
+    <div className="mx-auto max-w-[var(--wrap)] px-7 py-14">
+      <p
+        role="status"
+        aria-live="polite"
+        className="font-mono text-xs uppercase tracking-[0.1em] text-muted-2"
+      >
+        {children}
+      </p>
+    </div>
+  )
 }

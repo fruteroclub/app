@@ -102,18 +102,18 @@ export default function PerfilClient() {
   }
 
   if (!authenticated) {
+    // The login: a clean, centered editorial card on warm paper — a professional
+    // exterior that reads as a Login page first. The CTA opens the Privy modal.
     return (
-      <section className="grid max-w-xl gap-5">
-        <p className="font-mono text-xs font-semibold uppercase tracking-[0.16em] text-magenta">
-          <Glyph name="target" size={13} className="mr-2 inline-block align-middle" />
-          {t('create.kicker')}
-        </p>
-        <h1 className="font-display text-5xl font-bold tracking-[-0.025em]">
+      <section className="mx-auto grid max-w-md justify-items-center gap-5 py-12 text-center md:py-20">
+        <h1 className="font-display text-4xl font-semibold leading-[1.05] tracking-[-0.025em] text-ink">
           {t('create.title')}
         </h1>
-        <p className="max-w-prose text-base text-muted">{t('create.lead')}</p>
-        <div>
-          <Button size="lg" onClick={() => login()}>
+        <p className="max-w-[34ch] font-serif text-lg leading-[1.45] text-ink">
+          {t('create.lead')}
+        </p>
+        <div className="mt-2">
+          <Button onClick={() => login()}>
             <Glyph name="bolt" size={14} />
             {t('create.loginCta')}
           </Button>
@@ -123,19 +123,14 @@ export default function PerfilClient() {
   }
 
   if (state.kind === 'create') {
+    // Centered, on a card-like surface: a strong frame-colored border + the
+    // warmer paper (--surface) background, matching the editorial card system.
     return (
-      <section className="grid gap-7">
-        <header className="grid gap-3">
-          <p className="font-mono text-xs font-semibold uppercase tracking-[0.16em] text-magenta">
-            <Glyph name="target" size={13} className="mr-2 inline-block align-middle" />
-            {t('create.kicker')}
-          </p>
-          <h1 className="font-display text-5xl font-bold tracking-[-0.025em]">
-            {t('create.title')}
-          </h1>
-          <p className="max-w-prose text-base text-muted">{t('create.lead')}</p>
-        </header>
-        <PerfilForm mode="create" />
+      <section className="mx-auto grid w-full max-w-2xl gap-8">
+        <CreateHeader />
+        <div className="border-[3px] border-frame bg-surface p-6 md:p-8">
+          <PerfilForm mode="create" />
+        </div>
       </section>
     )
   }
@@ -172,5 +167,21 @@ export default function PerfilClient() {
     >
       {t('view.loading')}
     </p>
+  )
+}
+
+/**
+ * The create-form header — just the title, left-aligned above the card. No
+ * eyebrow (reserved for marketing/editorial surfaces) and no lead (unnecessary
+ * once you're past the login).
+ */
+function CreateHeader() {
+  const t = useTranslations('perfil.create')
+  return (
+    <header>
+      <h1 className="font-display text-4xl font-semibold leading-[1.02] tracking-[-0.025em] text-ink md:text-5xl">
+        {t('title')}
+      </h1>
+    </header>
   )
 }
