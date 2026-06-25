@@ -34,7 +34,9 @@
         "violet": "Violeta",
         "amber": "Ámbar",
         "green": "Verde"
-      }
+      },
+      "firstName": "Nombre",
+      "lastName": "Apellido"
     },
     "submit": "Crea tu perfil",
     "submitting": "Creando…",
@@ -44,7 +46,8 @@
       "handleTaken": "Ese handle ya existe.",
       "session": "Vuelve a iniciar sesión para continuar.",
       "generic": "No pudimos guardar tu perfil. Intenta de nuevo.",
-      "validation": "Revisa los campos marcados."
+      "validation": "Revisa los campos marcados.",
+      "nameRequired": "El nombre es obligatorio."
     },
     "success": "¡Perfil listo!",
     "bounties": {

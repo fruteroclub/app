@@ -1,0 +1,15 @@
+{
+  "title": "Tu tablero",
+  "lead": "Completa los bounties de bienvenida y gana $PULPA para tu reputación en la comunidad.",
+  "linkLabel": "Ir a tu tablero",
+  "save": "Guardar bounties",
+  "saving": "Guardando…",
+  "saved": "¡Guardado! 🎉",
+  "loading": "Cargando tu tablero…",
+  "retry": "Reintentar",
+  "errors": {
+    "load": "No pudimos cargar tu tablero. Intenta de nuevo.",
+    "save": "No pudimos guardar tus bounties. Intenta de nuevo.",
+    "session": "Vuelve a iniciar sesión para continuar."
+  }
+}

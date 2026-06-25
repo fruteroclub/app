@@ -85,6 +85,19 @@ describe('profileInputSchema', () => {
     }
   })
 
+  it('accepts first + last name and drops empty last name', () => {
+    const r = profileInputSchema.safeParse({
+      ...base,
+      firstName: 'Andrés',
+      lastName: '',
+    })
+    expect(r.success).toBe(true)
+    if (r.success) {
+      expect(r.data.firstName).toBe('Andrés')
+      expect(r.data.lastName).toBeUndefined()
+    }
+  })
+
   it('rejects an unknown preferred color', () => {
     expect(
       profileInputSchema.safeParse({ ...base, preferredColor: 'turquoise' })

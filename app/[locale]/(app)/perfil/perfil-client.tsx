@@ -123,10 +123,14 @@ export default function PerfilClient() {
   }
 
   if (state.kind === 'create') {
+    // Centered, on a card-like surface: a strong frame-colored border + the
+    // warmer paper (--surface) background, matching the editorial card system.
     return (
-      <section className="grid gap-8">
+      <section className="mx-auto grid w-full max-w-2xl gap-8">
         <CreateHeader />
-        <PerfilForm mode="create" />
+        <div className="border-[3px] border-frame bg-surface p-6 md:p-8">
+          <PerfilForm mode="create" />
+        </div>
       </section>
     )
   }
@@ -167,25 +171,17 @@ export default function PerfilClient() {
 }
 
 /**
- * The create-form header — the editorial eyebrow + title + lead above the form
- * (left-aligned, warm paper). Eyebrow follows the marketing pattern (mono magenta
- * + glyph + a trailing hairline rule, as on /enterprise).
+ * The create-form header — just the title, left-aligned above the card. No
+ * eyebrow (reserved for marketing/editorial surfaces) and no lead (unnecessary
+ * once you're past the login).
  */
 function CreateHeader() {
   const t = useTranslations('perfil.create')
   return (
-    <header className="grid gap-4">
-      <p className="flex items-center gap-2.5 font-mono text-xs font-semibold uppercase tracking-[0.16em] text-magenta">
-        <Glyph name="target" size={13} />
-        {t('kicker')}
-        <span className="h-px max-w-[120px] flex-1 bg-line" />
-      </p>
+    <header>
       <h1 className="font-display text-4xl font-semibold leading-[1.02] tracking-[-0.025em] text-ink md:text-5xl">
         {t('title')}
       </h1>
-      <p className="max-w-[48ch] font-serif text-lg leading-[1.45] text-muted">
-        {t('lead')}
-      </p>
     </header>
   )
 }

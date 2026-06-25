@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, type FormEvent, type ReactNode } from 'react'
+import { useState, type FormEvent } from 'react'
 import { usePrivy } from '@privy-io/react-auth'
 import { useLocale, useTranslations } from 'next-intl'
 
@@ -18,7 +18,7 @@ type PreferredColor = (typeof PREFERRED_COLORS)[number]
 /** Preferred color → the canon CSS token (DESIGN.md "Canonical palette"). */
 const COLOR_VAR: Record<PreferredColor, string> = {
   magenta: 'var(--magenta)',
-  violet: 'var(--purple)',
+  violet: 'var(--violet)',
   amber: 'var(--orange)',
   green: 'var(--green)',
 }
@@ -31,11 +31,31 @@ const COLOR_TO_TONE: Record<PreferredColor, 'magenta' | 'green' | 'orange' | 'mu
   green: 'green',
 }
 
+/**
+ * Derive a public handle from the full name (the handle is no longer
+ * user-entered): strip accents, lowercase, non-alnum → hyphen, clamp to the DB
+ * CHECK (`^[A-Za-z0-9_-]{3,30}$`). Falls back to `builder` for empty/short slugs;
+ * the submit adds a random suffix on the rare collision.
+ */
+function slugifyHandle(name: string): string {
+  const slug = name
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 30)
+    .replace(/-+$/g, '')
+  return slug.length >= 3 ? slug : 'builder'
+}
+
 /** The profile shape the server returns (subset of the DB row). */
 export interface PerfilData {
   id: string
   handle: string
   displayName: string
+  firstName: string | null
+  lastName: string | null
   role: string | null
   location: string | null
   city: string | null
@@ -95,24 +115,37 @@ export default function PerfilForm({
     setFormError(null)
 
     const form = new FormData(event.currentTarget)
-    const links: Record<string, string> = {}
-    for (const key of ['github', 'website'] as const) {
-      const v = (form.get(key) as string | null)?.trim()
-      if (v) links[key] = v
-    }
     const str = (k: string) => ((form.get(k) as string | null) ?? '').trim()
-    const payload = {
-      handle: str('handle'),
-      displayName: str('displayName'),
+    const firstName = str('firstName')
+    const lastName = str('lastName')
+    if (!firstName) {
+      setFieldErrors({ firstName: [t('errors.nameRequired')] })
+      setSubmitting(false)
+      return
+    }
+    const displayName = [firstName, lastName].filter(Boolean).join(' ')
+    // The handle is derived from the name (no longer user-entered): keep the
+    // existing one on edit; slugify the name on create, adding a random suffix
+    // only if the derived handle collides.
+    const baseHandle = initial?.handle ?? slugifyHandle(displayName)
+
+    const buildBody = (handle: string) => ({
+      handle,
+      displayName,
+      firstName,
+      lastName,
       role: str('role'),
       city: str('city'),
       region: str('region'),
       favoriteFruit: str('favoriteFruit'),
       preferredColor: color,
-      testimony: str('testimony'),
-      links,
+      // Bounties (testimony + links) live on the dashboard now — this form is the
+      // IDENTITY profile only. Pass existing values through so editing the basics
+      // never wipes them: /api/profile is a FULL upsert.
+      testimony: initial?.testimony ?? undefined,
+      links: initial?.links ?? undefined,
       locale,
-    }
+    })
 
     let token: string | null = null
     try {
@@ -126,38 +159,55 @@ export default function PerfilForm({
       return
     }
 
-    try {
-      await apiFetch<{ profile: PerfilData }>('/api/profile', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(payload),
-      })
-      // Success (201 created / 200 updated) → show the perfil.
-      router.replace('/perfil')
-      router.refresh()
-    } catch (error) {
-      if (error instanceof ApiError) {
-        if (error.code === API_ERROR_CODES.CONFLICT) {
-          setFieldErrors({ handle: [t('errors.handleTaken')] })
-        } else if (error.status === 401) {
-          setFormError(t('errors.session'))
-        } else if (error.code === API_ERROR_CODES.VALIDATION_ERROR) {
-          const details = error.details as
-            | { fieldErrors?: FieldErrors }
-            | undefined
-          setFieldErrors(details?.fieldErrors ?? {})
-          setFormError(t('errors.validation'))
-        } else {
-          setFormError(error.message || t('errors.generic'))
+    // Submit, retrying with a suffixed handle if the derived one is taken
+    // (create only — on edit the handle is fixed).
+    let handle = baseHandle
+    for (let attempt = 0; attempt < 4; attempt++) {
+      try {
+        await apiFetch<{ profile: PerfilData }>('/api/profile', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(buildBody(handle)),
+        })
+        // Success (201 created / 200 updated) → show the perfil.
+        router.replace('/perfil')
+        router.refresh()
+        return
+      } catch (error) {
+        const handleTaken =
+          error instanceof ApiError &&
+          error.code === API_ERROR_CODES.CONFLICT
+        if (handleTaken && !initial?.handle && attempt < 3) {
+          handle = `${baseHandle.slice(0, 25)}-${Math.random().toString(36).slice(2, 6)}`
+          continue
         }
-      } else {
-        setFormError(t('errors.generic'))
+        if (error instanceof ApiError) {
+          if (error.status === 401) {
+            setFormError(t('errors.session'))
+          } else if (error.code === API_ERROR_CODES.VALIDATION_ERROR) {
+            const details = error.details as
+              | { fieldErrors?: FieldErrors }
+              | undefined
+            const fe = details?.fieldErrors ?? {}
+            // displayName is derived from firstName — surface its error there.
+            if (fe.displayName && !fe.firstName) fe.firstName = fe.displayName
+            setFieldErrors(fe)
+            setFormError(t('errors.validation'))
+          } else {
+            setFormError(error.message || t('errors.generic'))
+          }
+        } else {
+          setFormError(t('errors.generic'))
+        }
+        setSubmitting(false)
+        return
       }
-      setSubmitting(false)
     }
+    setFormError(t('errors.generic'))
+    setSubmitting(false)
   }
 
   return (
@@ -186,22 +236,19 @@ export default function PerfilForm({
           </span>
         </div>
 
-        <div className="grid gap-6">
+        <div className="grid gap-6 sm:grid-cols-2">
           <Field
-            name="displayName"
-            label={t('fields.displayName')}
-            defaultValue={initial?.displayName}
-            errors={fieldErrors.displayName}
+            name="firstName"
+            label={t('fields.firstName')}
+            defaultValue={initial?.firstName ?? ''}
+            errors={fieldErrors.firstName}
             required
           />
           <Field
-            name="handle"
-            label={t('fields.handle')}
-            hint={t('fields.handleHint')}
-            defaultValue={initial?.handle}
-            errors={fieldErrors.handle}
-            required
-            autoComplete="off"
+            name="lastName"
+            label={t('fields.lastName')}
+            defaultValue={initial?.lastName ?? ''}
+            errors={fieldErrors.lastName}
           />
         </div>
       </div>
@@ -235,7 +282,6 @@ export default function PerfilForm({
       <Field
         name="favoriteFruit"
         label={t('fields.favoriteFruit')}
-        hint={t('fields.favoriteFruitHint')}
         placeholder={t('fields.favoriteFruitPlaceholder')}
         defaultValue={initial?.favoriteFruit ?? ''}
         errors={fieldErrors.favoriteFruit}
@@ -255,14 +301,14 @@ export default function PerfilForm({
                 type="button"
                 onClick={() => setColor(selected ? undefined : c)}
                 aria-pressed={selected}
-                className={`flex items-center gap-2 border-[1.5px] px-3 py-2 font-mono text-xs uppercase tracking-[0.08em] transition-colors ${
+                className={`flex items-center gap-2.5 border-[1.5px] py-2 pl-2 pr-3.5 font-mono text-xs uppercase tracking-[0.08em] transition-colors ${
                   selected
                     ? 'border-magenta text-ink'
                     : 'border-ink/40 text-muted-2 hover:border-ink'
                 }`}
               >
                 <span
-                  className="inline-block h-4 w-4 border border-ink/30"
+                  className="inline-block h-8 w-8 border border-ink/30"
                   style={{ backgroundColor: COLOR_VAR[c] }}
                   aria-hidden="true"
                 />
@@ -272,64 +318,6 @@ export default function PerfilForm({
           })}
         </div>
       </fieldset>
-
-      {/* ── Welcome bounties (optional, easy $PULPA) ───────────────────── */}
-      <div className="grid gap-5 border-t-2 border-ink pt-7">
-        <header className="grid gap-1.5">
-          <p className="flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-[0.16em] text-magenta">
-            <Glyph name="star" size={13} />
-            {t('bounties.heading')}
-          </p>
-          <p className="max-w-prose text-sm text-muted">{t('bounties.lead')}</p>
-        </header>
-
-        <BountyCard
-          title={t('bounties.testimony.title')}
-          desc={t('bounties.testimony.desc')}
-          reward={t('bounties.reward')}
-          optional={t('bounties.optional')}
-        >
-          <textarea
-            id="testimony"
-            name="testimony"
-            rows={3}
-            maxLength={280}
-            defaultValue={initial?.testimony ?? ''}
-            placeholder={t('bounties.testimony.placeholder')}
-            className="border-[1.5px] border-ink bg-card px-3 py-2 font-sans text-sm text-ink outline-none focus-visible:border-magenta"
-          />
-          <FieldError errors={fieldErrors.testimony} />
-        </BountyCard>
-
-        <BountyCard
-          title={t('bounties.github.title')}
-          desc={t('bounties.github.desc')}
-          reward={t('bounties.reward')}
-          optional={t('bounties.optional')}
-        >
-          <BareField
-            name="github"
-            label={t('fields.github')}
-            placeholder={t('bounties.github.placeholder')}
-            defaultValue={initial?.links?.github ?? ''}
-          />
-        </BountyCard>
-
-        <BountyCard
-          title={t('bounties.website.title')}
-          desc={t('bounties.website.desc')}
-          reward={t('bounties.reward')}
-          optional={t('bounties.optional')}
-        >
-          <BareField
-            name="website"
-            label={t('fields.website')}
-            placeholder={t('bounties.website.placeholder')}
-            defaultValue={initial?.links?.website ?? ''}
-            errors={fieldErrors.website}
-          />
-        </BountyCard>
-      </div>
 
       <div>
         <Button type="submit" disabled={submitting}>
@@ -344,39 +332,6 @@ export default function PerfilForm({
         </Button>
       </div>
     </form>
-  )
-}
-
-/** A welcome-bounty card: title + reward chip + "optional" tag, then its input. */
-function BountyCard({
-  title,
-  desc,
-  reward,
-  optional,
-  children,
-}: {
-  title: string
-  desc: string
-  reward: string
-  optional: string
-  children: ReactNode
-}) {
-  return (
-    <article className="grid gap-3 border-[1.5px] border-line bg-surface/50 p-5">
-      <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
-        <h3 className="font-display text-base font-semibold tracking-[-0.01em] text-ink">
-          {title}
-        </h3>
-        <span className="font-mono text-[0.65rem] font-bold uppercase tracking-[0.12em] text-magenta">
-          {reward}
-        </span>
-        <span className="ml-auto font-mono text-[0.65rem] uppercase tracking-[0.12em] text-muted-2">
-          {optional}
-        </span>
-      </div>
-      <p className="text-sm text-muted">{desc}</p>
-      <div className="grid gap-1.5">{children}</div>
-    </article>
   )
 }
 
@@ -424,38 +379,6 @@ function Field({
       ) : null}
       <FieldError errors={errors} />
     </div>
-  )
-}
-
-/** A label-light field for inside a bounty card (the card supplies the heading). */
-function BareField({
-  name,
-  label,
-  placeholder,
-  defaultValue,
-  errors,
-}: {
-  name: string
-  label: string
-  placeholder?: string
-  defaultValue?: string
-  errors?: string[]
-}) {
-  return (
-    <>
-      <input
-        id={name}
-        name={name}
-        type="text"
-        aria-label={label}
-        placeholder={placeholder}
-        defaultValue={defaultValue}
-        autoComplete="off"
-        aria-invalid={errors && errors.length > 0 ? true : undefined}
-        className="border-[1.5px] border-ink bg-card px-3 py-2 font-sans text-sm text-ink outline-none focus-visible:border-magenta aria-[invalid=true]:border-red"
-      />
-      <FieldError errors={errors} />
-    </>
   )
 }
 

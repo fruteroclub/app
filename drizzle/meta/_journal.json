@@ -15,6 +15,13 @@
       "when": 1782331160359,
       "tag": "0001_profile_stage1_fields",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1782406920543,
+      "tag": "0002_profile_first_last_name",
+      "breakpoints": true
     }
   ]
 }

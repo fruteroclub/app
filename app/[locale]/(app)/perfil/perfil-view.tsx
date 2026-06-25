@@ -40,6 +40,7 @@ const COLOR_TO_TONE: Record<
 
 export default function PerfilView({ profile }: { profile: PerfilData }) {
   const t = useTranslations('perfil.view')
+  const td = useTranslations('dashboard')
   const format = useFormatter()
   const locale = useLocale()
 
@@ -103,7 +104,13 @@ export default function PerfilView({ profile }: { profile: PerfilData }) {
               <Glyph name="grid" size={12} /> {t('memberSince')} {memberSince}
             </span>
           </div>
-          <div className="mt-7">
+          <div className="mt-7 flex flex-wrap gap-3">
+            <Button asChild size="md">
+              <Link href="/dashboard" locale={locale}>
+                <Glyph name="star" size={14} />
+                {td('linkLabel')}
+              </Link>
+            </Button>
             <Button asChild size="md" variant="outline">
               <Link href="/perfil/edit" locale={locale}>
                 {t('edit')}

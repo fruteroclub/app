@@ -66,7 +66,13 @@ export const profiles = pgTable(
     privyDid: text('privy_did').notNull(),
     // Public handle. citext UNIQUE = case-insensitive dedupe at the DB layer.
     handle: citext('handle').notNull(),
+    // `display_name` is the composed full name (kept for display + the leaderboard
+    // acronym); the onboarding collects first + last name separately so they can
+    // be re-edited as discrete fields. `handle` is derived from the name, not
+    // user-entered.
     displayName: text('display_name').notNull(),
+    firstName: text('first_name'),
+    lastName: text('last_name'),
     role: text('role'),
     // `location` is the legacy single field; the onboarding now captures city +
     // region separately. Kept nullable for back-compat with early rows.

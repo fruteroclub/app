@@ -65,6 +65,11 @@ export const profileInputSchema = z.object({
     .trim()
     .min(1, 'El nombre es obligatorio.')
     .max(80, 'El nombre es demasiado largo.'),
+  // First + last name — the onboarding collects these; the client composes them
+  // into `displayName` and derives the `handle`. Optional here so the server
+  // contract stays back-compatible (displayName remains the required field).
+  firstName: optionalTrimmed(60),
+  lastName: optionalTrimmed(60),
   role: optionalTrimmed(120),
   // `location` stays accepted for back-compat; the onboarding sends city + region.
   location: optionalTrimmed(120),
