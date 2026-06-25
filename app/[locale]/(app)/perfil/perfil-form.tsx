@@ -301,14 +301,12 @@ export default function PerfilForm({
                 type="button"
                 onClick={() => setColor(selected ? undefined : c)}
                 aria-pressed={selected}
-                className={`flex items-center gap-2.5 border-[1.5px] py-2 pl-2 pr-3.5 font-mono text-xs uppercase tracking-[0.08em] transition-colors ${
-                  selected
-                    ? 'border-magenta text-ink'
-                    : 'border-ink/40 text-muted-2 hover:border-ink'
+                className={`flex items-center gap-2.5 border-[1.5px] bg-card py-2 pl-2 pr-3.5 font-mono text-xs uppercase tracking-[0.08em] text-ink transition-colors ${
+                  selected ? 'border-magenta' : 'border-frame hover:border-magenta/60'
                 }`}
               >
                 <span
-                  className="inline-block h-8 w-8 border border-ink/30"
+                  className="inline-block h-8 w-8 border border-frame/30"
                   style={{ backgroundColor: COLOR_VAR[c] }}
                   aria-hidden="true"
                 />

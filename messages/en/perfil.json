@@ -28,11 +28,11 @@
       "favoriteFruitHint": "Frutero culture. 🍓",
       "favoriteFruitPlaceholder": "Mango",
       "avatar": "Avatar",
-      "preferredColor": "Favorite color",
+      "preferredColor": "Choose a color",
       "colors": {
-        "magenta": "Magenta",
-        "violet": "Violet",
-        "amber": "Amber",
+        "magenta": "Pink",
+        "violet": "Purple",
+        "amber": "Yellow",
         "green": "Green"
       },
       "firstName": "First name",
