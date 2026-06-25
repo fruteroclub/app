@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState, type FormEvent } from 'react'
 import { usePrivy } from '@privy-io/react-auth'
 import { useLocale, useTranslations } from 'next-intl'
 
-import { useRouter } from '@/i18n/navigation'
+import { Link, useRouter } from '@/i18n/navigation'
 import { Button } from '@/components/ui'
 import { Glyph } from '@/components/Glyph'
 import { apiFetch, ApiError } from '@/lib/api/fetch'
@@ -196,6 +196,12 @@ export default function DashboardClient() {
           <p className="max-w-[52ch] font-serif text-lg leading-[1.45] text-muted">
             {t('lead')}
           </p>
+          <Link
+            href="/pulpa"
+            className="font-mono text-xs font-semibold uppercase tracking-[0.12em] text-magenta hover:underline"
+          >
+            {t('whatIsPulpa')} →
+          </Link>
         </header>
 
         {/* Category bar — the marketplace legend vibe (all bounties pay Reputación). */}

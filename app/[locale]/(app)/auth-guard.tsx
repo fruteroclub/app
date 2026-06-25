@@ -8,6 +8,9 @@ import { useTranslations } from 'next-intl'
 import { usePathname, useRouter } from '@/i18n/navigation'
 import { SIGNUP_HREF } from '@/content/landing'
 
+/** Informational (app) routes readable without auth (locale-stripped paths). */
+const PUBLIC_ROUTES = new Set<string>(['/pulpa'])
+
 /**
  * Client auth guard for the authed (app) group.
  *
@@ -30,16 +33,24 @@ export default function AuthGuard({ children }: { children: ReactNode }) {
   const pathname = usePathname()
   const t = useTranslations('app')
 
-  // `usePathname` (next-intl) is locale-stripped, so this is `/perfil` for both
-  // locales. The signup route shows its own login UI while unauthenticated.
+  // `usePathname` (next-intl) is locale-stripped, so these are `/perfil` etc. for
+  // both locales. The signup route shows its own login UI while unauthenticated;
+  // PUBLIC_ROUTES are purely informational (e.g. the $PULPA roadmap) — readable by
+  // anyone, with no auth and no Privy wait.
   const isSignupRoute = pathname === SIGNUP_HREF
+  const isPublicRoute = PUBLIC_ROUTES.has(pathname)
 
   useEffect(() => {
-    if (ready && !authenticated && !isSignupRoute) {
+    if (ready && !authenticated && !isSignupRoute && !isPublicRoute) {
       // Send unauthed users on a protected route to the localized signup entry.
       router.replace('/perfil')
     }
-  }, [ready, authenticated, isSignupRoute, router])
+  }, [ready, authenticated, isSignupRoute, isPublicRoute, router])
+
+  // Public informational routes render immediately (no auth, no Privy resolve).
+  if (isPublicRoute) {
+    return <>{children}</>
+  }
 
   if (!ready) {
     return <Pending>{t('auth.loading')}</Pending>

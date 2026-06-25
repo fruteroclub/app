@@ -16,7 +16,7 @@ import { routing, type Locale } from './routing'
  * Keeping the list explicit (rather than a filesystem glob) keeps the loader
  * statically analyzable for the bundler and avoids shipping stray files.
  */
-const NAMESPACES = ['common', 'landing', 'enterprise', 'app', 'perfil', 'noticias', 'dashboard'] as const
+const NAMESPACES = ['common', 'landing', 'enterprise', 'app', 'perfil', 'noticias', 'dashboard', 'pulpa'] as const
 
 async function loadNamespace(
   locale: Locale,

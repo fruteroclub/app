@@ -1,0 +1,27 @@
+{
+  "title": "PULPA",
+  "lead": "El token de reputación de Frutero Club: tu puntuación, tu moneda y tus conexiones dentro de la comunidad. Esto es hacia dónde vamos.",
+  "what": {
+    "heading": "Qué es",
+    "body": "Cada bounty que completas y cada aporte a la comunidad construye tu $PULPA. Es tuyo y verificable — la llave para subir de tier y desbloquear oportunidades reales."
+  },
+  "roadmap": {
+    "heading": "Hoja de ruta",
+    "now": {
+      "tag": "Ahora · v1.0",
+      "title": "Construye tu perfil y completa tus primeros bounties",
+      "body": "$PULPA es visible como el rumbo del club. El conteo en vivo todavía no está encendido — por ahora, completar bounties llena tu perfil y te prepara para la primera distribución."
+    },
+    "q3": {
+      "tag": "Jul–Sep 2026 · Q3",
+      "title": "Primera distribución — Membresía Q3 2026",
+      "body": "Los primeros $PULPA se reparten con la Membresía Trimestral Jul-Ago-Sep 2026 de Frutero Club. Completa los bounties de bienvenida para entrar."
+    },
+    "next": {
+      "tag": "Próximo · v1.1",
+      "title": "$PULPA en vivo",
+      "body": "Puntuación en tiempo real, el leaderboard y las recompensas se encienden. Tu $PULPA empieza a contar y a abrir puertas."
+    }
+  },
+  "cta": "Empieza con tus bounties"
+}
