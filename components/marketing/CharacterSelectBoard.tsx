@@ -475,7 +475,12 @@ export function CharacterSelectBoard({
           bottom-left) · period selector (center) · the all-time RÉCORD (bottom-right,
           formatted like a leaderboard entry: rarity glyph + acronym + score). */}
       <div className="flex items-center justify-between gap-3 border-t border-muted bg-black px-4 py-2.5">
-        <span className="flex items-center gap-2 font-mono text-[11px] font-bold uppercase tracking-[0.16em] text-ink">
+        {/* The $PULPA mention on the landing doubles as the entry to the /pulpa
+            roadmap (insert coin → what is $PULPA). */}
+        <Link
+          href="/pulpa"
+          className="flex items-center gap-2 font-mono text-[11px] font-bold uppercase tracking-[0.16em] text-ink no-underline transition-colors hover:text-magenta"
+        >
           <span
             aria-hidden
             className="text-magenta motion-safe:[animation:attract-blink_1.2s_steps(1,end)_infinite]"
@@ -483,7 +488,7 @@ export function CharacterSelectBoard({
             ▸
           </span>
           {labels.insert}
-        </span>
+        </Link>
         <span className="hidden items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] md:flex">
           <span className="font-bold text-magenta">{labels.periodWeek}</span>
           <span aria-hidden className="text-muted/50">·</span>
