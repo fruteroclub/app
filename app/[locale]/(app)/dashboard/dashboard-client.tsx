@@ -336,7 +336,7 @@ function BountyModal({
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-lg border-[3px] border-frame bg-card p-6 md:p-7"
+        className="w-full max-w-lg border-[3px] border-frame bg-surface p-6 md:p-7"
       >
         <div className="flex items-start justify-between gap-4">
           <div>
