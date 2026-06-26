@@ -20,6 +20,11 @@ export default defineSchema({
     // Profile Identifiers
     username: v.optional(v.string()),
     displayName: v.optional(v.string()),
+    // club-app: first + last name are FIRST-CLASS fields (the canonical name) —
+    // distinct from displayName (a separate public label). Do not derive one from
+    // the other; displayName may mirror "first last" but these are the source.
+    firstName: v.optional(v.string()),
+    lastName: v.optional(v.string()),
     bio: v.optional(v.string()),
     avatarUrl: v.optional(v.string()),
 
@@ -79,6 +84,7 @@ export default defineSchema({
     twitterUrl: v.optional(v.string()),
     linkedinUrl: v.optional(v.string()),
     telegramHandle: v.optional(v.string()),
+    websiteUrl: v.optional(v.string()), // club-app: personal site / portfolio
 
     // Social Usernames (for onboarding form)
     githubUsername: v.optional(v.string()),
@@ -109,6 +115,28 @@ export default defineSchema({
     completedBounties: v.optional(v.number()), // Bounties completed (Epic 3 - future)
     totalEarningsUsd: v.optional(v.number()), // Earnings from bounties (Epic 3 - future)
     profileViews: v.number(),
+
+    // club-app fields (first-class, our schema) — optional so the external
+    // contributor's export stays import-compatible (a superset).
+    // `profiles.role` = the member's role (creativo/negocio/tecnologia); distinct
+    // from `users.role` (authz: member/moderator/admin) on the other table.
+    role: v.optional(
+      v.union(
+        v.literal("creativo"),
+        v.literal("negocio"),
+        v.literal("tecnologia")
+      )
+    ),
+    favoriteFruit: v.optional(v.string()),
+    preferredColor: v.optional(
+      v.union(
+        v.literal("magenta"),
+        v.literal("violet"),
+        v.literal("amber"),
+        v.literal("green")
+      )
+    ),
+    testimony: v.optional(v.string()),
 
     // Metadata
     metadata: v.optional(v.any()),

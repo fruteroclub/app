@@ -4,15 +4,18 @@ import { v } from 'convex/values'
 /**
  * club-app surface over the shared Convex backend.
  *
- * The redesigned member app (club-app) reads/writes the same `users` + `profiles`
- * tables the live app uses, but its onboarding collects a few fields the base
- * schema doesn't have (first/last name, a discipline role, favorite fruit, a
- * preferred color, a written testimony, a website). For v1.0 those live in the
- * existing `profiles.metadata` bag (`v.any()`) — NO schema change — so importing
- * the contributor's snapshot stays compatible. Promote to real columns later.
+ * OUR schema is the source of truth: the club-app fields are FIRST-CLASS columns
+ * (users.firstName/lastName; profiles.role/favoriteFruit/preferredColor/
+ * websiteUrl/testimony) — added to schema.ts, not stuffed in a metadata bag. We
+ * reuse the external contributor's fields where they fit (users.displayName/
+ * username; profiles.city/country/githubUrl) and extend with ours. All additions
+ * are optional, so importing their `convex export` stays compatible (a superset).
  *
- * Auth pattern matches the rest of the backend: the Privy DID is a plain arg
- * (no ctx.auth), passed from `usePrivy().user.id` on the client.
+ * `displayName`, `firstName`, and `lastName` are THREE distinct fields — first +
+ * last are the canonical name; displayName mirrors "first last" for the external
+ * app's display surfaces but is never the source.
+ *
+ * Auth matches the rest of the backend: the Privy DID is a plain arg (no ctx.auth).
  */
 
 const PREFERRED_COLOR = v.union(
@@ -21,6 +24,7 @@ const PREFERRED_COLOR = v.union(
   v.literal('amber'),
   v.literal('green'),
 )
+/** The member's role (distinct from users.role authz). */
 const ROLE = v.union(
   v.literal('creativo'),
   v.literal('negocio'),
@@ -62,10 +66,10 @@ export const saveProfile = mutation({
     website: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
+    // displayName mirrors "first last" for the external app's display surfaces;
+    // firstName/lastName remain the canonical, first-class name fields.
     const displayName = [args.firstName, args.lastName].filter(Boolean).join(' ')
 
-    // Find or create the user, marking them active (v1.0 = "complete = member",
-    // no approval queue; the live app's pending→active flow is not adopted here).
     const existing = await ctx.db
       .query('users')
       .withIndex('by_privy_did', (q) => q.eq('privyDid', args.privyDid))
@@ -77,7 +81,10 @@ export const saveProfile = mutation({
       await ctx.db.patch(userId, {
         username: args.username,
         displayName,
+        firstName: args.firstName,
+        lastName: args.lastName || undefined,
         ...(args.email ? { email: args.email } : {}),
+        // v1.0 = "complete = member" (no approval queue).
         accountStatus: 'active',
         lastLoginAt: Date.now(),
       })
@@ -89,6 +96,8 @@ export const saveProfile = mutation({
           `${args.privyDid.replace('did:privy:', '')}@incomplete.user`,
         username: args.username,
         displayName,
+        firstName: args.firstName,
+        lastName: args.lastName || undefined,
         primaryAuthMethod: 'email',
         role: 'member',
         accountStatus: 'active',
@@ -96,15 +105,15 @@ export const saveProfile = mutation({
       })
     }
 
-    // club-app extras live in metadata for v1.0 (no schema change).
-    const metadata = {
-      firstName: args.firstName,
-      lastName: args.lastName ?? null,
+    const profileFields = {
+      city: args.city,
+      country: args.country,
+      githubUrl: args.github || undefined,
+      websiteUrl: args.website || undefined,
       role: args.role,
       favoriteFruit: args.favoriteFruit,
       preferredColor: args.preferredColor,
-      testimony: args.testimony ?? null,
-      website: args.website ?? null,
+      testimony: args.testimony || undefined,
     }
 
     const profile = await ctx.db
@@ -113,24 +122,16 @@ export const saveProfile = mutation({
       .unique()
 
     if (profile) {
-      await ctx.db.patch(profile._id, {
-        city: args.city,
-        country: args.country,
-        githubUrl: args.github,
-        metadata: { ...(profile.metadata ?? {}), ...metadata },
-      })
+      await ctx.db.patch(profile._id, profileFields)
     } else {
       await ctx.db.insert('profiles', {
         userId,
-        city: args.city,
-        country: args.country,
-        githubUrl: args.github,
         profileVisibility: 'public',
         availabilityStatus: 'available',
         learningTracks: [],
         profileViews: 0,
         projectsCount: 0,
-        metadata,
+        ...profileFields,
       })
     }
 
@@ -166,14 +167,15 @@ export const saveBounty = mutation({
       .unique()
     if (!profile) throw new Error('Profile not found')
 
-    const value = args.value.trim()
-    if (args.field === 'github') {
-      await ctx.db.patch(profile._id, { githubUrl: value || undefined })
-    } else {
-      await ctx.db.patch(profile._id, {
-        metadata: { ...(profile.metadata ?? {}), [args.field]: value || null },
-      })
-    }
+    const value = args.value.trim() || undefined
+    const patch =
+      args.field === 'github'
+        ? { githubUrl: value }
+        : args.field === 'website'
+          ? { websiteUrl: value }
+          : { testimony: value }
+    await ctx.db.patch(profile._id, patch)
+
     const updated = await ctx.db.get(profile._id)
     return { user, profile: updated }
   },
