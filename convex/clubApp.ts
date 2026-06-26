@@ -53,6 +53,8 @@ export const saveProfile = mutation({
   args: {
     privyDid: v.string(),
     email: v.optional(v.string()),
+    appWallet: v.optional(v.string()), // Privy embedded wallet
+    userWallet: v.optional(v.string()), // the user's own / external wallet
     username: v.string(), // the name-derived handle
     firstName: v.string(),
     lastName: v.optional(v.string()),
@@ -84,6 +86,8 @@ export const saveProfile = mutation({
         firstName: args.firstName,
         lastName: args.lastName || undefined,
         ...(args.email ? { email: args.email } : {}),
+        ...(args.appWallet ? { appWallet: args.appWallet } : {}),
+        ...(args.userWallet ? { userWallet: args.userWallet } : {}),
         // v1.0 = "complete = member" (no approval queue).
         accountStatus: 'active',
         lastLoginAt: Date.now(),
@@ -98,6 +102,8 @@ export const saveProfile = mutation({
         displayName,
         firstName: args.firstName,
         lastName: args.lastName || undefined,
+        appWallet: args.appWallet,
+        userWallet: args.userWallet,
         primaryAuthMethod: 'email',
         role: 'member',
         accountStatus: 'active',
