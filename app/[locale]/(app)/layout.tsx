@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import AppPrivyProvider from './privy-provider'
 import AuthGuard from './auth-guard'
 import { AppMasthead } from '@/components/app/AppMasthead'
+import { ConvexClientProvider } from '@/components/app/ConvexClientProvider'
 
 /**
  * The authed app surface is intentionally NOT indexable (T7): it is private,
@@ -32,9 +33,11 @@ export default function AppLayout({ children }: { children: ReactNode }) {
     // as an opt-in accent for specific game moments (the way the marketing
     // leaderboard sets data-mode="arcade" locally), not the whole surface. So the
     // old global ThemeScript/ArcadeMode forcing is intentionally removed here.
-    <AppPrivyProvider>
-      <AppMasthead />
-      <AuthGuard>{children}</AuthGuard>
-    </AppPrivyProvider>
+    <ConvexClientProvider>
+      <AppPrivyProvider>
+        <AppMasthead />
+        <AuthGuard>{children}</AuthGuard>
+      </AppPrivyProvider>
+    </ConvexClientProvider>
   )
 }
