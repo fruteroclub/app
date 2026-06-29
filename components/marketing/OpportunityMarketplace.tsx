@@ -27,13 +27,16 @@ import {
 
 // v0 legend shows only the currencies the board actually pays today (Reputación
 // + Experiencia). `dinero` returns to the legend when paid bounties land.
-const CURRENCIES: readonly OppCurrency[] = ["reputacion", "experiencia"] as const;
+const CURRENCIES: readonly OppCurrency[] = [
+  "reputacion",
+  "experiencia",
+] as const;
 
 export function OpportunityMarketplace() {
   const t = useTranslations("landing");
 
   return (
-    <section id="desbloquea" className="border-t border-line py-20 md:py-28">
+    <section id="oportunidades" className="border-t border-line py-20 md:py-28">
       {/* Header + editorial lead */}
       <SectionHeader
         register="editorial"
@@ -52,7 +55,10 @@ export function OpportunityMarketplace() {
             key={c}
             className={`inline-flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-[0.16em] ${CURRENCY_TEXT[c]}`}
           >
-            <span className={`inline-block h-2.5 w-2.5 ${CURRENCY_DOT[c]}`} aria-hidden="true" />
+            <span
+              className={`inline-block h-2.5 w-2.5 ${CURRENCY_DOT[c]}`}
+              aria-hidden="true"
+            />
             {t(`currency.${c}`)}
           </span>
         ))}

@@ -175,7 +175,14 @@ describe("landing — Masthead (paper-only)", () => {
     expect(screen.getAllByText("Frutero Club").length).toBeGreaterThan(0);
     expect(
       screen.getByRole("link", { name: /Cómo funciona/i }),
-    ).toBeInTheDocument();
+    ).toHaveAttribute("href", "#como-funciona");
+    expect(
+      screen.getByRole("link", { name: /Oportunidades/i }),
+    ).toHaveAttribute("href", "#oportunidades");
+    expect(screen.getByRole("link", { name: /^Empresas$/i })).toHaveAttribute(
+      "href",
+      "/enterprise",
+    );
     // Paper-only public surface: the MODO toggle must not exist here.
     expect(screen.queryByText(/MODO/i)).not.toBeInTheDocument();
   });
@@ -274,6 +281,13 @@ describe("landing — CtaBand", () => {
 });
 
 describe("landing — OpportunityMarketplace (#5)", () => {
+  it("uses the oportunidades anchor targeted by the masthead nav", () => {
+    const { container } = renderLanding("es", <OpportunityMarketplace />);
+
+    expect(container.querySelector("#oportunidades")).not.toBeNull();
+    expect(container.querySelector("#desbloquea")).toBeNull();
+  });
+
   it("lists the 5 open opportunities + the Publica aquí ad slot", () => {
     renderLanding("es", <OpportunityMarketplace />);
 

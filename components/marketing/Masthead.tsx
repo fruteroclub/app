@@ -22,7 +22,7 @@ export function Masthead() {
 
   return (
     <header className="sticky top-0 z-50 bg-frame text-paper">
-      <div className="mx-auto grid h-20 max-w-[var(--wrap)] grid-cols-[1fr_auto] items-center gap-6 px-7 md:grid-cols-[auto_1fr_auto]">
+      <div className="relative mx-auto flex h-20 max-w-[var(--wrap)] items-center justify-between gap-6 px-7">
         <Link href="/" className="flex items-center gap-2.5 no-underline">
           <Image
             src="/logo.png"
@@ -40,7 +40,7 @@ export function Masthead() {
 
         <MastheadNav />
 
-        <div className="flex items-center justify-self-end">
+        <div className="flex items-center">
           <MastheadAuthAction />
         </div>
       </div>

@@ -34,7 +34,7 @@ export interface NavItem {
 
 export const NAV_ITEMS: readonly NavItem[] = [
   { i18nKey: "nav.how", href: "#como-funciona" },
-  { i18nKey: "nav.unlocks", href: "#desbloquea" },
+  { i18nKey: "nav.opportunities", href: "#oportunidades" },
   { i18nKey: "nav.enterprise", href: ENTERPRISE_HREF },
 ] as const;
 
@@ -142,11 +142,36 @@ export const OPPORTUNITIES: readonly Opportunity[] = [
   // The first open board (v0). Three Reputación content bounties (entry-tier,
   // open to the Community) + two Experiencia opportunities. Only the ETH Cinco
   // de Mayo stay is uncommon (Club Member); everything else is common.
-  { id: "build-in-public", currency: "reputacion", rarity: "common", i18nKey: "marketplace.items.buildInPublic" },
-  { id: "project-card", currency: "reputacion", rarity: "common", i18nKey: "marketplace.items.projectCard" },
-  { id: "video-testimonial", currency: "reputacion", rarity: "common", i18nKey: "marketplace.items.videoTestimonial" },
-  { id: "demo-day", currency: "experiencia", rarity: "common", i18nKey: "marketplace.items.demoDay" },
-  { id: "eth-stay", currency: "experiencia", rarity: "uncommon", i18nKey: "marketplace.items.ethStay" },
+  {
+    id: "build-in-public",
+    currency: "reputacion",
+    rarity: "common",
+    i18nKey: "marketplace.items.buildInPublic",
+  },
+  {
+    id: "project-card",
+    currency: "reputacion",
+    rarity: "common",
+    i18nKey: "marketplace.items.projectCard",
+  },
+  {
+    id: "video-testimonial",
+    currency: "reputacion",
+    rarity: "common",
+    i18nKey: "marketplace.items.videoTestimonial",
+  },
+  {
+    id: "demo-day",
+    currency: "experiencia",
+    rarity: "common",
+    i18nKey: "marketplace.items.demoDay",
+  },
+  {
+    id: "eth-stay",
+    currency: "experiencia",
+    rarity: "uncommon",
+    i18nKey: "marketplace.items.ethStay",
+  },
 ] as const;
 
 /* ===========================================================================
@@ -181,12 +206,66 @@ export interface Player {
 
 export const PLAYERS: readonly Player[] = [
   // TODO-swap: real members + consent + real card art + real weekly $PULPA (indexer) + real tags.
-  { id: "andres", name: "Andrés Frutero", acronym: "AFR", roleKey: "players.items.andres.role", rarity: "rare", pulpa: 2540, ships: ["Frutero OS", "zkPase"], accent: "magenta" },
-  { id: "mariana", name: "Mariana Ríos", acronym: "MRI", roleKey: "players.items.mariana.role", rarity: "rare", pulpa: 2310, ships: ["Monad Audit", "MUX"], accent: "green" },
-  { id: "diego", name: "Diego Romero", acronym: "DGO", roleKey: "players.items.diego.role", rarity: "uncommon", pulpa: 1980, ships: ["Demo Night", "Frutero UI"], accent: "orange" },
-  { id: "valeria", name: "Valeria Méndez", acronym: "VAL", roleKey: "players.items.valeria.role", rarity: "uncommon", pulpa: 1450, ships: ["Velora App"], accent: "magenta" },
-  { id: "tomas", name: "Tomás Aguilar", acronym: "TMS", roleKey: "players.items.tomas.role", rarity: "common", pulpa: 980, ships: ["Nubia ML"], accent: "green" },
-  { id: "sofia", name: "Sofía Luna", acronym: "SOF", roleKey: "players.items.sofia.role", rarity: "common", pulpa: 720, ships: ["Club DevRel"], accent: "muted" },
+  {
+    id: "andres",
+    name: "Andrés Frutero",
+    acronym: "AFR",
+    roleKey: "players.items.andres.role",
+    rarity: "rare",
+    pulpa: 2540,
+    ships: ["Frutero OS", "zkPase"],
+    accent: "magenta",
+  },
+  {
+    id: "mariana",
+    name: "Mariana Ríos",
+    acronym: "MRI",
+    roleKey: "players.items.mariana.role",
+    rarity: "rare",
+    pulpa: 2310,
+    ships: ["Monad Audit", "MUX"],
+    accent: "green",
+  },
+  {
+    id: "diego",
+    name: "Diego Romero",
+    acronym: "DGO",
+    roleKey: "players.items.diego.role",
+    rarity: "uncommon",
+    pulpa: 1980,
+    ships: ["Demo Night", "Frutero UI"],
+    accent: "orange",
+  },
+  {
+    id: "valeria",
+    name: "Valeria Méndez",
+    acronym: "VAL",
+    roleKey: "players.items.valeria.role",
+    rarity: "uncommon",
+    pulpa: 1450,
+    ships: ["Velora App"],
+    accent: "magenta",
+  },
+  {
+    id: "tomas",
+    name: "Tomás Aguilar",
+    acronym: "TMS",
+    roleKey: "players.items.tomas.role",
+    rarity: "common",
+    pulpa: 980,
+    ships: ["Nubia ML"],
+    accent: "green",
+  },
+  {
+    id: "sofia",
+    name: "Sofía Luna",
+    acronym: "SOF",
+    roleKey: "players.items.sofia.role",
+    rarity: "common",
+    pulpa: 720,
+    ships: ["Club DevRel"],
+    accent: "muted",
+  },
 ] as const;
 
 /**
@@ -194,7 +273,11 @@ export const PLAYERS: readonly Player[] = [
  * insert-coin bar, formatted like a leaderboard entry (rarity + acronym + score).
  * TODO-swap: the real all-time record from the indexer.
  */
-export const HISTORIC_RECORD: { acronym: string; rarity: Rarity; pulpa: number } = {
+export const HISTORIC_RECORD: {
+  acronym: string;
+  rarity: Rarity;
+  pulpa: number;
+} = {
   acronym: "AFR",
   rarity: "rare",
   pulpa: 12480,
@@ -278,11 +361,31 @@ export interface FaqItem {
 }
 
 export const FAQ_ITEMS: readonly FaqItem[] = [
-  { id: "jargon", index: "01", qKey: "faq.items.jargon.q", aKey: "faq.items.jargon.a" },
-  { id: "cost", index: "02", qKey: "faq.items.cost.q", aKey: "faq.items.cost.a" },
+  {
+    id: "jargon",
+    index: "01",
+    qKey: "faq.items.jargon.q",
+    aKey: "faq.items.jargon.a",
+  },
+  {
+    id: "cost",
+    index: "02",
+    qKey: "faq.items.cost.q",
+    aKey: "faq.items.cost.a",
+  },
   { id: "who", index: "03", qKey: "faq.items.who.q", aKey: "faq.items.who.a" },
-  { id: "level", index: "04", qKey: "faq.items.level.q", aKey: "faq.items.level.a" },
-  { id: "where", index: "05", qKey: "faq.items.where.q", aKey: "faq.items.where.a" },
+  {
+    id: "level",
+    index: "04",
+    qKey: "faq.items.level.q",
+    aKey: "faq.items.level.a",
+  },
+  {
+    id: "where",
+    index: "05",
+    qKey: "faq.items.where.q",
+    aKey: "faq.items.where.a",
+  },
 ] as const;
 
 /**

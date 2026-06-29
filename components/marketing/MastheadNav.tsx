@@ -19,7 +19,7 @@ export function MastheadNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="hidden justify-center gap-6 md:flex">
+    <nav className="absolute left-1/2 hidden -translate-x-1/2 justify-center gap-6 md:flex">
       {NAV_ITEMS.map((item) => {
         const active = item.href.startsWith("/") && pathname === item.href;
         return (
