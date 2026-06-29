@@ -1,10 +1,8 @@
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 
-import { Glyph } from "@/components/Glyph";
-import { Button } from "@/components/ui";
 import { Link } from "@/i18n/navigation";
-import { SIGNUP_HREF } from "@/content/landing";
+import { MastheadAuthAction } from "./MastheadAuthAction";
 import { MastheadNav } from "./MastheadNav";
 
 /**
@@ -20,7 +18,6 @@ import { MastheadNav } from "./MastheadNav";
  * lives only in the authed (app) dopamine screens. Server component — static.
  */
 export function Masthead() {
-  const t = useTranslations("landing");
   const tc = useTranslations("common");
 
   return (
@@ -44,13 +41,7 @@ export function Masthead() {
         <MastheadNav />
 
         <div className="flex items-center justify-self-end">
-          {/* The shared Button at the default size (40px); onDark = magenta border
-              on the ink bar, flat (arcade shadow/lift is gated to data-mode=arcade). */}
-          <Button asChild onDark>
-            <Link href={SIGNUP_HREF}>
-              <Glyph name="bolt" size={13} /> {t("hero.ctaPrimary")}
-            </Link>
-          </Button>
+          <MastheadAuthAction />
         </div>
       </div>
     </header>

@@ -63,9 +63,6 @@ export const saveProfile = mutation({
     country: v.string(),
     favoriteFruit: v.string(),
     preferredColor: PREFERRED_COLOR,
-    testimony: v.optional(v.string()),
-    github: v.optional(v.string()),
-    website: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     // displayName mirrors "first last" for the external app's display surfaces;
@@ -111,15 +108,14 @@ export const saveProfile = mutation({
       })
     }
 
+    // Identity only — testimony / github / website are dashboard bounties
+    // (saveBounty), so saving identity never touches them.
     const profileFields = {
       city: args.city,
       country: args.country,
-      githubUrl: args.github || undefined,
-      websiteUrl: args.website || undefined,
       role: args.role,
       favoriteFruit: args.favoriteFruit,
       preferredColor: args.preferredColor,
-      testimony: args.testimony || undefined,
     }
 
     const profile = await ctx.db

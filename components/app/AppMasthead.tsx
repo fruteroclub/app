@@ -2,6 +2,7 @@ import Image from 'next/image'
 import { useTranslations } from 'next-intl'
 
 import { Link } from '@/i18n/navigation'
+import { AppNavigationMenu } from './AppNavigationMenu'
 
 /**
  * AppMasthead — the member-area header for the authed (app) group.
@@ -12,7 +13,6 @@ import { Link } from '@/i18n/navigation'
  * the arcade-dark surface like the top edge of an arcade cabinet. Server component.
  */
 export function AppMasthead() {
-  const t = useTranslations('app')
   const tc = useTranslations('common')
 
   return (
@@ -35,10 +35,9 @@ export function AppMasthead() {
             <span className="text-magenta">.</span>
           </span>
         </Link>
-        <span className="flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-[0.18em] text-magenta">
-          <span aria-hidden>▸</span>
-          {t('memberArea')}
-        </span>
+        <div className="flex items-center">
+          <AppNavigationMenu />
+        </div>
       </div>
     </header>
   )

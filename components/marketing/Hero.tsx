@@ -1,9 +1,9 @@
 import { useTranslations } from "next-intl";
 
-import { Glyph } from "@/components/Glyph";
 import { Button } from "@/components/ui";
 import { Link } from "@/i18n/navigation";
-import { ENTERPRISE_HREF, SIGNUP_HREF } from "@/content/landing";
+import { ENTERPRISE_HREF } from "@/content/landing";
+import { HeroAuthCta } from "./HeroAuthCta";
 
 /**
  * Hero — the media lead of the front page (left column). A large greyed photo with
@@ -51,11 +51,7 @@ export function Hero() {
       </p>
 
       <div className="mt-6 flex flex-wrap items-center gap-2">
-        <Button asChild size="md">
-          <Link href={SIGNUP_HREF}>
-            <Glyph name="bolt" size={13} /> {t("hero.ctaPrimary")}
-          </Link>
-        </Button>
+        <HeroAuthCta />
         <Button asChild variant="link" size="md">
           <Link href={ENTERPRISE_HREF}>{t("hero.ctaSecondary")}</Link>
         </Button>

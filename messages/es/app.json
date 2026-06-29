@@ -3,5 +3,16 @@
     "loading": "Cargando…",
     "signinRequired": "Vuelve a iniciar sesión para continuar."
   },
-  "memberArea": "Área de miembros"
+  "nav": {
+    "dashboard": "Tablero",
+    "editProfile": "Editar perfil",
+    "loggingOut": "Cerrando sesión…",
+    "logout": "Cerrar sesión",
+    "memberFallback": "Miembro",
+    "menu": "Menú",
+    "openMenu": "Abrir menú de navegación",
+    "profile": "Perfil",
+    "pulpa": "$PULPA",
+    "signedIn": "Sesión activa"
+  }
 }

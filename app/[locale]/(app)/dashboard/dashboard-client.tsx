@@ -1,15 +1,15 @@
 'use client'
 
-import { useCallback, useEffect, useState, type FormEvent } from 'react'
+import { useEffect, useState, type FormEvent } from 'react'
 import { usePrivy } from '@privy-io/react-auth'
-import { useLocale, useTranslations } from 'next-intl'
+import { useMutation, useQuery } from 'convex/react'
+import { useTranslations } from 'next-intl'
 
 import { Link, useRouter } from '@/i18n/navigation'
 import { Button } from '@/components/ui'
 import { Glyph } from '@/components/Glyph'
-import { apiFetch, ApiError } from '@/lib/api/fetch'
-import type { PerfilData } from '../perfil/perfil-form'
-import type { Locale } from '@/i18n/routing'
+import { api } from '@/convex/_generated/api'
+import { toMember, type MemberProfile } from '@/lib/member'
 
 /**
  * The /dashboard surface — the member's "first board", styled like the public
@@ -18,127 +18,54 @@ import type { Locale } from '@/i18n/routing'
  * cards, each with a Reputación currency chip + a done/pending status. Clicking a
  * card opens a modal (a bottom-sheet on mobile) to fulfill it.
  *
- * Bounties are stored ON the profile (testimony + links). /api/profile is a FULL
- * upsert, so saving one bounty re-POSTs the whole identity unchanged + the edited
- * field — completing a bounty never disturbs the rest of the profile.
+ * Bounties live on the profile (testimony + github/website URLs); each is saved
+ * with the `saveBounty` Convex mutation, which patches just that one field. The
+ * reactive `getProfile` query updates the board itself after a save.
  *
  *   not ready              → loading
  *   ready, !authenticated  → login CTA (the layout guard also redirects)
  *   authenticated, no row  → redirect to /perfil (create identity first)
  *   authenticated, has row → the bounties board
  */
-type LoadState =
-  | { kind: 'loading' }
-  | { kind: 'ready'; profile: PerfilData }
-  | { kind: 'error'; message: string }
 
-/** The three welcome bounties (stored as testimony / links.github / links.website). */
+/** The three welcome bounties — the `field` arg the saveBounty mutation expects. */
 type BountyId = 'testimony' | 'github' | 'website'
 const BOUNTY_IDS: readonly BountyId[] = ['testimony', 'github', 'website']
 
-function bountyValue(profile: PerfilData, id: BountyId): string {
+function bountyValue(profile: MemberProfile, id: BountyId): string {
   if (id === 'testimony') return profile.testimony ?? ''
-  return profile.links?.[id] ?? ''
+  return profile.links[id] ?? ''
 }
 
 export default function DashboardClient() {
   const t = useTranslations('dashboard')
   const tp = useTranslations('perfil.create')
-  const locale = useLocale() as Locale
   const router = useRouter()
-  const { ready, authenticated, login, getAccessToken } = usePrivy()
+  const { ready, authenticated, login, user } = usePrivy()
+  const data = useQuery(
+    api.clubApp.getProfile,
+    user?.id ? { privyDid: user.id } : 'skip',
+  )
+  const saveBountyMutation = useMutation(api.clubApp.saveBounty)
 
-  const [state, setState] = useState<LoadState>({ kind: 'loading' })
   const [active, setActive] = useState<BountyId | null>(null)
 
-  const load = useCallback(async () => {
-    setState({ kind: 'loading' })
-    let token: string | null = null
-    try {
-      token = await getAccessToken()
-    } catch {
-      token = null
-    }
-    if (!token) {
-      setState({ kind: 'error', message: t('errors.session') })
-      return
-    }
-    try {
-      const { profile } = await apiFetch<{ profile: PerfilData }>('/api/profile', {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      setState({ kind: 'ready', profile })
-    } catch (error) {
-      if (error instanceof ApiError && error.status === 404) {
-        router.replace('/perfil')
-      } else if (error instanceof ApiError && error.status === 401) {
-        setState({ kind: 'error', message: t('errors.session') })
-      } else {
-        setState({ kind: 'error', message: t('errors.load') })
-      }
-    }
-  }, [getAccessToken, router, t])
+  const member = toMember(data ?? null)
+  const loading =
+    !ready || (authenticated && Boolean(user?.id) && data === undefined)
 
+  // Authed with a resolved-but-empty profile → identity comes first.
   useEffect(() => {
-    if (ready && authenticated) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      void load()
-    }
-  }, [ready, authenticated, load])
+    if (!loading && authenticated && !member) router.replace('/perfil')
+  }, [loading, authenticated, member, router])
 
-  // FULL upsert: resend the whole identity unchanged + the one edited bounty
-  // field, so saving a bounty never nulls another profile field (no PATCH route).
+  /** Patch a single bounty field; the reactive query refreshes the board. */
   async function saveBounty(id: BountyId, value: string): Promise<void> {
-    if (state.kind !== 'ready') return
-    const profile = state.profile
-    let token: string | null = null
-    try {
-      token = await getAccessToken()
-    } catch {
-      token = null
-    }
-    if (!token) throw new Error(t('errors.session'))
-
-    const links: Record<string, string> = { ...(profile.links ?? {}) }
-    let testimony = profile.testimony ?? undefined
-    if (id === 'testimony') {
-      testimony = value || undefined
-    } else if (value) {
-      links[id] = value
-    } else {
-      delete links[id]
-    }
-
-    const { profile: updated } = await apiFetch<{ profile: PerfilData }>(
-      '/api/profile',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          handle: profile.handle,
-          displayName: profile.displayName,
-          firstName: profile.firstName ?? undefined,
-          lastName: profile.lastName ?? undefined,
-          role: profile.role ?? undefined,
-          location: profile.location ?? undefined,
-          city: profile.city ?? undefined,
-          region: profile.region ?? undefined,
-          favoriteFruit: profile.favoriteFruit ?? undefined,
-          preferredColor: profile.preferredColor ?? undefined,
-          testimony,
-          bio: profile.bio ?? undefined,
-          links,
-          locale,
-        }),
-      },
-    )
-    setState({ kind: 'ready', profile: updated })
+    if (!user?.id) throw new Error(t('errors.session'))
+    await saveBountyMutation({ privyDid: user.id, field: id, value })
   }
 
-  if (!ready || (authenticated && state.kind === 'loading')) {
+  if (loading) {
     return (
       <p role="status" aria-live="polite" className="font-mono text-xs text-muted-2">
         {t('loading')}
@@ -163,27 +90,9 @@ export default function DashboardClient() {
     )
   }
 
-  if (state.kind === 'error') {
-    return (
-      <section className="grid max-w-xl gap-4">
-        <p
-          role="alert"
-          className="border-2 border-black bg-card px-4 py-3 font-mono text-xs"
-          style={{ color: 'var(--red)' }}
-        >
-          {state.message}
-        </p>
-        <div>
-          <Button variant="outline" size="sm" onClick={() => void load()}>
-            <Glyph name="target" size={12} /> {t('retry')}
-          </Button>
-        </div>
-      </section>
-    )
-  }
-
-  if (state.kind !== 'ready') return null
-  const profile = state.profile
+  // No profile yet → the effect above redirects to /perfil; render nothing.
+  if (!member) return null
+  const profile = member
   const doneCount = BOUNTY_IDS.filter((id) => bountyValue(profile, id)).length
 
   return (
@@ -318,13 +227,7 @@ function BountyModal({
       await onSave(id, value)
       onClose()
     } catch (err) {
-      setError(
-        err instanceof ApiError
-          ? err.message || t('errors.save')
-          : err instanceof Error
-            ? err.message
-            : t('errors.save'),
-      )
+      setError(err instanceof Error ? err.message : t('errors.save'))
       setSaving(false)
     }
   }

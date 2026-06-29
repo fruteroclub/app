@@ -1,6 +1,5 @@
 {
   "create": {
-    "kicker": "Frutero Community · Stage 1",
     "title": "Create your profile",
     "lead": "Your verifiable identity in the club. Sign in to get started.",
     "loginCta": "Sign in to start",
@@ -79,19 +78,18 @@
     }
   },
   "view": {
-    "kicker": "Builder Profile",
     "memberSince": "Member since",
     "edit": "Edit profile",
     "empty": "You don't have a profile yet. Create it to appear in the community.",
     "createCta": "Create your profile",
     "sections": {
       "summary": "Summary",
+      "testimony": "Testimonial",
       "links": "Links"
     },
     "loading": "Loading your profile…"
   },
   "edit": {
-    "kicker": "Edit profile",
     "title": "Edit your profile",
     "back": "Back to profile"
   }

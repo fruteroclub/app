@@ -1,9 +1,9 @@
-import type { ReactNode } from 'react'
-import type { Metadata } from 'next'
-import AppPrivyProvider from './privy-provider'
-import AuthGuard from './auth-guard'
-import { AppMasthead } from '@/components/app/AppMasthead'
-import { ConvexClientProvider } from '@/components/app/ConvexClientProvider'
+import type { ReactNode } from "react";
+import type { Metadata } from "next";
+import AuthGuard from "./auth-guard";
+import { AppMasthead } from "@/components/app/AppMasthead";
+import AppPrivyProvider from "@/components/app/AppPrivyProvider";
+import { ConvexClientProvider } from "@/components/app/ConvexClientProvider";
 
 /**
  * The authed app surface is intentionally NOT indexable (T7): it is private,
@@ -12,7 +12,7 @@ import { ConvexClientProvider } from '@/components/app/ConvexClientProvider'
  */
 export const metadata: Metadata = {
   robots: { index: false, follow: false },
-}
+};
 
 /**
  * Authed (app) route group layout.
@@ -39,5 +39,5 @@ export default function AppLayout({ children }: { children: ReactNode }) {
         <AuthGuard>{children}</AuthGuard>
       </AppPrivyProvider>
     </ConvexClientProvider>
-  )
+  );
 }

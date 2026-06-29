@@ -1,6 +1,5 @@
 {
   "create": {
-    "kicker": "Comunidad Frutero · Etapa 1",
     "title": "Crea tu perfil",
     "lead": "Tu identidad verificable en el club. Inicia sesión para empezar.",
     "loginCta": "Inicia sesión para empezar",
@@ -79,19 +78,18 @@
     }
   },
   "view": {
-    "kicker": "Perfil de Constructor",
     "memberSince": "Miembro desde",
     "edit": "Editar perfil",
     "empty": "Aún no tienes un perfil. Créalo para aparecer en la comunidad.",
     "createCta": "Crea tu perfil",
     "sections": {
       "summary": "Resumen",
+      "testimony": "Testimonio",
       "links": "Enlaces"
     },
     "loading": "Cargando tu perfil…"
   },
   "edit": {
-    "kicker": "Editar perfil",
     "title": "Edita tu perfil",
     "back": "Volver al perfil"
   }

@@ -2,18 +2,22 @@
 
 import { useState, type FormEvent } from 'react'
 import { usePrivy } from '@privy-io/react-auth'
-import { useLocale, useTranslations } from 'next-intl'
+import { useMutation } from 'convex/react'
+import { useTranslations } from 'next-intl'
 
 import { useRouter } from '@/i18n/navigation'
 import { Avatar, Button } from '@/components/ui'
 import { Glyph } from '@/components/Glyph'
-import { apiFetch, ApiError } from '@/lib/api/fetch'
-import { API_ERROR_CODES } from '@/lib/api/response'
-import { PREFERRED_COLORS } from '@/lib/validators/profile'
-import type { Locale } from '@/i18n/routing'
-
-/** The four canon-palette accents, in pick order. */
-type PreferredColor = (typeof PREFERRED_COLORS)[number]
+import { api } from '@/convex/_generated/api'
+import {
+  MEMBER_ROLES as ROLE_CATEGORIES,
+  PREFERRED_COLORS,
+  pickWallets,
+  slugifyHandle,
+  type MemberProfile,
+  type MemberRole,
+  type PreferredColor,
+} from '@/lib/member'
 
 /** Preferred color → the canon CSS token (DESIGN.md "Canonical palette"). */
 const COLOR_VAR: Record<PreferredColor, string> = {
@@ -31,34 +35,14 @@ const COLOR_TO_TONE: Record<PreferredColor, 'magenta' | 'green' | 'orange' | 'mu
   green: 'green',
 }
 
-/**
- * Derive a public handle from the full name (the handle is no longer
- * user-entered): strip accents, lowercase, non-alnum → hyphen, clamp to the DB
- * CHECK (`^[A-Za-z0-9_-]{3,30}$`). Falls back to `builder` for empty/short slugs;
- * the submit adds a random suffix on the rare collision.
- */
-function slugifyHandle(name: string): string {
-  const slug = name
-    .normalize('NFKD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '')
-    .slice(0, 30)
-    .replace(/-+$/g, '')
-  return slug.length >= 3 ? slug : 'builder'
-}
 
-/** The three role tracks — a fixed selector, stored as the key in `profiles.role`. */
-export const ROLE_CATEGORIES = ['creativo', 'negocio', 'tecnologia'] as const
-export type RoleCategory = (typeof ROLE_CATEGORIES)[number]
 
 /**
  * Expressive line icons for the role selector (representational, unlike the
  * abstract geometric Glyph set): an artist palette (Creativo), a handshake
  * (Negocio), and a gear (Tecnología).
  */
-function RoleIcon({ role }: { role: RoleCategory }) {
+function RoleIcon({ role }: { role: MemberRole }) {
   const svg = {
     width: 20,
     height: 20,
@@ -100,56 +84,26 @@ function RoleIcon({ role }: { role: RoleCategory }) {
   )
 }
 
-/** The profile shape the server returns (subset of the DB row). */
-export interface PerfilData {
-  id: string
-  handle: string
-  displayName: string
-  firstName: string | null
-  lastName: string | null
-  role: string | null
-  location: string | null
-  city: string | null
-  region: string | null
-  favoriteFruit: string | null
-  preferredColor: PreferredColor | null
-  testimony: string | null
-  bio: string | null
-  links: Record<string, string> | null
-  locale: Locale
-  createdAt: string
-  updatedAt: string
-}
-
 type FieldErrors = Record<string, string[] | undefined>
 
 /**
- * The create/edit form for a perfil — the Stage-1 onboarding ("subscribe to the
- * underground publication / become a Community Member"). Shared by /perfil
- * (create) and /perfil/edit (edit).
- *
- * Two parts: the BASICS (name, handle, role, city, region, favorite fruit,
- * preferred color → a live avatar-placeholder accent) and three optional
- * "welcome bounty" cards (testimony, a GitHub project, a personal website) — each
- * an easy $PULPA win. Gets a fresh Privy token, POSTs to /api/profile, and
- * branches on the route's status codes:
- *   201/200 → navigate to the perfil view
- *   400     → inline field errors (zod.flatten().fieldErrors)
- *   409     → inline handle error ("ese handle ya existe")
- *   401     → re-auth message (the layout guard will also redirect)
- *   502/500 → a single user-visible error banner (no silent failure)
+ * The create/edit IDENTITY form — Stage-1 onboarding. Shared by /perfil (create)
+ * and /perfil/edit (edit). Writes the member's account + profile to Convex via
+ * `api.clubApp.saveProfile` (identity only — the welcome bounties live on the
+ * dashboard). The Privy DID + wallet addresses come straight from `usePrivy`; the
+ * handle is derived from the name. All fields required (client-validated).
  */
 export default function PerfilForm({
   initial,
   mode,
 }: {
-  initial?: PerfilData
+  initial?: MemberProfile
   mode: 'create' | 'edit'
 }) {
   const t = useTranslations('perfil.create')
-  const locale = useLocale() as Locale
   const router = useRouter()
-  const { getAccessToken } = usePrivy()
+  const { user } = usePrivy()
+  const saveProfile = useMutation(api.clubApp.saveProfile)
 
   const [submitting, setSubmitting] = useState(false)
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({})
@@ -157,10 +111,8 @@ export default function PerfilForm({
   const [color, setColor] = useState<PreferredColor | undefined>(
     initial?.preferredColor ?? undefined,
   )
-  const [role, setRole] = useState<RoleCategory | undefined>(
-    ROLE_CATEGORIES.includes(initial?.role as RoleCategory)
-      ? (initial?.role as RoleCategory)
-      : undefined,
+  const [role, setRole] = useState<MemberRole | undefined>(
+    initial?.role ?? undefined,
   )
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
@@ -196,91 +148,40 @@ export default function PerfilForm({
       return
     }
 
-    const displayName = [firstName, lastName].filter(Boolean).join(' ')
-    // The handle is derived from the name (no longer user-entered): keep the
-    // existing one on edit; slugify the name on create, adding a random suffix
-    // only if the derived handle collides.
-    const baseHandle = initial?.handle ?? slugifyHandle(displayName)
-
-    const buildBody = (handle: string) => ({
-      handle,
-      displayName,
-      firstName,
-      lastName,
-      role,
-      city,
-      region,
-      favoriteFruit,
-      preferredColor: color,
-      // Bounties (testimony + links) live on the dashboard now — this form is the
-      // IDENTITY profile only. Pass existing values through so editing the basics
-      // never wipes them: /api/profile is a FULL upsert.
-      testimony: initial?.testimony ?? undefined,
-      links: initial?.links ?? undefined,
-      locale,
-    })
-
-    let token: string | null = null
-    try {
-      token = await getAccessToken()
-    } catch {
-      token = null
-    }
-    if (!token) {
+    if (!user?.id) {
       setFormError(t('errors.session'))
       setSubmitting(false)
       return
     }
 
-    // Submit, retrying with a suffixed handle if the derived one is taken
-    // (create only — on edit the handle is fixed).
-    let handle = baseHandle
-    for (let attempt = 0; attempt < 4; attempt++) {
-      try {
-        await apiFetch<{ profile: PerfilData }>('/api/profile', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(buildBody(handle)),
-        })
-        // Success (201 created / 200 updated) → show the perfil.
-        router.replace('/perfil')
-        router.refresh()
-        return
-      } catch (error) {
-        const handleTaken =
-          error instanceof ApiError &&
-          error.code === API_ERROR_CODES.CONFLICT
-        if (handleTaken && !initial?.handle && attempt < 3) {
-          handle = `${baseHandle.slice(0, 25)}-${Math.random().toString(36).slice(2, 6)}`
-          continue
-        }
-        if (error instanceof ApiError) {
-          if (error.status === 401) {
-            setFormError(t('errors.session'))
-          } else if (error.code === API_ERROR_CODES.VALIDATION_ERROR) {
-            const details = error.details as
-              | { fieldErrors?: FieldErrors }
-              | undefined
-            const fe = details?.fieldErrors ?? {}
-            // displayName is derived from firstName — surface its error there.
-            if (fe.displayName && !fe.firstName) fe.firstName = fe.displayName
-            setFieldErrors(fe)
-            setFormError(t('errors.validation'))
-          } else {
-            setFormError(error.message || t('errors.generic'))
-          }
-        } else {
-          setFormError(t('errors.generic'))
-        }
-        setSubmitting(false)
-        return
-      }
+    // The handle is derived from the name (not user-entered): keep the existing
+    // one on edit, else slugify. The two wallet addresses come from Privy.
+    const displayName = [firstName, lastName].filter(Boolean).join(' ')
+    const username = initial?.handle || slugifyHandle(displayName)
+    const { appWallet, userWallet } = pickWallets(user)
+
+    try {
+      await saveProfile({
+        privyDid: user.id,
+        email: user.email?.address ?? undefined,
+        appWallet,
+        userWallet,
+        username,
+        firstName,
+        lastName: lastName || undefined,
+        // role/color are guaranteed set by the required-checks above.
+        role: role!,
+        city,
+        country: region,
+        favoriteFruit,
+        preferredColor: color!,
+      })
+      // Convex is reactive — the /perfil getProfile query updates on its own.
+      router.replace('/perfil')
+    } catch {
+      setFormError(t('errors.generic'))
+      setSubmitting(false)
     }
-    setFormError(t('errors.generic'))
-    setSubmitting(false)
   }
 
   return (

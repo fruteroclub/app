@@ -1,7 +1,26 @@
 import * as React from "react";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import { NextIntlClientProvider } from "next-intl";
+
+const authMocks = vi.hoisted(() => ({
+  logout: vi.fn(async () => undefined),
+  profile: {
+    user: {
+      firstName: "Mel",
+      displayName: "Mel Frutero",
+    },
+  } as undefined | { user: { firstName: string; displayName: string } },
+  privy: {
+    ready: true,
+    authenticated: false,
+    user: {
+      id: "did:privy:test",
+      email: { address: "member@frutero.club" },
+      wallet: undefined,
+    },
+  },
+}));
 
 /**
  * Stub the locale-aware navigation. The real `@/i18n/navigation` pulls in
@@ -22,6 +41,23 @@ vi.mock("@/i18n/navigation", () => ({
     React.createElement("a", { href, ...props }, children),
   // MastheadNav reads the active route; default to home for the render tests.
   usePathname: () => "/",
+  useRouter: () => ({ replace: vi.fn() }),
+}));
+
+vi.mock("@privy-io/react-auth", () => ({
+  PrivyProvider: ({ children }: { children: React.ReactNode }) => children,
+  useLogout: () => ({ logout: authMocks.logout }),
+  usePrivy: () => authMocks.privy,
+}));
+
+vi.mock("convex/react", () => ({
+  ConvexProvider: ({ children }: { children: React.ReactNode }) => children,
+  ConvexReactClient: class ConvexReactClient {},
+  useQuery: () => authMocks.profile,
+}));
+
+vi.mock("@/convex/_generated/api", () => ({
+  api: { clubApp: { getProfile: "getProfile" } },
 }));
 
 import { GlyphDefs } from "@/components/Glyph";
@@ -41,12 +77,14 @@ import { OPPORTUNITIES, PROOF_STATS, SIGNUP_HREF } from "@/content/landing";
 
 import esCommon from "@/messages/es/common.json";
 import esLanding from "@/messages/es/landing.json";
+import esApp from "@/messages/es/app.json";
 import enCommon from "@/messages/en/common.json";
 import enLanding from "@/messages/en/landing.json";
+import enApp from "@/messages/en/app.json";
 
 const MESSAGES = {
-  es: { common: esCommon, landing: esLanding },
-  en: { common: enCommon, landing: enLanding },
+  es: { common: esCommon, landing: esLanding, app: esApp },
+  en: { common: enCommon, landing: enLanding, app: enApp },
 } as const;
 
 function renderLanding(locale: "es" | "en", ui: React.ReactNode) {
@@ -57,6 +95,18 @@ function renderLanding(locale: "es" | "en", ui: React.ReactNode) {
     </NextIntlClientProvider>,
   );
 }
+
+beforeEach(() => {
+  authMocks.logout.mockClear();
+  authMocks.privy.ready = true;
+  authMocks.privy.authenticated = false;
+  authMocks.profile = {
+    user: {
+      firstName: "Mel",
+      displayName: "Mel Frutero",
+    },
+  };
+});
 
 describe("landing — Hero", () => {
   it("renders the ES display title and serif lead", () => {
@@ -87,6 +137,34 @@ describe("landing — Hero", () => {
     // next-intl Link on the default locale (es) renders the bare path.
     expect(primary.getAttribute("href")).toContain(SIGNUP_HREF);
   });
+
+  it("does not flash the signup CTA while hero auth state is resolving", () => {
+    authMocks.privy.ready = false;
+
+    renderLanding("es", <Hero />);
+
+    expect(
+      screen.queryByRole("link", { name: /Crea tu perfil/i }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("link", { name: /Tablero/i }),
+    ).not.toBeInTheDocument();
+    expect(screen.getByTestId("hero-auth-placeholder")).toBeInTheDocument();
+  });
+
+  it("shows the dashboard CTA in the hero when authenticated", () => {
+    authMocks.privy.authenticated = true;
+
+    renderLanding("es", <Hero />);
+
+    expect(
+      screen.queryByRole("link", { name: /Crea tu perfil/i }),
+    ).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /Tablero/i })).toHaveAttribute(
+      "href",
+      "/dashboard",
+    );
+  });
 });
 
 describe("landing — Masthead (paper-only)", () => {
@@ -100,6 +178,60 @@ describe("landing — Masthead (paper-only)", () => {
     ).toBeInTheDocument();
     // Paper-only public surface: the MODO toggle must not exist here.
     expect(screen.queryByText(/MODO/i)).not.toBeInTheDocument();
+  });
+
+  it("does not flash the signup CTA while auth state is resolving", () => {
+    authMocks.privy.ready = false;
+
+    renderLanding("es", <Masthead />);
+
+    expect(
+      screen.queryByRole("link", { name: /Crea tu perfil/i }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: /abrir menú de navegación/i }),
+    ).not.toBeInTheDocument();
+    expect(screen.getByTestId("masthead-auth-placeholder")).toBeInTheDocument();
+  });
+
+  it("does not show the auth email while the member profile is loading", () => {
+    authMocks.privy.authenticated = true;
+    authMocks.profile = undefined;
+
+    renderLanding("es", <Masthead />);
+
+    expect(
+      screen.queryByRole("link", { name: /Crea tu perfil/i }),
+    ).not.toBeInTheDocument();
+    expect(screen.queryByText("member@frutero.club")).not.toBeInTheDocument();
+    expect(
+      screen.getByTestId("app-navigation-menu-placeholder"),
+    ).toBeInTheDocument();
+  });
+
+  it("replaces the signup CTA with the member menu when authenticated", () => {
+    authMocks.privy.authenticated = true;
+
+    renderLanding("es", <Masthead />);
+
+    expect(
+      screen.queryByRole("link", { name: /Crea tu perfil/i }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /abrir menú de navegación/i }),
+    ).toHaveTextContent("Mel");
+
+    fireEvent.click(
+      screen.getByRole("button", { name: /abrir menú de navegación/i }),
+    );
+
+    expect(
+      screen.queryByRole("menuitem", { name: "Editar perfil" }),
+    ).not.toBeInTheDocument();
+    expect(screen.getByRole("menuitem", { name: "Perfil" })).toHaveAttribute(
+      "href",
+      "/perfil",
+    );
   });
 });
 
@@ -205,8 +337,12 @@ describe('landing — Leaderboard character-select makes no fake "live" claim', 
     const { container } = renderLanding("es", <CharacterSelect />);
     // First view is the roster grid (no CTA yet). Opening the top builder (Andrés,
     // 2,540) runs the clear→load transition, so the profile + CTA appear async.
-    fireEvent.click(within(container).getByRole("button", { name: /Andrés Frutero/i }));
-    const cta = await within(container).findByRole("link", { name: /Habla con su Agente/i });
+    fireEvent.click(
+      within(container).getByRole("button", { name: /Andrés Frutero/i }),
+    );
+    const cta = await within(container).findByRole("link", {
+      name: /Habla con su Agente/i,
+    });
     expect(cta).toHaveAttribute("href", "/perfil/andres");
   });
 });
@@ -245,9 +381,9 @@ describe("landing — Lo último #7 + hero rail (T4 repoint to latest())", () =>
       "es",
       <LatestMagazine posts={cards} localePrefix="" />,
     );
-    const hrefs = Array.from(container.querySelectorAll('a[href^="/noticias/"]')).map((a) =>
-      a.getAttribute("href"),
-    );
+    const hrefs = Array.from(
+      container.querySelectorAll('a[href^="/noticias/"]'),
+    ).map((a) => a.getAttribute("href"));
     expect(hrefs).toContain("/noticias/2026-06-22-alpha");
     expect(hrefs).toContain("/noticias/2026-06-20-bravo");
   });
@@ -257,9 +393,9 @@ describe("landing — Lo último #7 + hero rail (T4 repoint to latest())", () =>
       "en",
       <LatestMagazine posts={cards} localePrefix="/en" />,
     );
-    const hrefs = Array.from(container.querySelectorAll('a[href^="/en/noticias/"]')).map((a) =>
-      a.getAttribute("href"),
-    );
+    const hrefs = Array.from(
+      container.querySelectorAll('a[href^="/en/noticias/"]'),
+    ).map((a) => a.getAttribute("href"));
     expect(hrefs).toContain("/en/noticias/2026-06-22-alpha");
   });
 
@@ -269,11 +405,18 @@ describe("landing — Lo último #7 + hero rail (T4 repoint to latest())", () =>
   });
 
   it("CommunityFrontPage rail items DEEP-LINK into #lo-ultimo (#<slug>), not the article URL", () => {
-    const { container } = renderLanding("es", <CommunityFrontPage posts={cards} />);
+    const { container } = renderLanding(
+      "es",
+      <CommunityFrontPage posts={cards} />,
+    );
     // The rail opens the matching tab in the on-page Lo último reader.
-    expect(container.querySelector('a[href="#2026-06-22-alpha"]')).not.toBeNull();
+    expect(
+      container.querySelector('a[href="#2026-06-22-alpha"]'),
+    ).not.toBeNull();
     // It must NOT navigate away to the full article route.
-    expect(container.querySelector('a[href="/noticias/2026-06-22-alpha"]')).toBeNull();
+    expect(
+      container.querySelector('a[href="/noticias/2026-06-22-alpha"]'),
+    ).toBeNull();
     // "Ver todo" still scrolls to the section.
     expect(container.querySelector('a[href="#lo-ultimo"]')).not.toBeNull();
   });
