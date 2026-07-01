@@ -62,14 +62,13 @@ One leftover Production variable is present:
 The new app is Convex-first and should not need `DATABASE_URL`. Remove this from
 Vercel after the final code audit confirms no runtime usage.
 
-Confirmed Vercel state on 2026-07-01 after Convex production setup:
+Confirmed Vercel state on 2026-07-01 after Convex and Privy production setup:
 
 - Production:
   - `NEXT_PUBLIC_SITE_URL=https://frutero.club`
   - Convex points at `prod:aware-flamingo-310`
     (`https://aware-flamingo-310.convex.cloud`)
-  - `NEXT_PUBLIC_PRIVY_APP_ID` is set, but it does not match
-    `frutero-app` production's Privy app ID.
+  - `NEXT_PUBLIC_PRIVY_APP_ID` matches `frutero-app` production's Privy app ID.
   - `NEXT_PUBLIC_PRIVY_CLIENT_ID` and `PRIVY_APP_SECRET` are present only in
     Production, but the new app does not read either variable today.
   - `GITHUB_TOKEN` is present only in Production.
@@ -91,10 +90,17 @@ Confirmed Vercel state on 2026-07-01 after Convex production setup:
 
 Required correction before production cutover:
 
-- Replace `app` Production `NEXT_PUBLIC_PRIVY_APP_ID` with the existing
-  `frutero-app` production Privy app ID so users keep the same Privy DIDs.
 - Keep Preview on a separate staging/dev Privy app unless the team explicitly
   wants `dev.frutero.club` to authenticate real production users.
+
+Completed Privy production setup:
+
+- `app` Production `NEXT_PUBLIC_PRIVY_APP_ID` now matches the existing
+  `frutero-app` Production Privy app ID, so users keep the same Privy DIDs.
+- The value is stored as non-sensitive Vercel config because `NEXT_PUBLIC_*`
+  values are public in the built client.
+- A new Vercel Production deployment is required before the live production build
+  uses the updated value.
 
 Completed Convex production setup:
 
@@ -200,7 +206,8 @@ migration.
    - If Vercel project constraints make that awkward, keep it as a staging
      alias but ensure it uses staging env values and remains noindex.
 3. Privy:
-   - Production must use the existing `frutero-app` production Privy app.
+   - Production is configured to use the existing `frutero-app` production Privy
+     app.
    - Preview/dev should use a separate staging Privy app unless testing against
      production users is intentional.
 4. Data preservation:
