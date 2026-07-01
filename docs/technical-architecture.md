@@ -323,3 +323,4 @@ Automated coverage is risk-weighted:
 - `components/marketing/ContactForm.tsx`
 - `components/ui/form-card.tsx`
 - `lib/content/articles.ts`
+- `docs/production-migration-plan.md`
