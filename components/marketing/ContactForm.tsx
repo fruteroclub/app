@@ -1,12 +1,18 @@
 "use client";
 
-import type { CSSProperties } from "react";
 import { useState, type FormEvent } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { useMutation } from "convex/react";
 
 import { api } from "@/convex/_generated/api";
-import { Button } from "@/components/ui";
+import {
+  Button,
+  FormCard,
+  formAlertClass,
+  formControlClass,
+  formFieldErrorClass,
+  formLabelClass,
+} from "@/components/ui";
 import { Glyph } from "@/components/Glyph";
 import type { Locale } from "@/i18n/routing";
 
@@ -14,19 +20,7 @@ type FieldErrors = Record<string, string[] | undefined>;
 
 const HONEYPOT_FIELD = "company_website";
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const PAPER_CARD_VARS: CSSProperties = {
-  "--paper": "#f9f5ef",
-  "--surface": "#ece6dd",
-  "--card": "#fffbf5",
-  "--ink": "#11091e",
-  "--muted": "#5b5170",
-  "--muted-2": "#8a8198",
-  "--line": "#dcd3c4",
-  "--black": "#08000f",
-} as CSSProperties;
-
-const CARD_CLASS =
-  "relative mx-auto w-full max-w-2xl border-[3px] border-[var(--muted-canonical)] bg-card p-5 md:p-7";
+const FORM_CARD_CLASS = "mx-auto max-w-2xl p-5 md:p-7";
 
 /**
  * ContactForm — the single lead-capture island on /enterprise (T6).
@@ -118,7 +112,7 @@ export function ContactForm({
 
   if (succeeded) {
     return (
-      <article className={CARD_CLASS} style={PAPER_CARD_VARS}>
+      <FormCard className={FORM_CARD_CLASS}>
         <div role="status">
           <div className="mb-2 flex items-center gap-2 font-display text-xl font-semibold text-ink">
             <Glyph name="star" size={18} style={{ color: "var(--green)" }} />
@@ -126,12 +120,12 @@ export function ContactForm({
           </div>
           <p className="font-sans text-sm text-muted">{t("success.body")}</p>
         </div>
-      </article>
+      </FormCard>
     );
   }
 
   return (
-    <article className={CARD_CLASS} style={PAPER_CARD_VARS}>
+    <FormCard className={FORM_CARD_CLASS}>
       <form
         onSubmit={onSubmit}
         noValidate
@@ -142,7 +136,7 @@ export function ContactForm({
           <p
             id="contact-form-error"
             role="alert"
-            className="border-2 border-black bg-card px-4 py-3 font-mono text-xs"
+            className={formAlertClass}
             style={{ color: "var(--red)" }}
           >
             {formError}
@@ -176,10 +170,7 @@ export function ContactForm({
         />
 
         <div className="grid gap-1.5">
-          <label
-            htmlFor="message"
-            className="font-mono text-xs uppercase tracking-[0.1em] text-muted-2"
-          >
+          <label htmlFor="message" className={formLabelClass}>
             {t("fields.message")}
             <span className="ml-1 text-magenta">*</span>
           </label>
@@ -195,7 +186,7 @@ export function ContactForm({
                 ? true
                 : undefined
             }
-            className="border-[1.5px] border-ink bg-card px-3 py-2 font-sans text-sm text-ink outline-none focus-visible:border-magenta aria-[invalid=true]:border-red"
+            className={formControlClass}
           />
           <FieldError errors={fieldErrors.message} />
         </div>
@@ -225,7 +216,7 @@ export function ContactForm({
           </Button>
         </div>
       </form>
-    </article>
+    </FormCard>
   );
 }
 
@@ -252,10 +243,7 @@ function Field({
 }) {
   return (
     <div className="grid gap-1.5">
-      <label
-        htmlFor={name}
-        className="font-mono text-xs uppercase tracking-[0.1em] text-muted-2"
-      >
+      <label htmlFor={name} className={formLabelClass}>
         {label}
         {required ? <span className="ml-1 text-magenta">*</span> : null}
       </label>
@@ -268,7 +256,7 @@ function Field({
         required={required}
         autoComplete={autoComplete}
         aria-invalid={errors && errors.length > 0 ? true : undefined}
-        className="border-[1.5px] border-ink bg-card px-3 py-2 font-sans text-sm text-ink outline-none focus-visible:border-magenta aria-[invalid=true]:border-red"
+        className={formControlClass}
       />
       {hint ? (
         <span className="font-mono text-xs text-muted-2">{hint}</span>
@@ -283,7 +271,7 @@ function FieldError({ errors }: { errors?: string[] }) {
   return (
     <span
       role="alert"
-      className="font-mono text-xs"
+      className={formFieldErrorClass}
       style={{ color: "var(--red)" }}
     >
       {errors[0]}

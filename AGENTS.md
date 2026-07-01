@@ -59,6 +59,7 @@ code/club-app/
   app/{layout,sitemap,robots,opengraph-image}.tsx  middleware.ts
   components/{ui,marketing,app,analytics}/*  components/Glyph.tsx
   convex/{schema,clubApp}.ts                               # profiles / leads
+  docs/technical-architecture.md                           # technical reference
   content/{landing,enterprise}.ts                          # typed structured data
   messages/{es,en}/<namespace>.json                        # per-namespace copy
   i18n/{routing,request,navigation}.ts                     # next-intl wiring
@@ -98,12 +99,12 @@ queries/mutations in `convex/clubApp.ts`.
 
 Copy `.env.example` → `.env.local` and fill it. Envs and what they gate:
 
-| Var                                                         | Gates                                           | Notes                                                               |
-| ----------------------------------------------------------- | ----------------------------------------------- | ------------------------------------------------------------------- |
-| `NEXT_PUBLIC_PRIVY_APP_ID`                                  | login + embedded wallet creation                | Privy app.                                                          |
-| `CONVEX_DEPLOYMENT` / `NEXT_PUBLIC_CONVEX_URL`              | profile, dashboard bounty, and lead persistence | Convex dev/prod deployment.                                         |
+| Var                                                         | Gates                                           | Notes                                                                                                                                             |
+| ----------------------------------------------------------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `NEXT_PUBLIC_PRIVY_APP_ID`                                  | login + embedded wallet creation                | Privy app.                                                                                                                                        |
+| `CONVEX_DEPLOYMENT` / `NEXT_PUBLIC_CONVEX_URL`              | profile, dashboard bounty, and lead persistence | Convex dev/prod deployment.                                                                                                                       |
 | `RESEND_API_KEY` / `RESEND_FROM` / `CONTACT_FALLBACK_EMAIL` | best-effort lead emails                         | Configure in Convex. Sends an internal notification to `CONTACT_FALLBACK_EMAIL` (defaults to `hola@frutero.club`) and a confirmation to the lead. |
-| `NEXT_PUBLIC_SITE_URL`                                      | canonical/hreflang/OG                           | `https://frutero.club`.                                             |
+| `NEXT_PUBLIC_SITE_URL`                                      | canonical/hreflang/OG                           | `https://frutero.club`.                                                                                                                           |
 
 The build itself needs no private secrets.
 
