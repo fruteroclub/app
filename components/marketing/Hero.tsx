@@ -1,8 +1,5 @@
 import { useTranslations } from "next-intl";
 
-import { Button } from "@/components/ui";
-import { Link } from "@/i18n/navigation";
-import { ENTERPRISE_HREF } from "@/content/landing";
 import { HeroAuthCta } from "./HeroAuthCta";
 
 /**
@@ -50,11 +47,8 @@ export function Hero() {
         })}
       </p>
 
-      <div className="mt-6 flex flex-wrap items-center gap-2">
+      <div className="mt-6 flex justify-end">
         <HeroAuthCta />
-        <Button asChild variant="link" size="md">
-          <Link href={ENTERPRISE_HREF}>{t("hero.ctaSecondary")}</Link>
-        </Button>
       </div>
     </div>
   );

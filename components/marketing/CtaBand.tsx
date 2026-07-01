@@ -21,7 +21,7 @@ import { Band } from "./Band";
  *     then the BIG Bitter display heading + Geist lead body, then the two CTAs.
  *
  * Beat anatomy (top → bottom):
- *   · Mono kicker: "FRUTERO CLUB · LATAM" with magenta accent mark   [text-muted-2]
+ *   · Mono kicker with the Frutero Club mark                         [text-muted-2]
  *   · Hairline rule (1px)
  *   · Big Bitter display headline from band.title1                    [text-white]
  *   · Petrona lead paragraph from band.lead                           [text-ink (arcade-fg)]

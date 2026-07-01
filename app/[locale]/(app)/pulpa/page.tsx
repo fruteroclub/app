@@ -23,7 +23,7 @@ export default async function PulpaPage({
   setRequestLocale(locale)
 
   return (
-    <main className="mx-auto max-w-[var(--wrap)] px-7 py-14">
+    <main className="scroll-mt-16 mx-auto max-w-[var(--wrap)] px-7 py-14">
       <GlyphDefs />
       <PulpaContent />
     </main>

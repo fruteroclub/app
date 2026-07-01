@@ -12,6 +12,10 @@ export {
 export { ProofStrip } from "./ProofStrip";
 export { Pillars } from "./Pillars";
 export { OpportunityMarketplace } from "./OpportunityMarketplace";
+export {
+  OpportunityBoard,
+  type OpportunityBoardProps,
+} from "./OpportunityBoard";
 export { PlayerCards } from "./PlayerCards";
 export { PlayerCard, type PlayerCardProps } from "./PlayerCard";
 export { OpportunityCard, type OpportunityCardProps } from "./OpportunityCard";

@@ -31,8 +31,8 @@ import {
  * shadows/HUD on); every other dark band stays FLAT (DESIGN.md Borders/Shadows).
  *
  * Hard rules honored: greenfield; vocab is "perfil" + "verificable" (never
- * onchain/crypto); the only island is the ContactForm on /enterprise — this page
- * is otherwise static. force-static SSG.
+ * onchain/crypto); this page is force-static SSG with small auth-aware CTA
+ * islands.
  *
  * Beat map (# · register · component):
  *   1 · paper  · CommunityFrontPage (hero + community rail) — done v0

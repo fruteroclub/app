@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "Frutero Club — Sube de nivel",
-    "description": "Comunidad de builders de LatAm. Construye, demuestra tu trabajo con reputación verificable y desbloquea oportunidades reales."
+    "description": "Comunidad de builders de Latinoamérica. Construye, demuestra tu trabajo con reputación verificable y desbloquea oportunidades reales."
   },
   "nav": {
     "how": "Cómo funciona",
@@ -9,7 +9,7 @@
     "enterprise": "Empresas"
   },
   "hero": {
-    "kicker": "Comunidad de builders · LATAM",
+    "kicker": "Comunidad de builders · Latinoamérica",
     "title1": "Sube de",
     "title2": "nivel",
     "lead": "<b>Gana reputación verificable</b> construyendo, enviando y enseñando. Tu nivel desbloquea oportunidades reales.",
@@ -24,14 +24,14 @@
   "proof": {
     "tbd": "Pronto",
     "builders": "Builders activos",
-    "projects": "Proyectos enviados",
+    "projects": "Proyectos",
     "events": "Eventos",
-    "unlocks": "Oportunidades desbloqueadas"
+    "unlocks": "Oportunidades"
   },
   "thesis": {
     "tag": "MANIFIESTO",
-    "heading": "Construir en LatAm no debería ser invisible",
-    "body": "En LatAm construyes de verdad: envías proyectos, ganas hackathons, ayudas a otros builders. Pero ese trabajo se pierde en un hilo de Discord, en un tweet que nadie volverá a ver, en resultados de hackathon que nadie verifica. Frutero Club lo convierte en reputación verificable que es tuya: nadie te la puede quitar, y te abre oportunidades reales.",
+    "heading": "Construir en Latinoamérica no debería ser invisible",
+    "body": "En Latinoamérica construyes de verdad: envías proyectos, ganas hackathons, ayudas a otros builders. Pero ese trabajo se pierde en un hilo de Discord, en un tweet que nadie volverá a ver, en resultados de hackathon que nadie verifica. Frutero Club lo convierte en reputación verificable que es tuya: nadie te la puede quitar, y te abre oportunidades reales.",
     "bridgeUp": "Sube de nivel",
     "bridgeReward": "Oportunidades Reales"
   },
@@ -62,7 +62,7 @@
     "items": {
       "post1": {
         "title": "Cómo un perfil verificable te consigue tu próximo contrato",
-        "dek": "La diferencia entre decir que construyes y poder probarlo. Una guía práctica para builders de LatAm."
+        "dek": "La diferencia entre decir que construyes y poder probarlo. Una guía práctica para builders de Latinoamérica."
       },
       "post2": {
         "title": "Crónica del último Demo Day en CDMX",
@@ -88,7 +88,7 @@
       },
       "who": {
         "q": "¿Para quién es?",
-        "a": "Para builders de LatAm: devs, diseñadores y fundadores que envían trabajo real. Si construyes, este es tu lugar."
+        "a": "Para builders de Latinoamérica: devs, diseñadores y fundadores que envían trabajo real. Si construyes, este es tu lugar."
       },
       "level": {
         "q": "¿Cómo subo de nivel?",
@@ -96,28 +96,32 @@
       },
       "where": {
         "q": "¿Dónde pasa todo esto?",
-        "a": "Online y en persona. Nacimos en CDMX y operamos por toda LatAm, con eventos, demo days y estadías reales."
+        "a": "Online y en persona. Nacimos en CDMX y operamos por toda Latinoamérica, con eventos, demo days y estadías reales."
       }
     }
   },
   "leaderboard": {
-    "title": "Selecciona tu constructor",
-    "tag": "Ranking semanal",
-    "rosterTitle": "Roster de constructores",
+    "title": "Preview de reputación",
+    "tag": "Ranking en desarrollo",
+    "rosterTitle": "Builders ocultos",
     "pulpaLabel": "$PULPA",
-    "weekLabel": "Esta semana",
+    "weekLabel": "En desarrollo",
     "back": "Volver al roster",
-    "prompt": "Selecciona un constructor",
-    "insert": "Inserta $PULPA",
-    "highScore": "Récord",
+    "prompt": "Ranking en desarrollo",
+    "insert": "Ver hoja de ruta $PULPA",
+    "highScore": "Distribución",
     "periods": {
       "week": "Semanal",
       "quarter": "Trimestral",
       "year": "Anual"
     },
-    "construye": "Construye",
-    "agentCta": "Habla con su Agente →",
-    "footer": "$PULPA semanal · Datos ilustrativos · Pronto, datos reales"
+    "construye": "Señales",
+    "agentCta": "Próximamente",
+    "footer": "$PULPA en desarrollo · Sin ranking activo",
+    "hiddenRole": "Builder oculto",
+    "hiddenShip": "Por desbloquear",
+    "hiddenSlot": "Slot oculto",
+    "lockedTier": "Oculto"
   },
   "pillars": {
     "heading": "Cómo funciona",
@@ -151,10 +155,13 @@
     }
   },
   "marketplace": {
+    "pageTitle": "Oportunidades",
+    "pageDescription": "Marketplace de oportunidades de Frutero Club, actualmente en desarrollo.",
+    "pageLead": "El marketplace completo está en desarrollo. Mientras tanto, estas son las primeras oportunidades abiertas para ganar reputación y vivir experiencias construyendo en público.",
+    "status": "En desarrollo",
     "heading": "Lo que puedes desbloquear",
     "lead": "El tablón de oportunidades de la comunidad: gana reputación y vive experiencias construyendo en público.",
     "open": "5 Oportunidades Abiertas",
-    "explore": "Explora el marketplace",
     "items": {
       "buildInPublic": {
         "title": "Build in Public semanal",
@@ -217,6 +224,7 @@
     "heading": "Los players",
     "lead": "Cada miembro es una carta de jugador. Tu rareza sube construyendo.",
     "open": "Ver toda la colección",
+    "regionFallback": "Latinoamérica",
     "items": {
       "andres": {
         "role": "Full-Stack Builder",
@@ -258,7 +266,7 @@
   },
   "band": {
     "title1": "Construye en público",
-    "lead": "La reputación se gana ayudando. Únete a la comunidad de builders de LatAm.",
+    "lead": "La reputación se gana ayudando. Únete a la comunidad de builders de Latinoamérica.",
     "cta": "Crea tu perfil"
   },
   "footer": {

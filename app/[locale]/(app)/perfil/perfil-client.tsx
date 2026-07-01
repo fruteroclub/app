@@ -1,12 +1,13 @@
 "use client";
 
-import { usePrivy } from "@privy-io/react-auth";
+import { useLogin, usePrivy } from "@privy-io/react-auth";
 import { useQuery } from "convex/react";
 import { useTranslations } from "next-intl";
 
 import { Button } from "@/components/ui";
 import { Glyph } from "@/components/Glyph";
 import { api } from "@/convex/_generated/api";
+import { useRouter } from "@/i18n/navigation";
 import { toMember } from "@/lib/member";
 import PerfilForm from "./perfil-form";
 import PerfilView from "./perfil-view";
@@ -24,7 +25,11 @@ import PerfilView from "./perfil-view";
  */
 export default function PerfilClient() {
   const t = useTranslations("perfil");
-  const { ready, authenticated, login, user } = usePrivy();
+  const router = useRouter();
+  const { ready, authenticated, user } = usePrivy();
+  const { login } = useLogin({
+    onComplete: () => router.replace("/dashboard"),
+  });
   const data = useQuery(
     api.clubApp.getProfile,
     user?.id ? { privyDid: user.id } : "skip",

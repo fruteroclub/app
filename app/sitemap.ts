@@ -1,14 +1,14 @@
-import type { MetadataRoute } from 'next'
-import { locales } from '@/i18n/routing'
-import { localizedUrl, localeToBcp47 } from '@/lib/seo'
-import { getAllArticles } from '@/lib/content/articles'
+import type { MetadataRoute } from "next";
+import { locales } from "@/i18n/routing";
+import { localizedUrl, localeToBcp47 } from "@/lib/seo";
+import { getAllArticles } from "@/lib/content/articles";
 
 /**
  * Sitemap (T5/T7).
  *
- * Lists the public, indexable marketing routes ONLY — the authed `(app)` surface
- * (`/perfil`, `/perfil/edit`) and the `/api/*` handlers are deliberately absent
- * (they are noindex / non-content, and robots.ts disallows them).
+ * Lists the public, indexable marketing routes ONLY. The authed `(app)` surface
+ * (`/perfil`, `/perfil/edit`) is deliberately absent (noindex / non-content,
+ * and robots.ts disallows it).
  *
  * Each entry carries `alternates.languages` (hreflang) so Google sees the ES/EN
  * pair as one localized document, with the bare-apex ES URL as the indexable
@@ -24,53 +24,55 @@ import { getAllArticles } from '@/lib/content/articles'
 // Prerender at build (like the article routes): the content reader uses a
 // `no-store` fetch, which would otherwise make the sitemap dynamic (runtime token
 // + a GitHub round-trip per request). force-static reads the corpus once at build.
-export const dynamic = 'force-static'
+export const dynamic = "force-static";
 
 /** Locale-less marketing route paths + their relative priority. */
 const ROUTES: { path: string; priority: number }[] = [
-  { path: '/', priority: 1 },
-  { path: '/enterprise', priority: 0.8 },
-]
+  { path: "/", priority: 1 },
+  { path: "/enterprise", priority: 0.8 },
+];
 
 function hreflang(path: string): Record<string, string> {
-  const languages: Record<string, string> = {}
+  const languages: Record<string, string> = {};
   for (const l of locales) {
-    languages[localeToBcp47[l].replace('_', '-')] = localizedUrl(l, path)
+    languages[localeToBcp47[l].replace("_", "-")] = localizedUrl(l, path);
   }
-  return languages
+  return languages;
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const lastModified = new Date()
+  const lastModified = new Date();
 
-  const staticEntries: MetadataRoute.Sitemap = ROUTES.map(({ path, priority }) => ({
-    url: localizedUrl('es', path),
-    lastModified,
-    changeFrequency: 'weekly',
-    priority,
-    alternates: { languages: hreflang(path) },
-  }))
+  const staticEntries: MetadataRoute.Sitemap = ROUTES.map(
+    ({ path, priority }) => ({
+      url: localizedUrl("es", path),
+      lastModified,
+      changeFrequency: "weekly",
+      priority,
+      alternates: { languages: hreflang(path) },
+    }),
+  );
 
-  const articles = await getAllArticles('es')
+  const articles = await getAllArticles("es");
 
   const newsIndex: MetadataRoute.Sitemap[number] = {
-    url: localizedUrl('es', '/noticias'),
+    url: localizedUrl("es", "/noticias"),
     lastModified,
-    changeFrequency: 'daily',
+    changeFrequency: "daily",
     priority: 0.7,
-    alternates: { languages: hreflang('/noticias') },
-  }
+    alternates: { languages: hreflang("/noticias") },
+  };
 
   const articleEntries: MetadataRoute.Sitemap = articles.map((a) => {
-    const path = `/noticias/${a.meta.slug}`
+    const path = `/noticias/${a.meta.slug}`;
     return {
-      url: localizedUrl('es', path),
+      url: localizedUrl("es", path),
       lastModified: new Date(`${a.meta.date}T00:00:00Z`),
-      changeFrequency: 'monthly',
+      changeFrequency: "monthly",
       priority: 0.6,
       alternates: { languages: hreflang(path) },
-    }
-  })
+    };
+  });
 
-  return [...staticEntries, newsIndex, ...articleEntries]
+  return [...staticEntries, newsIndex, ...articleEntries];
 }

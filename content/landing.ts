@@ -13,10 +13,8 @@ import type { GlyphName } from "@/components/Glyph";
  * "reputación onchain" is intentionally rewritten to "reputación verificable" in
  * the message files.
  *
- * PROOF NUMBERS (plan "Open blockers"): the hero proof-strip values are operator
- * inputs and are NOT yet supplied. They are exported as `null` placeholders and
- * the component renders a visible "—" with a flag rather than shipping invented
- * credibility numbers silently (Hard rule #6: no silent failures / no fake proof).
+ * PROOF NUMBERS: the hero proof strip reads current launch stats from Convex.
+ * These values are only conservative fallbacks while the client query resolves.
  */
 
 export type AccentColor = "magenta" | "green" | "orange" | "muted";
@@ -26,40 +24,34 @@ export const SIGNUP_HREF = "/perfil";
 /** Services / leads page (T6). */
 export const ENTERPRISE_HREF = "/enterprise";
 
-/** Masthead nav. `href` is an in-page anchor or a route. */
+/** Masthead nav. Landing section links are home-anchored so they work off-page. */
 export interface NavItem {
   i18nKey: string;
   href: string;
 }
 
 export const NAV_ITEMS: readonly NavItem[] = [
-  { i18nKey: "nav.how", href: "#como-funciona" },
-  { i18nKey: "nav.opportunities", href: "#oportunidades" },
+  { i18nKey: "nav.how", href: "/#como-funciona" },
+  { i18nKey: "nav.opportunities", href: "/#oportunidades" },
   { i18nKey: "nav.enterprise", href: ENTERPRISE_HREF },
 ] as const;
 
 /**
- * Hero proof strip ("heronums" in the preview). Values are OPERATOR INPUTS.
- *
- * The `value: string | null` shape is RETAINED (a `null` still renders the flagged
- * "Pronto"/"Soon" placeholder), but per the plan's "real proof, not placeholders"
- * frame these now carry PLACEHOLDER numbers so the structure is visible end-to-end.
- *
- * TODO-swap: replace these four values with the operator's real, current numbers
- * before the real-proof go-live (plan "Operator data contract" item 1). The fourth
- * stat dropped "gas/sin barreras" in favor of "oportunidades desbloqueadas".
+ * Hero proof strip ("heronums" in the preview). Builders and projects are loaded
+ * from Convex; events and opportunities are launch constants returned by the same
+ * Convex query.
  */
 export interface ProofStat {
-  /** Operator-supplied display value. `null` => render a flagged placeholder. */
+  /** Fallback display value while the Convex query resolves. */
   value: string | null;
   i18nKey: string;
 }
 
 export const PROOF_STATS: readonly ProofStat[] = [
-  { value: "+850", i18nKey: "proof.builders" }, // TODO-swap: real builders activos
-  { value: "1,200+", i18nKey: "proof.projects" }, // TODO-swap: real proyectos enviados
-  { value: "45", i18nKey: "proof.events" }, // TODO-swap: real eventos
-  { value: "120+", i18nKey: "proof.unlocks" }, // TODO-swap: real oportunidades desbloqueadas
+  { value: "—", i18nKey: "proof.builders" },
+  { value: "—", i18nKey: "proof.projects" },
+  { value: "100+", i18nKey: "proof.events" },
+  { value: "5", i18nKey: "proof.unlocks" },
 ] as const;
 
 /**

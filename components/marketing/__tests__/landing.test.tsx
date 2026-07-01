@@ -11,6 +11,22 @@ const authMocks = vi.hoisted(() => ({
       displayName: "Mel Frutero",
     },
   } as undefined | { user: { firstName: string; displayName: string } },
+  launchStats: {
+    activeBuilders: 12,
+    projects: 4,
+    events: 100,
+    opportunities: 5,
+  },
+  testimonials: Array.from({ length: 6 }, (_, index) => ({
+    id: `testimonial-${index + 1}`,
+    userId: `user-${index + 1}`,
+    username: `builder${index + 1}`,
+    name: `Builder ${index + 1}`,
+    role: "tecnologia",
+    city: "CDMX",
+    country: "México",
+    testimony: `Testimonio vivo ${index + 1}`,
+  })),
   privy: {
     ready: true,
     authenticated: false,
@@ -53,11 +69,22 @@ vi.mock("@privy-io/react-auth", () => ({
 vi.mock("convex/react", () => ({
   ConvexProvider: ({ children }: { children: React.ReactNode }) => children,
   ConvexReactClient: class ConvexReactClient {},
-  useQuery: () => authMocks.profile,
+  useQuery: (queryRef: string) =>
+    queryRef === "getLaunchStats"
+      ? authMocks.launchStats
+      : queryRef === "getRandomTestimonials"
+        ? authMocks.testimonials
+        : authMocks.profile,
 }));
 
 vi.mock("@/convex/_generated/api", () => ({
-  api: { clubApp: { getProfile: "getProfile" } },
+  api: {
+    clubApp: {
+      getProfile: "getProfile",
+      getLaunchStats: "getLaunchStats",
+      getRandomTestimonials: "getRandomTestimonials",
+    },
+  },
 }));
 
 import { GlyphDefs } from "@/components/Glyph";
@@ -70,6 +97,7 @@ import {
   Masthead,
   OpportunityMarketplace,
   Pillars,
+  PlayerCards,
   ProofStrip,
 } from "@/components/marketing";
 import type { CommunityCardData } from "@/content/cards";
@@ -78,13 +106,15 @@ import { OPPORTUNITIES, PROOF_STATS, SIGNUP_HREF } from "@/content/landing";
 import esCommon from "@/messages/es/common.json";
 import esLanding from "@/messages/es/landing.json";
 import esApp from "@/messages/es/app.json";
+import esPerfil from "@/messages/es/perfil.json";
 import enCommon from "@/messages/en/common.json";
 import enLanding from "@/messages/en/landing.json";
 import enApp from "@/messages/en/app.json";
+import enPerfil from "@/messages/en/perfil.json";
 
 const MESSAGES = {
-  es: { common: esCommon, landing: esLanding, app: esApp },
-  en: { common: enCommon, landing: enLanding, app: enApp },
+  es: { common: esCommon, landing: esLanding, app: esApp, perfil: esPerfil },
+  en: { common: enCommon, landing: enLanding, app: enApp, perfil: enPerfil },
 } as const;
 
 function renderLanding(locale: "es" | "en", ui: React.ReactNode) {
@@ -175,10 +205,10 @@ describe("landing — Masthead (paper-only)", () => {
     expect(screen.getAllByText("Frutero Club").length).toBeGreaterThan(0);
     expect(
       screen.getByRole("link", { name: /Cómo funciona/i }),
-    ).toHaveAttribute("href", "#como-funciona");
+    ).toHaveAttribute("href", "/#como-funciona");
     expect(
       screen.getByRole("link", { name: /Oportunidades/i }),
-    ).toHaveAttribute("href", "#oportunidades");
+    ).toHaveAttribute("href", "/#oportunidades");
     expect(screen.getByRole("link", { name: /^Empresas$/i })).toHaveAttribute(
       "href",
       "/enterprise",
@@ -243,17 +273,22 @@ describe("landing — Masthead (paper-only)", () => {
 });
 
 describe("landing — ProofStrip (real operator numbers, no fake/placeholder path)", () => {
-  it("renders every supplied proof number and flags none as pending", () => {
-    // Plan rework: the null / "Pronto" flagged-placeholder path was retired in
-    // favor of real-proof operator numbers. Every PROOF_STAT now carries a string
-    // value, so the strip renders four numbers and no pending flags.
+  it("renders the Convex-backed launch stats and flags none as pending", () => {
     const { container } = renderLanding("es", <ProofStrip />);
     const pending = container.querySelectorAll("[data-proof-pending]");
     expect(pending.length).toBe(0);
-    for (const stat of PROOF_STATS) {
-      expect(stat.value).not.toBeNull();
-      expect(screen.getByText(stat.value as string)).toBeInTheDocument();
-    }
+
+    expect(screen.getByText("12")).toBeInTheDocument();
+    expect(screen.getByText("4")).toBeInTheDocument();
+    expect(screen.getByText("100+")).toBeInTheDocument();
+    expect(screen.getByText("5")).toBeInTheDocument();
+    expect(screen.getByText("Oportunidades")).toBeInTheDocument();
+    expect(PROOF_STATS.map((stat) => stat.i18nKey)).toEqual([
+      "proof.builders",
+      "proof.projects",
+      "proof.events",
+      "proof.unlocks",
+    ]);
   });
 });
 
@@ -305,6 +340,9 @@ describe("landing — OpportunityMarketplace (#5)", () => {
     expect(
       screen.getByRole("heading", { name: /^Publica aquí$/i }),
     ).toBeInTheDocument();
+    expect(
+      screen.queryByRole("link", { name: /Explora el marketplace/i }),
+    ).not.toBeInTheDocument();
   });
 
   it("only ETH Cinco de Mayo is uncommon; everything else is common", () => {
@@ -336,28 +374,101 @@ describe("landing — vocabulary guard (Hard rule #3)", () => {
   });
 });
 
-describe('landing — Leaderboard character-select makes no fake "live" claim', () => {
-  it("does not label the static $PULPA snapshot as EN VIVO / LIVE", () => {
-    // The #8 Leaderboard is the CharacterSelect cabinet: a roster ranked by $PULPA
-    // (a snapshot until the onchain indexer is live) → a featured builder + the
-    // `Habla con su Agente` CTA. $PULPA is illustrative for now, so the cabinet must
-    // not claim a live feed anywhere.
-    const { container } = renderLanding("es", <CharacterSelect />);
-    expect(within(container).queryByText(/EN VIVO/i)).not.toBeInTheDocument();
-    expect(within(container).queryByText(/\bLIVE\b/i)).not.toBeInTheDocument();
+describe("landing — PlayerCards testimonials", () => {
+  it("renders six Convex-backed member testimonials", () => {
+    const { container } = renderLanding("es", <PlayerCards />);
+
+    expect(container.querySelectorAll("article")).toHaveLength(6);
+    expect(screen.getByText("Builder 1")).toBeInTheDocument();
+    expect(screen.getByText(/Testimonio vivo 1/)).toBeInTheDocument();
+    expect(screen.getAllByText("Tecnología")).toHaveLength(6);
+    expect(screen.queryByText("@builder1")).not.toBeInTheDocument();
+
+    const firstCard = container.querySelector("article");
+    const firstCardHeader = firstCard?.querySelector("img")?.parentElement;
+    expect(firstCardHeader).toHaveTextContent("Builder 1");
+    expect(firstCardHeader).not.toHaveTextContent("Tecnología");
+    expect(screen.queryByText("Andrés Frutero")).not.toBeInTheDocument();
   });
 
-  it("opens a builder from the grid and links the Agent CTA to /perfil/<id>", async () => {
+  it("does not flash fake fallback players while testimonials load", () => {
+    const previous = authMocks.testimonials;
+    (authMocks as { testimonials: unknown }).testimonials = undefined;
+
+    try {
+      const { container } = renderLanding("es", <PlayerCards />);
+
+      expect(container.querySelectorAll("article")).toHaveLength(6);
+      expect(screen.queryByText("Andrés Frutero")).not.toBeInTheDocument();
+      expect(screen.queryByText("Mariana Ríos")).not.toBeInTheDocument();
+      expect(screen.getAllByText("???")).toHaveLength(6);
+      expect(screen.getAllByText(/Por desbloquear/)).toHaveLength(6);
+    } finally {
+      authMocks.testimonials = previous;
+    }
+  });
+});
+
+describe('landing — Leaderboard character-select makes no fake "live" claim', () => {
+  it("renders locked slots instead of mock builders, scores, or profile links", () => {
     const { container } = renderLanding("es", <CharacterSelect />);
-    // First view is the roster grid (no CTA yet). Opening the top builder (Andrés,
-    // 2,540) runs the clear→load transition, so the profile + CTA appear async.
-    fireEvent.click(
-      within(container).getByRole("button", { name: /Andrés Frutero/i }),
-    );
-    const cta = await within(container).findByRole("link", {
-      name: /Habla con su Agente/i,
+
+    expect(within(container).queryByText(/EN VIVO/i)).not.toBeInTheDocument();
+    expect(within(container).queryByText(/\bLIVE\b/i)).not.toBeInTheDocument();
+    expect(
+      within(container).getByText(/Ranking en desarrollo/i),
+    ).toBeInTheDocument();
+    expect(
+      within(container).queryByText(/Andrés Frutero/i),
+    ).not.toBeInTheDocument();
+    expect(within(container).queryByText(/2,540/i)).not.toBeInTheDocument();
+    expect(within(container).queryByText(/12,480/i)).not.toBeInTheDocument();
+    expect(
+      within(container).queryByRole("link", { name: /Habla con su Agente/i }),
+    ).not.toBeInTheDocument();
+    expect(
+      within(container).queryByRole("link", { name: /Próximamente/i }),
+    ).not.toBeInTheDocument();
+
+    const hiddenSlots = within(container).getAllByRole("button", {
+      name: /Slot oculto/i,
     });
-    expect(cta).toHaveAttribute("href", "/perfil/andres");
+    expect(hiddenSlots).toHaveLength(6);
+    expect(hiddenSlots[0]).toHaveAttribute("aria-disabled", "true");
+    fireEvent.click(hiddenSlots[0]);
+    expect(
+      within(container).queryByRole("link", { name: /Próximamente/i }),
+    ).not.toBeInTheDocument();
+    expect(
+      within(container).getByRole("link", {
+        name: /Ver hoja de ruta \$PULPA/i,
+      }),
+    ).toHaveAttribute("href", "/pulpa");
+    expect(within(container).getAllByText("???").length).toBeGreaterThanOrEqual(
+      6,
+    );
+    expect(within(container).getAllByText("--").length).toBeGreaterThanOrEqual(
+      6,
+    );
+  });
+
+  it("localizes the locked roster state in English", () => {
+    const { container } = renderLanding("en", <CharacterSelect />);
+
+    expect(
+      within(container).getByText(/Ranking in development/i),
+    ).toBeInTheDocument();
+    expect(
+      within(container).getByRole("link", {
+        name: /View \$PULPA roadmap/i,
+      }),
+    ).toHaveAttribute("href", "/pulpa");
+    expect(
+      within(container).getAllByRole("button", { name: /Hidden slot/i }),
+    ).toHaveLength(6);
+    expect(
+      within(container).queryByRole("link", { name: /Talk to their Agent/i }),
+    ).not.toBeInTheDocument();
   });
 });
 

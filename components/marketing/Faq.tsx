@@ -24,7 +24,6 @@ export function Faq() {
         title={t("faq.heading")}
         rule={false}
         className="mb-6"
-        titleClassName="font-display text-[clamp(1.6rem,3.5vw,2.2rem)] font-semibold tracking-[-0.025em] text-ink"
       />
 
       <FaqTabs />

@@ -1,12 +1,12 @@
 {
   "meta": {
     "title": "Frutero Club — For companies",
-    "description": "We build product, run hackathons, and connect you with verifiable LatAm talent. Work with the Frutero Club builder community."
+    "description": "We build product, run hackathons, and connect you with verifiable Latin America talent. Work with the Frutero Club builder community."
   },
   "hero": {
-    "kicker": "For companies · LATAM",
+    "kicker": "For companies · Latin America",
     "title": "Build with the community",
-    "lead": "Frutero Club is a community of teams that already ship product, run hackathons, and train builders across LatAm. Now you can also tap into their verifiable talent.",
+    "lead": "Frutero Club is a community of teams that already ship product, run hackathons, and train builders across Latin America. Now you can also tap into their verifiable talent.",
     "cta": "Let's talk",
     "cardLabel": "Why Frutero",
     "cardBody": "It's not a job board. It's a community where every builder's work lives on their perfil — verifiable, and theirs."
@@ -54,7 +54,13 @@
     },
     "errors": {
       "validation": "Check the highlighted fields.",
-      "rateLimited": "Too many submissions. Try again in a few minutes.",
+      "nameRequired": "Name is required.",
+      "nameTooLong": "Name is too long.",
+      "emailRequired": "Email is required.",
+      "emailInvalid": "Invalid email.",
+      "orgTooLong": "Organization is too long.",
+      "messageRequired": "Tell us how we can help.",
+      "messageTooLong": "Message cannot exceed 2000 characters.",
       "generic": "We couldn't send your message. Please try again."
     }
   }

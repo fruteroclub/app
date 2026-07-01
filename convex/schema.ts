@@ -42,11 +42,15 @@ export default defineSchema({
     primaryAuthMethod: v.union(
       v.literal("email"),
       v.literal("wallet"),
-      v.literal("social")
+      v.literal("social"),
     ),
 
     // Authorization
-    role: v.union(v.literal("member"), v.literal("moderator"), v.literal("admin")),
+    role: v.union(
+      v.literal("member"),
+      v.literal("moderator"),
+      v.literal("admin"),
+    ),
 
     // Account Status
     accountStatus: v.union(
@@ -54,7 +58,7 @@ export default defineSchema({
       v.literal("pending"), // Onboarding complete, waiting for approval
       v.literal("active"), // Approved and active
       v.literal("suspended"), // Temporarily disabled
-      v.literal("banned") // Permanently disabled
+      v.literal("banned"), // Permanently disabled
     ),
 
     // Timestamps (Unix milliseconds)
@@ -99,21 +103,21 @@ export default defineSchema({
 
     // Learning & Interests
     learningTracks: v.array(
-      v.union(v.literal("ai"), v.literal("crypto"), v.literal("privacy"))
+      v.union(v.literal("ai"), v.literal("crypto"), v.literal("privacy")),
     ),
 
     // Privacy Settings
     profileVisibility: v.union(
       v.literal("public"),
       v.literal("members"),
-      v.literal("private")
+      v.literal("private"),
     ),
 
     // Status
     availabilityStatus: v.union(
       v.literal("available"),
       v.literal("open_to_offers"),
-      v.literal("unavailable")
+      v.literal("unavailable"),
     ),
 
     // Stats
@@ -129,8 +133,8 @@ export default defineSchema({
       v.union(
         v.literal("creativo"),
         v.literal("negocio"),
-        v.literal("tecnologia")
-      )
+        v.literal("tecnologia"),
+      ),
     ),
     favoriteFruit: v.optional(v.string()),
     preferredColor: v.optional(
@@ -138,8 +142,8 @@ export default defineSchema({
         v.literal("magenta"),
         v.literal("violet"),
         v.literal("amber"),
-        v.literal("green")
-      )
+        v.literal("green"),
+      ),
     ),
     testimony: v.optional(v.string()),
 
@@ -148,4 +152,24 @@ export default defineSchema({
   })
     .index("by_user_id", ["userId"])
     .index("by_visibility", ["profileVisibility"]),
+
+  // ============================================================
+  // LEADS — enterprise contact form submissions
+  // ============================================================
+  leads: defineTable({
+    name: v.string(),
+    email: v.string(),
+    org: v.optional(v.string()),
+    message: v.string(),
+    source: v.union(v.literal("enterprise"), v.literal("landing")),
+    locale: v.union(v.literal("es"), v.literal("en")),
+    status: v.union(
+      v.literal("new"),
+      v.literal("reviewed"),
+      v.literal("closed"),
+    ),
+    metadata: v.optional(v.any()),
+  })
+    .index("by_source", ["source"])
+    .index("by_status", ["status"]),
 });

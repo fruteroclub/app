@@ -22,7 +22,7 @@ export const metadata: Metadata = {
  *   - flip the document into arcade-dark mode (app-only; marketing stays paper),
  *   - wrap the subtree in the Privy provider (auth + silent embedded wallet,
  *     NO wagmi/viem — Hard rule #4),
- *   - gate access with the client AuthGuard (UX gate; route handlers re-verify).
+ *   - gate access with the client AuthGuard.
  *
  * This group is dynamic (authed), unlike the static marketing group.
  */
