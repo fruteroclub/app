@@ -89,3 +89,55 @@ export function OpportunityCard({
     </article>
   );
 }
+
+/**
+ * SponsorSlotCard — the "empty" slot at the end of the board (#5).
+ *
+ * Not an open opportunity: an ad placement CTA inviting a sponsor or a member to
+ * publish here ("Publica aquí"). Rendered as a dashed-frame card so it visually
+ * reads as a vacant slot rather than a live listing. Presentational — the
+ * marketplace wraps it in a locale-aware <Link> (hence the `group-hover` accent).
+ */
+export interface SponsorSlotCardProps {
+  label: string;
+  title: string;
+  body: string;
+  cta: string;
+  className?: string;
+}
+
+export function SponsorSlotCard({
+  label,
+  title,
+  body,
+  cta,
+  className = "",
+}: SponsorSlotCardProps) {
+  return (
+    <div
+      className={`flex h-full flex-col border-[3px] border-dashed border-frame bg-surface/40 p-6 transition-colors group-hover:border-magenta ${className}`}
+    >
+      {/* Top: a muted "vacant slot" marker (no currency, no rarity) */}
+      <span className="font-mono text-xs font-bold uppercase tracking-[0.14em] text-muted-2">
+        {label}
+      </span>
+
+      {/* Title */}
+      <h3 className="mt-4 font-display text-xl font-semibold leading-[1.15] tracking-[-0.01em] text-ink">
+        {title}
+      </h3>
+
+      {/* Body */}
+      <p className="mt-2 flex-1 font-sans text-base leading-[1.5] text-muted">
+        {body}
+      </p>
+
+      {/* Footer: the CTA */}
+      <div className="mt-5 flex items-center justify-between border-t border-dashed border-line pt-3">
+        <span className="font-mono text-xs font-bold uppercase tracking-[0.14em] text-magenta">
+          {cta} →
+        </span>
+      </div>
+    </div>
+  );
+}

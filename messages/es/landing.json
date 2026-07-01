@@ -1,15 +1,15 @@
 {
   "meta": {
     "title": "Frutero Club — Sube de nivel",
-    "description": "Comunidad de builders de LatAm. Construye, demuestra tu trabajo con reputación verificable y desbloquea oportunidades reales."
+    "description": "Comunidad de builders de Latinoamérica. Construye, demuestra tu trabajo con reputación verificable y desbloquea oportunidades reales."
   },
   "nav": {
     "how": "Cómo funciona",
-    "unlocks": "Desbloquea",
+    "opportunities": "Oportunidades",
     "enterprise": "Empresas"
   },
   "hero": {
-    "kicker": "Comunidad de builders · LATAM",
+    "kicker": "Comunidad de builders · Latinoamérica",
     "title1": "Sube de",
     "title2": "nivel",
     "lead": "<b>Gana reputación verificable</b> construyendo, enviando y enseñando. Tu nivel desbloquea oportunidades reales.",
@@ -24,14 +24,14 @@
   "proof": {
     "tbd": "Pronto",
     "builders": "Builders activos",
-    "projects": "Proyectos enviados",
+    "projects": "Proyectos",
     "events": "Eventos",
-    "unlocks": "Oportunidades desbloqueadas"
+    "unlocks": "Oportunidades"
   },
   "thesis": {
     "tag": "MANIFIESTO",
-    "heading": "Construir en LatAm no debería ser invisible",
-    "body": "En LatAm construyes de verdad: envías proyectos, ganas hackathons, ayudas a otros builders. Pero ese trabajo se pierde en un hilo de Discord, en un tweet que nadie volverá a ver, en resultados de hackathon que nadie verifica. Frutero Club lo convierte en reputación verificable que es tuya: nadie te la puede quitar, y te abre oportunidades reales.",
+    "heading": "Construir en Latinoamérica no debería ser invisible",
+    "body": "En Latinoamérica construyes de verdad: envías proyectos, ganas hackathons, ayudas a otros builders. Pero ese trabajo se pierde en un hilo de Discord, en un tweet que nadie volverá a ver, en resultados de hackathon que nadie verifica. Frutero Club lo convierte en reputación verificable que es tuya: nadie te la puede quitar, y te abre oportunidades reales.",
     "bridgeUp": "Sube de nivel",
     "bridgeReward": "Oportunidades Reales"
   },
@@ -62,7 +62,7 @@
     "items": {
       "post1": {
         "title": "Cómo un perfil verificable te consigue tu próximo contrato",
-        "dek": "La diferencia entre decir que construyes y poder probarlo. Una guía práctica para builders de LatAm."
+        "dek": "La diferencia entre decir que construyes y poder probarlo. Una guía práctica para builders de Latinoamérica."
       },
       "post2": {
         "title": "Crónica del último Demo Day en CDMX",
@@ -88,7 +88,7 @@
       },
       "who": {
         "q": "¿Para quién es?",
-        "a": "Para builders de LatAm: devs, diseñadores y fundadores que envían trabajo real. Si construyes, este es tu lugar."
+        "a": "Para builders de Latinoamérica: devs, diseñadores y fundadores que envían trabajo real. Si construyes, este es tu lugar."
       },
       "level": {
         "q": "¿Cómo subo de nivel?",
@@ -96,24 +96,32 @@
       },
       "where": {
         "q": "¿Dónde pasa todo esto?",
-        "a": "Online y en persona. Nacimos en CDMX y operamos por toda LatAm, con eventos, demo days y estadías reales."
+        "a": "Online y en persona. Nacimos en CDMX y operamos por toda Latinoamérica, con eventos, demo days y estadías reales."
       }
     }
   },
   "leaderboard": {
-    "title": "Selecciona tu constructor",
-    "tag": "Ranking semanal",
-    "rosterTitle": "Roster de constructores",
+    "title": "Preview de reputación",
+    "tag": "Ranking en desarrollo",
+    "rosterTitle": "Builders ocultos",
     "pulpaLabel": "$PULPA",
-    "weekLabel": "Esta semana",
+    "weekLabel": "En desarrollo",
     "back": "Volver al roster",
-    "prompt": "Selecciona un constructor",
-    "insert": "Inserta $PULPA",
-    "highScore": "Récord",
-    "periods": { "week": "Semanal", "quarter": "Trimestral", "year": "Anual" },
-    "construye": "Construye",
-    "agentCta": "Habla con su Agente →",
-    "footer": "$PULPA semanal · Datos ilustrativos · Pronto, datos reales"
+    "prompt": "Ranking en desarrollo",
+    "insert": "Ver hoja de ruta $PULPA",
+    "highScore": "Distribución",
+    "periods": {
+      "week": "Semanal",
+      "quarter": "Trimestral",
+      "year": "Anual"
+    },
+    "construye": "Señales",
+    "agentCta": "Próximamente",
+    "footer": "$PULPA en desarrollo · Sin ranking activo",
+    "hiddenRole": "Builder oculto",
+    "hiddenShip": "Por desbloquear",
+    "hiddenSlot": "Slot oculto",
+    "lockedTier": "Oculto"
   },
   "pillars": {
     "heading": "Cómo funciona",
@@ -147,23 +155,65 @@
     }
   },
   "marketplace": {
+    "pageTitle": "Oportunidades",
+    "pageDescription": "Marketplace de oportunidades de Frutero Club, actualmente en desarrollo.",
+    "pageLead": "El marketplace completo está en desarrollo. Mientras tanto, estas son las primeras oportunidades abiertas para ganar reputación y vivir experiencias construyendo en público.",
+    "status": "En desarrollo",
     "heading": "Lo que puedes desbloquear",
-    "lead": "El marketplace de power-ups de la comunidad: gana reputación, dinero o experiencias.",
-    "open": "+40 oportunidades abiertas",
-    "explore": "Explora el marketplace",
+    "lead": "El tablón de oportunidades de la comunidad: gana reputación y vive experiencias construyendo en público.",
+    "open": "5 Oportunidades Abiertas",
     "items": {
-      "audit": { "title": "Audita un smart contract en Monad", "body": "Revisa el contrato de un proyecto del club antes de su deploy.", "reward": "+250 rep", "poster": "Frutero Club" },
-      "guide": { "title": "Escribe una guía técnica", "body": "Documenta algo que aprendiste para el resto de la comunidad.", "reward": "+80 rep", "poster": "Redacción Frutero" },
-      "bounty": { "title": "Bounty: integra ERC-8004", "body": "Implementa el estándar de identidad en un proyecto abierto.", "reward": "$500", "poster": "Monad" },
-      "issue": { "title": "Resuelve un issue del SDK", "body": "Toma un issue etiquetado y mándalo a producción.", "reward": "$150", "poster": "Frutero Club" },
-      "demo": { "title": "Demo Night — CDMX", "body": "Presenta tu proyecto ante la comunidad en un evento en vivo.", "reward": "Demo en vivo", "poster": "Frutero Club" },
-      "stay": { "title": "Estadía CDMX — 1 semana", "body": "Una semana de eventos en CDMX, hospedaje incluido. El premio mayor.", "reward": "1 semana", "poster": "Frutero Club" }
+      "buildInPublic": {
+        "title": "Build in Public semanal",
+        "body": "Publica tu avance cada semana: qué construiste, qué rompió y qué sigue.",
+        "reward": "+$PULPA",
+        "poster": "Frutero Club"
+      },
+      "projectCard": {
+        "title": "Tu proyecto actual",
+        "body": "Una tarjeta con el one-liner de tu proyecto y cómo funciona.",
+        "reward": "+$PULPA",
+        "poster": "Frutero Club"
+      },
+      "videoTestimonial": {
+        "title": "Video testimonio Frutero",
+        "body": "Graba un video corto con tu historia como constructor del club.",
+        "reward": "+$PULPA",
+        "poster": "Frutero Club"
+      },
+      "demoDay": {
+        "title": "Demo en AI x Blockchain Day",
+        "body": "Un slot para presentar tu proyecto en vivo durante el AI x Blockchain Day.",
+        "reward": "Demo en vivo",
+        "poster": "Frutero Club"
+      },
+      "ethStay": {
+        "title": "Estadía ETH Cinco de Mayo",
+        "body": "Hospedaje durante la semana de ETH Cinco de Mayo (6–13 jul 2026).",
+        "reward": "1 semana · CDMX",
+        "poster": "Frutero Club"
+      }
+    },
+    "sponsor": {
+      "label": "Espacio disponible",
+      "title": "Publica aquí",
+      "body": "Este lugar puede ser tuyo. Patrocina una oportunidad o publica la tuya ante la comunidad.",
+      "cta": "Publica aquí"
     }
   },
   "rarity": {
-    "common": { "name": "Común", "role": "Community Member" },
-    "uncommon": { "name": "Uncommon", "role": "Club Member" },
-    "rare": { "name": "Rare", "role": "Club Contributor" }
+    "common": {
+      "name": "Común",
+      "role": "Community Member"
+    },
+    "uncommon": {
+      "name": "Uncommon",
+      "role": "Club Member"
+    },
+    "rare": {
+      "name": "Rare",
+      "role": "Club Contributor"
+    }
   },
   "currency": {
     "reputacion": "Reputación",
@@ -174,18 +224,49 @@
     "heading": "Los players",
     "lead": "Cada miembro es una carta de jugador. Tu rareza sube construyendo.",
     "open": "Ver toda la colección",
+    "regionFallback": "Latinoamérica",
     "items": {
-      "andres": { "role": "Full-Stack Builder", "company": "Frutero Club", "city": "CDMX", "quote": "Frutero me dio la primera comunidad donde mi código importa. Subí a Club Contributor enviando, no hablando." },
-      "mariana": { "role": "Smart Contracts", "company": "Monad", "city": "Buenos Aires", "quote": "Cada contrato que audito suma a mi reputación. Acá tu trabajo te sigue, no se pierde en un Discord." },
-      "diego": { "role": "Producto y Diseño", "company": "Frutero", "city": "CDMX", "quote": "Pasé de hacer side-projects en silencio a presentar en Demo Night. La rareza se siente real." },
-      "valeria": { "role": "Diseño de Producto", "company": "Velora", "city": "Lima", "quote": "Mi perfil habla por mí. Conseguí mi primer contrato serio gracias a lo que construí en el club." },
-      "tomas": { "role": "Data & ML", "company": "Nubia", "city": "Bogotá", "quote": "Empecé como Community Member sin saber a quién mostrarle mi trabajo. Hoy tengo a quién." },
-      "sofia": { "role": "DevRel", "company": "Frutero", "city": "Medellín", "quote": "La comunidad te empuja a subir de nivel. No estás construyendo solo." }
+      "andres": {
+        "role": "Full-Stack Builder",
+        "company": "Frutero Club",
+        "city": "CDMX",
+        "quote": "Frutero me dio la primera comunidad donde mi código importa. Subí a Club Contributor enviando, no hablando."
+      },
+      "mariana": {
+        "role": "Smart Contracts",
+        "company": "Monad",
+        "city": "Buenos Aires",
+        "quote": "Cada contrato que audito suma a mi reputación. Acá tu trabajo te sigue, no se pierde en un Discord."
+      },
+      "diego": {
+        "role": "Producto y Diseño",
+        "company": "Frutero",
+        "city": "CDMX",
+        "quote": "Pasé de hacer side-projects en silencio a presentar en Demo Night. La rareza se siente real."
+      },
+      "valeria": {
+        "role": "Diseño de Producto",
+        "company": "Velora",
+        "city": "Lima",
+        "quote": "Mi perfil habla por mí. Conseguí mi primer contrato serio gracias a lo que construí en el club."
+      },
+      "tomas": {
+        "role": "Data & ML",
+        "company": "Nubia",
+        "city": "Bogotá",
+        "quote": "Empecé como Community Member sin saber a quién mostrarle mi trabajo. Hoy tengo a quién."
+      },
+      "sofia": {
+        "role": "DevRel",
+        "company": "Frutero",
+        "city": "Medellín",
+        "quote": "La comunidad te empuja a subir de nivel. No estás construyendo solo."
+      }
     }
   },
   "band": {
     "title1": "Construye en público",
-    "lead": "La reputación se gana ayudando. Únete a la comunidad de builders de LatAm.",
+    "lead": "La reputación se gana ayudando. Únete a la comunidad de builders de Latinoamérica.",
     "cta": "Crea tu perfil"
   },
   "footer": {

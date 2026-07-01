@@ -10,6 +10,7 @@ import { getArticle, listSlugs, type Lang } from '@/lib/content/articles'
 import { toMagazinePageProps } from '@/lib/content/present'
 import { MagazinePage, Masthead, SiteFooter } from '@/components/marketing'
 import { JsonLd } from '@/components/seo/JsonLd'
+import { Button } from '@/components/ui'
 import { SIGNUP_HREF } from '@/content/landing'
 
 /**
@@ -79,12 +80,11 @@ const markdownComponents = {
       const isCta = href === SIGNUP_HREF || href.startsWith(`${SIGNUP_HREF}?`)
       if (isCta) {
         return (
-          <Link
-            href={href}
-            className="mt-8 inline-flex items-center gap-2 border-2 border-black bg-magenta px-[26px] py-[15px] font-mono text-sm font-semibold uppercase tracking-[0.07em] text-white no-underline transition-colors hover:bg-[color-mix(in_srgb,var(--magenta)_88%,var(--black))]"
-          >
-            {children} &rarr;
-          </Link>
+          <Button asChild className="mt-8">
+            <Link href={href}>
+              {children} &rarr;
+            </Link>
+          </Button>
         )
       }
       return (

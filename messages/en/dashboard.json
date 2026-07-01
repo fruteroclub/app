@@ -1,0 +1,24 @@
+{
+  "title": "Your dashboard",
+  "lead": "Complete the welcome bounties and earn $PULPA toward your community reputation.",
+  "linkLabel": "Go to your dashboard",
+  "save": "Save bounties",
+  "saving": "Saving…",
+  "saved": "Saved! 🎉",
+  "loading": "Loading your dashboard…",
+  "retry": "Try again",
+  "errors": {
+    "load": "We couldn't load your dashboard. Try again.",
+    "save": "We couldn't save your bounties. Try again.",
+    "session": "Sign in again to continue."
+  },
+  "reputation": "Reputation",
+  "count": "{done}/{total} completed",
+  "completed": "Completed",
+  "pending": "Pending",
+  "complete": "Complete",
+  "edit": "Edit",
+  "cancel": "Cancel",
+  "saveBounty": "Save",
+  "whatIsPulpa": "What is $PULPA?"
+}

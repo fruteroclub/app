@@ -67,11 +67,13 @@ test.describe('routing — /es canonicalizes to bare', () => {
 })
 
 test.describe('vocabulary guard (Hard rule #3) — rendered HTML', () => {
-  test('the ES landing HTML never says onchain/web3/crypto/blockchain', async ({
+  // "blockchain" is allowed (a technology; tech-forward) — the guard keeps out
+  // the crypto-bro register only: onchain / web3 / crypto.
+  test('the ES landing HTML never says onchain/web3/crypto', async ({
     page,
   }) => {
     await page.goto('/')
     const body = (await page.locator('body').innerText()).toLowerCase()
-    expect(body).not.toMatch(/\bonchain\b|\bweb3\b|\bcrypto\b|\bblockchain\b/)
+    expect(body).not.toMatch(/\bonchain\b|\bweb3\b|\bcrypto\b/)
   })
 })

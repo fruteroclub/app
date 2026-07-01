@@ -13,10 +13,8 @@ import type { GlyphName } from "@/components/Glyph";
  * "reputación onchain" is intentionally rewritten to "reputación verificable" in
  * the message files.
  *
- * PROOF NUMBERS (plan "Open blockers"): the hero proof-strip values are operator
- * inputs and are NOT yet supplied. They are exported as `null` placeholders and
- * the component renders a visible "—" with a flag rather than shipping invented
- * credibility numbers silently (Hard rule #6: no silent failures / no fake proof).
+ * PROOF NUMBERS: the hero proof strip reads current launch stats from Convex.
+ * These values are only conservative fallbacks while the client query resolves.
  */
 
 export type AccentColor = "magenta" | "green" | "orange" | "muted";
@@ -26,40 +24,34 @@ export const SIGNUP_HREF = "/perfil";
 /** Services / leads page (T6). */
 export const ENTERPRISE_HREF = "/enterprise";
 
-/** Masthead nav. `href` is an in-page anchor or a route. */
+/** Masthead nav. Landing section links are home-anchored so they work off-page. */
 export interface NavItem {
   i18nKey: string;
   href: string;
 }
 
 export const NAV_ITEMS: readonly NavItem[] = [
-  { i18nKey: "nav.how", href: "#como-funciona" },
-  { i18nKey: "nav.unlocks", href: "#desbloquea" },
+  { i18nKey: "nav.how", href: "/#como-funciona" },
+  { i18nKey: "nav.opportunities", href: "/#oportunidades" },
   { i18nKey: "nav.enterprise", href: ENTERPRISE_HREF },
 ] as const;
 
 /**
- * Hero proof strip ("heronums" in the preview). Values are OPERATOR INPUTS.
- *
- * The `value: string | null` shape is RETAINED (a `null` still renders the flagged
- * "Pronto"/"Soon" placeholder), but per the plan's "real proof, not placeholders"
- * frame these now carry PLACEHOLDER numbers so the structure is visible end-to-end.
- *
- * TODO-swap: replace these four values with the operator's real, current numbers
- * before the real-proof go-live (plan "Operator data contract" item 1). The fourth
- * stat dropped "gas/sin barreras" in favor of "oportunidades desbloqueadas".
+ * Hero proof strip ("heronums" in the preview). Builders and projects are loaded
+ * from Convex; events and opportunities are launch constants returned by the same
+ * Convex query.
  */
 export interface ProofStat {
-  /** Operator-supplied display value. `null` => render a flagged placeholder. */
+  /** Fallback display value while the Convex query resolves. */
   value: string | null;
   i18nKey: string;
 }
 
 export const PROOF_STATS: readonly ProofStat[] = [
-  { value: "+850", i18nKey: "proof.builders" }, // TODO-swap: real builders activos
-  { value: "1,200+", i18nKey: "proof.projects" }, // TODO-swap: real proyectos enviados
-  { value: "45", i18nKey: "proof.events" }, // TODO-swap: real eventos
-  { value: "120+", i18nKey: "proof.unlocks" }, // TODO-swap: real oportunidades desbloqueadas
+  { value: "—", i18nKey: "proof.builders" },
+  { value: "—", i18nKey: "proof.projects" },
+  { value: "100+", i18nKey: "proof.events" },
+  { value: "5", i18nKey: "proof.unlocks" },
 ] as const;
 
 /**
@@ -99,8 +91,9 @@ export const UNLOCKS: readonly Unlock[] = [
  * #5 Opportunity Marketplace ("Lo que puedes desbloquear" reframed).
  * A community board of "power-up" opportunities. Each pays one of three
  * CURRENCIES (reputación / dinero / experiencia, color-coded) and carries a
- * RARITY tier (Pokémon-TCG inspired; the membership role). Placeholder data —
- * TODO-swap with the real marketplace before go-live.
+ * RARITY tier (Pokémon-TCG inspired; the membership role). v0 board: the first
+ * real opportunities (Reputación content bounties + Experiencia events). The
+ * `dinero` currency stays in the model for paid bounties added later.
  * =========================================================================== */
 
 /** Membership rarity tier (Pokémon-TCG inspired). Symbol conveys the tier. */
@@ -138,12 +131,39 @@ export interface Opportunity {
 }
 
 export const OPPORTUNITIES: readonly Opportunity[] = [
-  { id: "audit", currency: "reputacion", rarity: "rare", i18nKey: "marketplace.items.audit" },
-  { id: "guide", currency: "reputacion", rarity: "common", i18nKey: "marketplace.items.guide" },
-  { id: "bounty", currency: "dinero", rarity: "rare", i18nKey: "marketplace.items.bounty" },
-  { id: "issue", currency: "dinero", rarity: "uncommon", i18nKey: "marketplace.items.issue" },
-  { id: "demo", currency: "experiencia", rarity: "uncommon", i18nKey: "marketplace.items.demo" },
-  { id: "stay", currency: "experiencia", rarity: "rare", i18nKey: "marketplace.items.stay" },
+  // The first open board (v0). Three Reputación content bounties (entry-tier,
+  // open to the Community) + two Experiencia opportunities. Only the ETH Cinco
+  // de Mayo stay is uncommon (Club Member); everything else is common.
+  {
+    id: "build-in-public",
+    currency: "reputacion",
+    rarity: "common",
+    i18nKey: "marketplace.items.buildInPublic",
+  },
+  {
+    id: "project-card",
+    currency: "reputacion",
+    rarity: "common",
+    i18nKey: "marketplace.items.projectCard",
+  },
+  {
+    id: "video-testimonial",
+    currency: "reputacion",
+    rarity: "common",
+    i18nKey: "marketplace.items.videoTestimonial",
+  },
+  {
+    id: "demo-day",
+    currency: "experiencia",
+    rarity: "common",
+    i18nKey: "marketplace.items.demoDay",
+  },
+  {
+    id: "eth-stay",
+    currency: "experiencia",
+    rarity: "uncommon",
+    i18nKey: "marketplace.items.ethStay",
+  },
 ] as const;
 
 /* ===========================================================================
@@ -178,12 +198,66 @@ export interface Player {
 
 export const PLAYERS: readonly Player[] = [
   // TODO-swap: real members + consent + real card art + real weekly $PULPA (indexer) + real tags.
-  { id: "andres", name: "Andrés Frutero", acronym: "AFR", roleKey: "players.items.andres.role", rarity: "rare", pulpa: 2540, ships: ["Frutero OS", "zkPase"], accent: "magenta" },
-  { id: "mariana", name: "Mariana Ríos", acronym: "MRI", roleKey: "players.items.mariana.role", rarity: "rare", pulpa: 2310, ships: ["Monad Audit", "MUX"], accent: "green" },
-  { id: "diego", name: "Diego Romero", acronym: "DGO", roleKey: "players.items.diego.role", rarity: "uncommon", pulpa: 1980, ships: ["Demo Night", "Frutero UI"], accent: "orange" },
-  { id: "valeria", name: "Valeria Méndez", acronym: "VAL", roleKey: "players.items.valeria.role", rarity: "uncommon", pulpa: 1450, ships: ["Velora App"], accent: "magenta" },
-  { id: "tomas", name: "Tomás Aguilar", acronym: "TMS", roleKey: "players.items.tomas.role", rarity: "common", pulpa: 980, ships: ["Nubia ML"], accent: "green" },
-  { id: "sofia", name: "Sofía Luna", acronym: "SOF", roleKey: "players.items.sofia.role", rarity: "common", pulpa: 720, ships: ["Club DevRel"], accent: "muted" },
+  {
+    id: "andres",
+    name: "Andrés Frutero",
+    acronym: "AFR",
+    roleKey: "players.items.andres.role",
+    rarity: "rare",
+    pulpa: 2540,
+    ships: ["Frutero OS", "zkPase"],
+    accent: "magenta",
+  },
+  {
+    id: "mariana",
+    name: "Mariana Ríos",
+    acronym: "MRI",
+    roleKey: "players.items.mariana.role",
+    rarity: "rare",
+    pulpa: 2310,
+    ships: ["Monad Audit", "MUX"],
+    accent: "green",
+  },
+  {
+    id: "diego",
+    name: "Diego Romero",
+    acronym: "DGO",
+    roleKey: "players.items.diego.role",
+    rarity: "uncommon",
+    pulpa: 1980,
+    ships: ["Demo Night", "Frutero UI"],
+    accent: "orange",
+  },
+  {
+    id: "valeria",
+    name: "Valeria Méndez",
+    acronym: "VAL",
+    roleKey: "players.items.valeria.role",
+    rarity: "uncommon",
+    pulpa: 1450,
+    ships: ["Velora App"],
+    accent: "magenta",
+  },
+  {
+    id: "tomas",
+    name: "Tomás Aguilar",
+    acronym: "TMS",
+    roleKey: "players.items.tomas.role",
+    rarity: "common",
+    pulpa: 980,
+    ships: ["Nubia ML"],
+    accent: "green",
+  },
+  {
+    id: "sofia",
+    name: "Sofía Luna",
+    acronym: "SOF",
+    roleKey: "players.items.sofia.role",
+    rarity: "common",
+    pulpa: 720,
+    ships: ["Club DevRel"],
+    accent: "muted",
+  },
 ] as const;
 
 /**
@@ -191,7 +265,11 @@ export const PLAYERS: readonly Player[] = [
  * insert-coin bar, formatted like a leaderboard entry (rarity + acronym + score).
  * TODO-swap: the real all-time record from the indexer.
  */
-export const HISTORIC_RECORD: { acronym: string; rarity: Rarity; pulpa: number } = {
+export const HISTORIC_RECORD: {
+  acronym: string;
+  rarity: Rarity;
+  pulpa: number;
+} = {
   acronym: "AFR",
   rarity: "rare",
   pulpa: 12480,
@@ -275,11 +353,31 @@ export interface FaqItem {
 }
 
 export const FAQ_ITEMS: readonly FaqItem[] = [
-  { id: "jargon", index: "01", qKey: "faq.items.jargon.q", aKey: "faq.items.jargon.a" },
-  { id: "cost", index: "02", qKey: "faq.items.cost.q", aKey: "faq.items.cost.a" },
+  {
+    id: "jargon",
+    index: "01",
+    qKey: "faq.items.jargon.q",
+    aKey: "faq.items.jargon.a",
+  },
+  {
+    id: "cost",
+    index: "02",
+    qKey: "faq.items.cost.q",
+    aKey: "faq.items.cost.a",
+  },
   { id: "who", index: "03", qKey: "faq.items.who.q", aKey: "faq.items.who.a" },
-  { id: "level", index: "04", qKey: "faq.items.level.q", aKey: "faq.items.level.a" },
-  { id: "where", index: "05", qKey: "faq.items.where.q", aKey: "faq.items.where.a" },
+  {
+    id: "level",
+    index: "04",
+    qKey: "faq.items.level.q",
+    aKey: "faq.items.level.a",
+  },
+  {
+    id: "where",
+    index: "05",
+    qKey: "faq.items.where.q",
+    aKey: "faq.items.where.a",
+  },
 ] as const;
 
 /**

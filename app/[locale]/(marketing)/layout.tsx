@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
 
+import AppPrivyProvider from "@/components/app/AppPrivyProvider";
+import { ConvexClientProvider } from "@/components/app/ConvexClientProvider";
 import { GlyphDefs } from "@/components/Glyph";
 import { PublicationFrame } from "@/components/marketing";
 import { petrona } from "@/lib/fonts";
@@ -7,8 +9,8 @@ import { petrona } from "@/lib/fonts";
 /**
  * Marketing route group. Public pages are PAPER-ONLY (D-mode, LOCKED): no MODO
  * toggle here — arcade mode lives only in the authed (app) group. Pages in this
- * group render as static SSG (the only island is the ContactForm on /enterprise,
- * owned by T6).
+ * group render as static SSG with small client islands for auth-aware nav and
+ * lead capture.
  *
  * This layout:
  *  - mounts the shared <GlyphDefs/> sprite once for the whole subtree, so the
@@ -21,9 +23,13 @@ import { petrona } from "@/lib/fonts";
 export default function MarketingLayout({ children }: { children: ReactNode }) {
   return (
     <div className={petrona.variable}>
-      <GlyphDefs />
-      <PublicationFrame />
-      {children}
+      <ConvexClientProvider>
+        <AppPrivyProvider>
+          <GlyphDefs />
+          <PublicationFrame />
+          {children}
+        </AppPrivyProvider>
+      </ConvexClientProvider>
     </div>
   );
 }

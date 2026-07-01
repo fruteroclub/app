@@ -23,6 +23,7 @@
   --ink: #11091e; /* primary text / foreground */
   --muted-canonical: #332a4b;
   --purple: #190433; /* level/arcade block bg */
+  --violet: #3f1495; /* vivid violet — the legible secondary accent (e.g. the member preferred-color swatch); --purple is too dark to read as a swatch */
   --magenta: #c4088f; /* PRIMARY — CTAs, level badge, links, accents */
   --green: #19a662; /* verified / positive */
   --orange: #ff9500; /* warning / tertiary */
@@ -106,6 +107,7 @@
   --color-black: var(--black);
   --color-ink: var(--ink);
   --color-purple: var(--purple);
+  --color-violet: var(--violet);
   --color-magenta: var(--magenta);
   --color-green: var(--green);
   --color-orange: var(--orange);

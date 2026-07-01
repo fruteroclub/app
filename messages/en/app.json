@@ -2,5 +2,17 @@
   "auth": {
     "loading": "Loading…",
     "signinRequired": "Please sign in again to continue."
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "editProfile": "Edit profile",
+    "loggingOut": "Signing out…",
+    "logout": "Sign out",
+    "memberFallback": "Member",
+    "menu": "Menu",
+    "openMenu": "Open navigation menu",
+    "profile": "Profile",
+    "pulpa": "$PULPA",
+    "signedIn": "Signed in"
   }
 }

@@ -1,0 +1,27 @@
+{
+  "title": "PULPA",
+  "lead": "Frutero Club's reputation currency: it measures what you build, teach, and contribute. Climb tiers and open real opportunities. Here's how it arrives.",
+  "what": {
+    "heading": "What it is",
+    "body": "Your work in the club — bounties, projects, mentorship — turns into $PULPA: a reputation that's yours and verifiable, that no one can take from you. The more you build, the higher you climb; the higher you climb, the more opens up."
+  },
+  "roadmap": {
+    "heading": "Roadmap",
+    "now": {
+      "tag": "Now · v1.0",
+      "title": "Set up your profile and complete your first bounties",
+      "body": "For now $PULPA is the direction, not the scoreboard: live counting isn't switched on yet. Complete the welcome bounties — they fill your profile and put you in line for the first distribution."
+    },
+    "q3": {
+      "tag": "Jul–Sep 2026 · Q3",
+      "title": "First distribution — Q3 2026 Membership",
+      "body": "The first $PULPA is distributed with Frutero Club's Quarterly Membership (Jul–Aug–Sep 2026). The bounties you complete now count toward getting in."
+    },
+    "next": {
+      "tag": "Next · v1.1",
+      "title": "$PULPA goes live",
+      "body": "The scoreboard switches on: real-time scoring, the leaderboard, and rewards. Your $PULPA starts to count — and to open doors."
+    }
+  },
+  "cta": "Start with your bounties"
+}

@@ -38,5 +38,5 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules", "scripts/**/*", "drizzle/**/*", "tests/e2e/**/*"]
+  "exclude": ["node_modules", "scripts/**/*", "tests/e2e/**/*"]
 }

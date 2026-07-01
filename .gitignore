@@ -42,3 +42,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 .gstack/
+CLAUDE.md
+skills-lock.json
+.agents/
+.claude/
+convex/_generated/ai/

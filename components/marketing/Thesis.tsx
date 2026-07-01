@@ -1,4 +1,4 @@
-import type { CSSProperties } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import { useTranslations } from "next-intl";
 
 /**
@@ -32,17 +32,41 @@ function CropMarks() {
   const base = "pointer-events-none absolute h-3 w-3 border-ink/50";
   return (
     <>
-      <span aria-hidden className={`${base} -left-[3px] -top-[3px] border-l-2 border-t-2`} />
-      <span aria-hidden className={`${base} -right-[3px] -top-[3px] border-r-2 border-t-2`} />
-      <span aria-hidden className={`${base} -bottom-[3px] -left-[3px] border-b-2 border-l-2`} />
-      <span aria-hidden className={`${base} -bottom-[3px] -right-[3px] border-b-2 border-r-2`} />
+      <span
+        aria-hidden
+        className={`${base} -left-[3px] -top-[3px] border-l-2 border-t-2`}
+      />
+      <span
+        aria-hidden
+        className={`${base} -right-[3px] -top-[3px] border-r-2 border-t-2`}
+      />
+      <span
+        aria-hidden
+        className={`${base} -bottom-[3px] -left-[3px] border-b-2 border-l-2`}
+      />
+      <span
+        aria-hidden
+        className={`${base} -bottom-[3px] -right-[3px] border-b-2 border-r-2`}
+      />
     </>
   );
 }
 
-export function Thesis() {
-  const t = useTranslations("landing");
+export interface ThesisFrameProps {
+  tag: ReactNode;
+  heading: ReactNode;
+  body: ReactNode;
+  bridgeUp: ReactNode;
+  bridgeReward: ReactNode;
+}
 
+export function ThesisFrame({
+  tag,
+  heading,
+  body,
+  bridgeUp,
+  bridgeReward,
+}: ThesisFrameProps) {
   return (
     <div className="mx-auto max-w-[var(--wrap)] px-7 py-20 md:py-28">
       {/* Exhibition frame — a MUTED-bordered "gallery" mat around the manifesto + bridge. */}
@@ -57,16 +81,16 @@ export function Thesis() {
             {/* LEFT column — kicker + headline */}
             <div>
               <span className="block font-mono text-xs font-bold uppercase tracking-[0.2em] text-magenta">
-                {t("thesis.tag")}
+                {tag}
               </span>
               <h2 className="mt-4 font-display text-[clamp(1.9rem,3.6vw,2.85rem)] font-semibold leading-[1.05] tracking-[-0.025em] text-ink">
-                {t("thesis.heading")}
+                {heading}
               </h2>
               <div className="mt-6 h-px w-16 bg-ink" aria-hidden="true" />
             </div>
             {/* RIGHT column — body */}
             <p className="font-serif text-lg leading-[1.7] text-ink md:text-xl">
-              {t("thesis.body")}
+              {body}
             </p>
           </div>
         </article>
@@ -74,10 +98,12 @@ export function Thesis() {
         {/* Bridge — videogame (mono) ↔ editorial (serif), joined by the magenta "=".
             One row where it fits; stacks to 3 lines (Sube de nivel / = / reward) below md. */}
         <div className="mt-14 flex flex-col items-center gap-y-1.5 text-center font-semibold leading-[1.1] tracking-[-0.01em] text-[clamp(1.6rem,2.8vw,2.5rem)] md:flex-row md:justify-center md:gap-x-4">
-          <span className="whitespace-nowrap font-mono text-[#fffbf5]">{t("thesis.bridgeUp")}</span>
+          <span className="whitespace-nowrap font-mono text-[#fffbf5]">
+            {bridgeUp}
+          </span>
           <span className="text-magenta">=</span>
           <span className="whitespace-nowrap font-serif text-[#fffbf5]">
-            {t("thesis.bridgeReward")}
+            {bridgeReward}
             {/* Subtle round brand dot — a small magenta circle, not a font period. */}
             <span
               aria-hidden
@@ -87,5 +113,19 @@ export function Thesis() {
         </div>
       </div>
     </div>
+  );
+}
+
+export function Thesis() {
+  const t = useTranslations("landing");
+
+  return (
+    <ThesisFrame
+      tag={t("thesis.tag")}
+      heading={t("thesis.heading")}
+      body={t("thesis.body")}
+      bridgeUp={t("thesis.bridgeUp")}
+      bridgeReward={t("thesis.bridgeReward")}
+    />
   );
 }

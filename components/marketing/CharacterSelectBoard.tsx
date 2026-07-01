@@ -1,6 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState, type KeyboardEvent } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+  type KeyboardEvent,
+} from "react";
 
 import { Glyph } from "@/components/Glyph";
 import { Button } from "@/components/ui/button";
@@ -37,10 +43,11 @@ export interface RosterEntry {
   rarity: Rarity;
   rarityName: string;
   rarityRole: string;
-  pulpa: number;
+  pulpa: number | null;
   ships: readonly string[];
   accent: AccentColor;
-  href: string;
+  href?: string;
+  locked?: boolean;
 }
 
 export interface CharacterSelectLabels {
@@ -59,13 +66,14 @@ export interface CharacterSelectLabels {
   agentCta: string;
   rosterTitle: string;
   footer: string;
+  hiddenSlot: string;
 }
 
 /** The all-time $PULPA record holder, shown on the insert-coin bar (rarity + acronym + score). */
 export interface RecordEntry {
   acronym: string;
   rarity: Rarity;
-  pulpa: number;
+  pulpa: number | null;
 }
 
 const ACCENT_VAR: Record<AccentColor, string> = {
@@ -75,7 +83,8 @@ const ACCENT_VAR: Record<AccentColor, string> = {
   muted: "var(--muted-canonical)",
 };
 
-const fmtPulpa = (n: number) => n.toLocaleString("en-US");
+const fmtPulpa = (n: number | null | undefined) =>
+  typeof n === "number" ? n.toLocaleString("en-US") : "--";
 const rankNo = (i: number) => String(i + 1).padStart(2, "0");
 
 /** Arcade edition code W{ISO week}Q{quarter}Y{2-digit year}, e.g. "W25Q2Y26". */
@@ -86,7 +95,9 @@ function editionCode(d: Date): string {
   const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
   t.setUTCDate(t.getUTCDate() + 4 - (t.getUTCDay() || 7));
   const yearStart = new Date(Date.UTC(t.getUTCFullYear(), 0, 1));
-  const week = Math.ceil(((t.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);
+  const week = Math.ceil(
+    ((t.getTime() - yearStart.getTime()) / 86400000 + 1) / 7,
+  );
   return `W${String(week).padStart(2, "0")}Q${quarter}Y${yy}`;
 }
 const ATTRACT_MS = 1700;
@@ -117,19 +128,46 @@ function RaritySymbol({
       />
     );
   }
-  return <Glyph name={symbol} size={size} className={`shrink-0 ${glyphColor}`} aria-hidden />;
+  return (
+    <Glyph
+      name={symbol}
+      size={size}
+      className={`shrink-0 ${glyphColor}`}
+      aria-hidden
+    />
+  );
 }
 
-/** Risograph portrait — a two-ink PRINT (cream stock, photo as dark ink, faint accent, halftone). */
+function abstractPortraitStyle(entry: RosterEntry): CSSProperties {
+  return {
+    backgroundImage: [
+      `radial-gradient(circle at 50% 27%, ${ACCENT_VAR[entry.accent]} 0 13%, transparent 14%)`,
+      `radial-gradient(ellipse at 50% 78%, ${ACCENT_VAR[entry.accent]} 0 30%, transparent 31%)`,
+      "linear-gradient(135deg, rgba(17,9,30,0.95), rgba(17,9,30,0.28) 46%, rgba(249,245,239,0.88))",
+      "repeating-linear-gradient(90deg, transparent 0 10px, rgba(17,9,30,0.32) 10px 12px)",
+    ].join(", "),
+  };
+}
+
+/** Abstract risograph portrait for locked future builders. */
 function RisoPortrait({ entry }: { entry: RosterEntry }) {
   return (
     <>
       <span aria-hidden className="absolute inset-0 bg-[#efe6d6]" />
-      {/* eslint-disable-next-line @next/next/no-img-element -- placeholder portrait, swap for member card art */}
-      <img
-        src={`https://picsum.photos/seed/${entry.id}/420/520`}
-        alt={entry.name}
-        className="absolute inset-0 h-full w-full object-cover grayscale contrast-[1.7] brightness-105 mix-blend-multiply"
+      <span
+        aria-hidden
+        className="absolute inset-[8%] border-2 border-frame/40 opacity-90 mix-blend-multiply"
+        style={abstractPortraitStyle(entry)}
+      />
+      <span
+        aria-hidden
+        className="absolute left-[23%] top-[14%] h-[31%] w-[54%] rounded-full opacity-75 mix-blend-multiply"
+        style={{ backgroundColor: ACCENT_VAR[entry.accent] }}
+      />
+      <span
+        aria-hidden
+        className="absolute bottom-[9%] left-[13%] h-[46%] w-[74%] rounded-t-[999px] opacity-60 mix-blend-multiply"
+        style={{ backgroundColor: ACCENT_VAR[entry.accent] }}
       />
       <span
         aria-hidden
@@ -148,7 +186,13 @@ function RisoPortrait({ entry }: { entry: RosterEntry }) {
   );
 }
 
-function PortraitOverlays({ entry, rank }: { entry: RosterEntry; rank: string }) {
+function PortraitOverlays({
+  entry,
+  rank,
+}: {
+  entry: RosterEntry;
+  rank: string;
+}) {
   return (
     <>
       <span className="absolute left-0 top-0 bg-ink px-1.5 py-0.5 font-mono text-[11px] font-bold tracking-[0.08em] text-frame">
@@ -179,7 +223,11 @@ export function CharacterSelectBoard({
   const [reduced, setReduced] = useState(false);
 
   useEffect(() => {
-    if (typeof window === "undefined" || typeof window.matchMedia !== "function") return;
+    if (
+      typeof window === "undefined" ||
+      typeof window.matchMedia !== "function"
+    )
+      return;
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
     const set = () => setReduced(mq.matches);
     set();
@@ -213,6 +261,7 @@ export function CharacterSelectBoard({
 
   /** Transition to a view (a builder index, or null for the roster grid). */
   function go(target: number | null) {
+    if (target !== null && roster[target]?.locked) return;
     if (target === open && phase === "idle") return;
     if (reduced) {
       setOpen(target);
@@ -226,8 +275,6 @@ export function CharacterSelectBoard({
   const highlight = open ?? cursor; // which builder the leaderboard marks
   const sel = roster[highlight];
   const edition = editionCode(new Date()); // W##Q#Y## marquee edition code
-
-
 
   function point(i: number) {
     hoverRef.current = true;
@@ -348,14 +395,28 @@ export function CharacterSelectBoard({
                         key={ship}
                         className="inline-flex items-center gap-1.5 border border-muted px-2.5 py-1 font-mono text-xs uppercase tracking-[0.06em] text-ink"
                       >
-                        <Glyph name="bolt" size={11} className="text-ink/70" aria-hidden />
+                        <Glyph
+                          name="bolt"
+                          size={11}
+                          className="text-ink/70"
+                          aria-hidden
+                        />
                         {ship}
                       </span>
                     ))}
                   </span>
                 </div>
-                <Button asChild onDark size="lg" className="mt-6 self-start">
-                  <Link href={sel.href}>{labels.agentCta}</Link>
+                <Button
+                  asChild={Boolean(sel.href)}
+                  onDark
+                  disabled={!sel.href}
+                  className="mt-6 self-start"
+                >
+                  {sel.href ? (
+                    <Link href={sel.href}>{labels.agentCta}</Link>
+                  ) : (
+                    labels.agentCta
+                  )}
                 </Button>
               </div>
             </div>
@@ -367,19 +428,22 @@ export function CharacterSelectBoard({
             >
               {roster.map((p, i) => {
                 const isHL = i === cursor;
+                const locked = p.locked ?? false;
                 return (
                   <button
                     key={p.id}
                     type="button"
-                    onClick={() => go(i)}
+                    onClick={locked ? undefined : () => go(i)}
                     onMouseEnter={() => point(i)}
                     onMouseLeave={release}
                     onFocus={() => point(i)}
                     onBlur={release}
-                    aria-label={`${p.name} — ${labels.pulpaLabel} ${fmtPulpa(p.pulpa)}`}
+                    aria-disabled={locked || undefined}
+                    tabIndex={locked ? -1 : undefined}
+                    aria-label={`${labels.hiddenSlot} ${rankNo(i)} — ${labels.pulpaLabel} ${fmtPulpa(p.pulpa)}`}
                     className={`group flex flex-col border-2 text-left transition-colors md:h-full ${
                       isHL ? "border-magenta" : "border-muted hover:border-ink"
-                    }`}
+                    } ${locked ? "cursor-default" : ""}`}
                   >
                     <div className="relative aspect-[5/4] w-full overflow-hidden md:aspect-auto md:min-h-0 md:flex-1">
                       <RisoPortrait entry={p} />
@@ -392,7 +456,9 @@ export function CharacterSelectBoard({
                     </div>
                     <div
                       className={`flex items-center justify-between gap-2 border-t-2 px-3 py-2 transition-colors ${
-                        isHL ? "border-magenta bg-purple" : "border-muted bg-frame"
+                        isHL
+                          ? "border-magenta bg-purple"
+                          : "border-muted bg-frame"
                       }`}
                     >
                       <span className="font-mono text-lg font-bold uppercase tracking-[0.12em] text-white">
@@ -429,13 +495,16 @@ export function CharacterSelectBoard({
           >
             {roster.map((p, i) => {
               const isHL = i === highlight;
+              const locked = p.locked ?? false;
               return (
                 <button
                   key={p.id}
                   type="button"
                   role="option"
                   aria-selected={isHL}
-                  onClick={() => go(i)}
+                  aria-disabled={locked || undefined}
+                  tabIndex={locked ? -1 : undefined}
+                  onClick={locked ? undefined : () => go(i)}
                   onMouseEnter={() => !isOpen && point(i)}
                   onMouseLeave={() => !isOpen && release()}
                   className={`grid w-full flex-1 grid-cols-[26px_1fr_auto] items-center gap-2.5 border-b border-muted/40 border-l-[3px] px-4 py-3 text-left transition-colors last:border-b-0 ${
@@ -474,28 +543,44 @@ export function CharacterSelectBoard({
       {/* INSERT-COIN BAR — arcade bottom screen (black bezel): INSERT $PULPA (blink,
           bottom-left) · period selector (center) · the all-time RÉCORD (bottom-right,
           formatted like a leaderboard entry: rarity glyph + acronym + score). */}
-      <div className="flex items-center justify-between gap-3 border-t border-muted bg-black px-4 py-2.5">
-        <span className="flex items-center gap-2 font-mono text-[11px] font-bold uppercase tracking-[0.16em] text-ink">
-          <span
-            aria-hidden
-            className="text-magenta motion-safe:[animation:attract-blink_1.2s_steps(1,end)_infinite]"
-          >
-            ▸
-          </span>
-          {labels.insert}
-        </span>
+      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-muted bg-black px-4 py-2.5">
+        {/* The $PULPA mention on the landing doubles as the entry to the /pulpa
+            roadmap (insert coin → what is $PULPA). */}
+        <Button
+          asChild
+          variant="outline"
+          size="sm"
+          onDark
+          className="group w-full border-muted text-white hover:border-magenta hover:bg-magenta hover:text-white sm:w-auto"
+        >
+          <Link href="/pulpa">
+            <span
+              aria-hidden
+              className="text-magenta group-hover:text-white motion-safe:[animation:attract-blink_1.2s_steps(1,end)_infinite]"
+            >
+              ▸
+            </span>
+            {labels.insert}
+          </Link>
+        </Button>
         <span className="hidden items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] md:flex">
           <span className="font-bold text-magenta">{labels.periodWeek}</span>
-          <span aria-hidden className="text-muted/50">·</span>
+          <span aria-hidden className="text-muted/50">
+            ·
+          </span>
           <span className="text-muted">{labels.periodQuarter}</span>
-          <span aria-hidden className="text-muted/50">·</span>
+          <span aria-hidden className="text-muted/50">
+            ·
+          </span>
           <span className="text-muted">{labels.periodYear}</span>
         </span>
-        <span className="flex items-center gap-2 font-mono text-[11px] font-bold uppercase tracking-[0.14em] text-muted">
+        <span className="ml-auto flex items-center gap-2 font-mono text-[11px] font-bold uppercase tracking-[0.14em] text-muted">
           {labels.highScore}
           <RaritySymbol rarity={record.rarity} size={12} />
           <span className="text-white">{record.acronym}</span>
-          <span className="tabular-nums text-magenta">{fmtPulpa(record.pulpa)}</span>
+          <span className="tabular-nums text-magenta">
+            {fmtPulpa(record.pulpa)}
+          </span>
         </span>
       </div>
     </div>

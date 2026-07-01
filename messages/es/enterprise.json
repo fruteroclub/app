@@ -1,15 +1,20 @@
 {
   "meta": {
     "title": "Frutero Club — Para empresas",
-    "description": "Construimos producto, operamos hackathons y conectamos con talento verificable de LatAm. Trabaja con la comunidad de builders de Frutero Club."
+    "description": "Construimos producto, operamos hackathons y conectamos con talento verificable de Latinoamérica. Trabaja con la comunidad de builders de Frutero Club."
   },
   "hero": {
-    "kicker": "Para empresas · LATAM",
+    "kicker": "Para empresas · Latinoamérica",
     "title": "Construye con la comunidad",
-    "lead": "Frutero Club es una comunidad de equipos que ya construyen producto, operan hackathons y forman builders en LatAm. Hoy también puedes acceder a su talento verificable.",
-    "cta": "Hablemos",
-    "cardLabel": "Por qué Frutero",
-    "cardBody": "No es una bolsa de trabajo. Es una comunidad donde el trabajo de cada builder queda registrado en su perfil — verificable y suyo."
+    "subhead": "Conecta con talento verificado y acelera tu negocio:<line>Educación<dot>.</dot> Eventos<dot>.</dot> Consultoría<dot>.</dot></line>",
+    "cta": "Hablemos"
+  },
+  "about": {
+    "tag": "QUÉ ES",
+    "heading": "Qué es Frutero Club",
+    "body": "Una comunidad que acelera el ecosistema tech, desbloqueando oportunidades para sus miembros.",
+    "bridgeUp": "Sube de nivel",
+    "bridgeReward": "Oportunidades Reales"
   },
   "services": {
     "heading": "Lo que hacemos",
@@ -54,7 +59,13 @@
     },
     "errors": {
       "validation": "Revisa los campos marcados.",
-      "rateLimited": "Demasiados envíos. Intenta de nuevo en unos minutos.",
+      "nameRequired": "El nombre es obligatorio.",
+      "nameTooLong": "El nombre es demasiado largo.",
+      "emailRequired": "El correo es obligatorio.",
+      "emailInvalid": "Correo inválido.",
+      "orgTooLong": "La organización es demasiado larga.",
+      "messageRequired": "Cuéntanos en qué te ayudamos.",
+      "messageTooLong": "El mensaje no puede superar 2000 caracteres.",
       "generic": "No pudimos enviar tu mensaje. Intenta de nuevo."
     }
   }

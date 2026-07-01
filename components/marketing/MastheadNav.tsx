@@ -3,27 +3,30 @@
 import { useTranslations } from "next-intl";
 
 import { NAV_ITEMS } from "@/content/landing";
-import { usePathname } from "@/i18n/navigation";
+import { Link, usePathname } from "@/i18n/navigation";
 
 /**
  * MastheadNav — the masthead's primary nav (client island for active-route state).
  *
- * Route items (href starting with "/") highlight when they match the current
- * pathname — e.g. "Para empresas" → /enterprise shows a persistent 2px magenta
- * underline (the same bar the hover animation grows). usePathname() from
- * @/i18n/navigation is locale-stripped, so it matches the bare href. In-page
- * anchors (#…) aren't route-active (scroll-spy is not in scope).
+ * Route items without hashes highlight when they match the current pathname —
+ * e.g. "Para empresas" → /enterprise shows a persistent 2px magenta underline
+ * (the same bar the hover animation grows). usePathname() from @/i18n/navigation
+ * is locale-stripped, so it matches the bare href. Home section anchors are
+ * rendered through locale-aware Link so they work from non-home routes too.
  */
 export function MastheadNav() {
   const t = useTranslations("landing");
   const pathname = usePathname();
 
   return (
-    <nav className="hidden justify-center gap-6 md:flex">
+    <nav className="absolute left-1/2 hidden -translate-x-1/2 justify-center gap-6 md:flex">
       {NAV_ITEMS.map((item) => {
-        const active = item.href.startsWith("/") && pathname === item.href;
+        const active =
+          item.href.startsWith("/") &&
+          !item.href.includes("#") &&
+          pathname === item.href;
         return (
-          <a
+          <Link
             key={item.i18nKey}
             href={item.href}
             aria-current={active ? "page" : undefined}
@@ -32,7 +35,7 @@ export function MastheadNav() {
             }`}
           >
             {t(item.i18nKey)}
-          </a>
+          </Link>
         );
       })}
     </nav>

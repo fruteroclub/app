@@ -1,8 +1,8 @@
-import createMiddleware from 'next-intl/middleware'
-import { NextRequest, NextResponse } from 'next/server'
-import { routing, defaultLocale } from './i18n/routing'
+import createMiddleware from "next-intl/middleware";
+import { NextRequest, NextResponse } from "next/server";
+import { routing, defaultLocale } from "./i18n/routing";
 
-const intlMiddleware = createMiddleware(routing)
+const intlMiddleware = createMiddleware(routing);
 
 /**
  * Locale proxy (Next 16 `proxy.ts` convention — formerly `middleware.ts`).
@@ -15,22 +15,25 @@ const intlMiddleware = createMiddleware(routing)
  *   never serve duplicate content at both `/es/x` and `/x`.
  */
 export function proxy(request: NextRequest): NextResponse {
-  const { pathname, search } = request.nextUrl
+  const { pathname, search } = request.nextUrl;
 
   // Canonicalize any `/es` or `/es/...` to the bare (prefix-less) Spanish URL.
-  if (pathname === `/${defaultLocale}` || pathname.startsWith(`/${defaultLocale}/`)) {
-    const stripped = pathname.slice(`/${defaultLocale}`.length) || '/'
-    const url = request.nextUrl.clone()
-    url.pathname = stripped
-    url.search = search
-    return NextResponse.redirect(url, 308)
+  if (
+    pathname === `/${defaultLocale}` ||
+    pathname.startsWith(`/${defaultLocale}/`)
+  ) {
+    const stripped = pathname.slice(`/${defaultLocale}`.length) || "/";
+    const url = request.nextUrl.clone();
+    url.pathname = stripped;
+    url.search = search;
+    return NextResponse.redirect(url, 308);
   }
 
-  return intlMiddleware(request)
+  return intlMiddleware(request);
 }
 
 export const config = {
-  // Match all paths except API routes, Next internals, files with extensions,
+  // Match all paths except reserved server paths, Next internals, files with extensions,
   // and the EXTENSIONLESS metadata file-convention routes (opengraph-image /
   // twitter-image). The latter live at the ROOT (no locale segment), so letting
   // the locale proxy touch them rewrites `/opengraph-image` → a non-existent
@@ -48,8 +51,8 @@ export const config = {
   // skip → apex 404. `.*/opengraph-image` requires a leading segment, so the
   // root `/opengraph-image` never matches it and stays excluded.
   matcher: [
-    '/((?!api|_next|_vercel|opengraph-image|twitter-image|.*\\..*).*)',
-    '/((?!api|_next|_vercel).*/metadata\\.json)',
-    '/((?!api|_next|_vercel).*/opengraph-image)',
+    "/((?!api|_next|_vercel|opengraph-image|twitter-image|.*\\..*).*)",
+    "/((?!api|_next|_vercel).*/metadata\\.json)",
+    "/((?!api|_next|_vercel).*/opengraph-image)",
   ],
-}
+};
