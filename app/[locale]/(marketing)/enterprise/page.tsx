@@ -1,5 +1,6 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { useTranslations } from "next-intl";
+import type { ReactNode } from "react";
 import type { Metadata } from "next";
 
 import { buildMetadata } from "@/lib/seo";
@@ -12,6 +13,7 @@ import {
   Masthead,
   SectionHeading,
   SiteFooter,
+  ThesisFrame,
 } from "@/components/marketing";
 import { ContactForm } from "@/components/marketing/ContactForm";
 import { CONTACT_ANCHOR, ENTERPRISE_SERVICES } from "@/content/enterprise";
@@ -60,6 +62,13 @@ export default async function EnterprisePage({
       <main className="scroll-mt-20">
         <div className="mx-auto max-w-[var(--wrap)] px-7">
           <EnterpriseHero />
+        </div>
+
+        <ArcadeSection id="que-es-frutero">
+          <EnterpriseManifesto />
+        </ArcadeSection>
+
+        <div className="mx-auto max-w-[var(--wrap)] px-7">
           <Services />
           <TalentBlock />
         </div>
@@ -71,42 +80,60 @@ export default async function EnterprisePage({
   );
 }
 
-/** Hero — services-led headline + lead, CTA scrolls to the contact form. */
+/** Hero — services-led headline, CTA scrolls to the contact form. */
 function EnterpriseHero() {
   const t = useTranslations("enterprise");
+  const dot = (chunks: ReactNode) => (
+    <span className="text-magenta">{chunks}</span>
+  );
+  const line = (chunks: ReactNode) => <span className="block">{chunks}</span>;
+
   return (
-    <section className="grid items-center gap-12 py-[60px] md:grid-cols-[1.3fr_0.7fr]">
-      <div>
-        <div className="mb-[22px] flex items-center gap-2.5 font-mono text-xs font-semibold uppercase tracking-[0.16em] text-magenta">
+    <section className="grid min-h-[calc(100svh-14rem)] place-items-center py-16 text-center md:min-h-[calc(100svh-15rem)] md:py-20">
+      <div className="mx-auto w-full max-w-4xl">
+        <div className="mx-auto mb-6 flex max-w-xl items-center justify-center gap-3 font-mono text-xs font-semibold uppercase tracking-[0.16em] text-magenta">
+          <span className="h-px flex-1 bg-line" aria-hidden="true" />
           <Glyph name="target" size={13} />
           {t("hero.kicker")}
-          <span className="h-px max-w-[120px] flex-1 bg-line" />
+          <span className="h-px flex-1 bg-line" aria-hidden="true" />
         </div>
-        <h1 className="font-display text-[56px] font-semibold leading-[0.94] tracking-[-0.03em] md:text-[68px]">
+        <h1 className="mx-auto max-w-3xl font-display text-[clamp(3.6rem,7vw,5.75rem)] font-semibold leading-[0.96] tracking-[-0.03em]">
           {t("hero.title")}
           <span className="text-magenta">.</span>
         </h1>
-        <p className="mt-6 max-w-[46ch] font-serif text-xl leading-[1.4] text-ink">
-          {t("hero.lead")}
+        <p className="mx-auto mt-6 max-w-2xl font-serif text-xl leading-[1.4] text-ink md:text-2xl">
+          {t.rich("hero.subhead", { dot, line })}
         </p>
-        <div className="mt-7 flex max-w-[46ch] justify-end">
-          <Button asChild>
+        <div className="mx-auto mt-8 flex max-w-2xl justify-end">
+          <Button asChild size="lg">
             <a href={`#${CONTACT_ANCHOR}`}>
-              <Glyph name="bolt" size={14} />
+              <Glyph name="bolt" size={16} />
               {t("hero.cta")}
             </a>
           </Button>
         </div>
       </div>
-      <Card variant="hard" className="p-6">
-        <div className="mb-3 font-mono text-xs uppercase tracking-[0.14em] text-muted-2">
-          {t("hero.cardLabel")}
-        </div>
-        <p className="font-serif text-lg leading-[1.45] text-ink">
-          {t("hero.cardBody")}
-        </p>
-      </Card>
     </section>
+  );
+}
+
+/** Dark manifesto twin of the landing thesis section. */
+function EnterpriseManifesto() {
+  const t = useTranslations("enterprise");
+
+  return (
+    <ThesisFrame
+      tag={t("about.tag")}
+      heading={
+        <>
+          {t("about.heading")}
+          <span className="text-magenta">.</span>
+        </>
+      }
+      body={t("about.body")}
+      bridgeUp={t("about.bridgeUp")}
+      bridgeReward={t("about.bridgeReward")}
+    />
   );
 }
 
@@ -135,7 +162,7 @@ function Services() {
               size={22}
               style={{ color: `var(--${service.accent})` }}
             />
-            <h3 className="mt-4 font-display text-2xl font-bold leading-tight tracking-[-0.01em]">
+            <h3 className="mt-4 font-display text-2xl font-semibold leading-tight tracking-[-0.01em]">
               {t(`services.${service.i18nKey}.title`)}
             </h3>
             <p className="mt-2.5 font-sans text-sm leading-[1.5] text-muted">

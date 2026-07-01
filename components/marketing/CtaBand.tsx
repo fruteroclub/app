@@ -25,8 +25,8 @@ import { Band } from "./Band";
  *   · Hairline rule (1px)
  *   · Big Bitter display headline from band.title1                    [text-white]
  *   · Petrona lead paragraph from band.lead                           [text-ink (arcade-fg)]
- *   · Primary Button "Crea tu perfil" → /perfil                       [magenta]
- *   · Small secondary link "¿Eres empresa? →" → /enterprise           [text-muted-2]
+ *   · Right-aligned primary Button "Crea tu perfil" → /perfil         [magenta]
+ *   · Right-aligned secondary link "¿Eres empresa? →" → /enterprise   [text-muted-2]
  *
  * Halftone texture courtesy of <Band texture> (CSS-only dot grid, no images).
  *
@@ -57,10 +57,8 @@ export function CtaBand() {
           {t("band.lead")}
         </p>
 
-        {/* ── CTAs — consistent with the hero: the shared Button at the DEFAULT (md)
-              size, auto-width, primary magenta pill + secondary link (onDark on the
-              dark band so the link label reads light). ── */}
-        <div className="mx-auto mt-10 flex flex-wrap items-center justify-center gap-2">
+        {/* ── CTAs — right-aligned like 90s GUI/game option rows. ── */}
+        <div className="mx-auto mt-10 flex max-w-3xl flex-wrap items-center justify-end gap-2">
           <Button asChild size="md">
             <Link href={SIGNUP_HREF}>
               <Glyph name="bolt" size={13} aria-hidden />

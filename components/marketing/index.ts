@@ -46,7 +46,7 @@ export {
   type PullLineAccent,
   type PullLineSize,
 } from "./PullLine";
-export { Thesis } from "./Thesis";
+export { Thesis, ThesisFrame, type ThesisFrameProps } from "./Thesis";
 export { Testimonials } from "./Testimonials";
 export { TestimonialCard, type TestimonialCardProps } from "./TestimonialCard";
 export { MagazinePage, type MagazinePageProps } from "./MagazinePage";

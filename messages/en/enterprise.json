@@ -6,10 +6,15 @@
   "hero": {
     "kicker": "For companies · Latin America",
     "title": "Build with the community",
-    "lead": "Frutero Club is a community of teams that already ship product, run hackathons, and train builders across Latin America. Now you can also tap into their verifiable talent.",
-    "cta": "Let's talk",
-    "cardLabel": "Why Frutero",
-    "cardBody": "It's not a job board. It's a community where every builder's work lives on their perfil — verifiable, and theirs."
+    "subhead": "Connect with verified talent and accelerate your business:<line>Education<dot>.</dot> Events<dot>.</dot> Consulting<dot>.</dot></line>",
+    "cta": "Let's talk"
+  },
+  "about": {
+    "tag": "WHAT IT IS",
+    "heading": "What is Frutero Club",
+    "body": "A community that accelerates the tech ecosystem by unlocking opportunities for its members.",
+    "bridgeUp": "Level up",
+    "bridgeReward": "Real Opportunities"
   },
   "services": {
     "heading": "What we do",
